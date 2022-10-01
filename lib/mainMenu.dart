@@ -1,5 +1,7 @@
+import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:watfun_application/constantColors.dart';
+import 'package:watfun_application/userProfile/userProfile.dart';
 
 class MainMenu extends StatefulWidget {
   const MainMenu({Key? key}) : super(key: key);
@@ -26,37 +28,36 @@ class _MainMenuState extends State<MainMenu> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return DefaultTabController(
       length: 5,
       child: Scaffold(
-        backgroundColor: bgBlack,
-        appBar: AppBar(
-          backgroundColor: bgBlack,
-          title: const Text(
-            'WATFUN',
-            style: TextStyle(
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-          leading: IconButton(
-            icon: SizedBox(
-              width: 25,
-              height: 25,
-              child: Image.asset(
-                'assets/img/appLogo.png',
-              ),
-            ),
-            onPressed: () {},
-          ),
-        ),
+        // appBar: AppBar(
+        //   backgroundColor: bgBlack,
+        //   title: const Text(
+        //     'WATFUN',
+        //     style: TextStyle(
+        //       fontStyle: FontStyle.italic,
+        //     ),
+        //   ),
+        //   leading: IconButton(
+        //     icon: SizedBox(
+        //       width: 25,
+        //       height: 25,
+        //       child: Image.asset(
+        //         'assets/img/appLogo.png',
+        //       ),
+        //     ),
+        //     onPressed: () {},
+        //   ),
+        // ),
         bottomNavigationBar: Container(
-          color: bgBlack,
+          color: Colors.black,
           child: const TabBar(
             indicatorColor: Colors.transparent,
-            labelColor: lightPurple,
+            labelColor: purpleG,
             unselectedLabelColor: Colors.white,
             tabs: [
-            
               Tab(
                 icon: Icon(
                   Icons.storefront_outlined,
@@ -64,7 +65,7 @@ class _MainMenuState extends State<MainMenu> {
               ),
               Tab(
                 icon: Icon(
-                  Icons.explore_outlined ,
+                  Icons.explore_outlined,
                 ),
               ),
               Tab(
@@ -85,18 +86,51 @@ class _MainMenuState extends State<MainMenu> {
             ],
           ),
         ),
-        body: TabBarView(children: [
-          //home page class
-          Text("data"),
-          //store page class
-          Text("data"),
-          //add post class
-          Text("data"),
-          //wallet page class
-          Text("data"),
-          //profile page class
-          Text("data"),
-        ]),
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        fit: BoxFit.fitWidth,
+                        image: AssetImage('assets/img/neonBG.jpg'))),
+              ),
+              Container(
+                height: size.height,
+                width: size.width,
+                color: Colors.black.withOpacity(0.5),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 48, 0, 48),
+                child: Container(
+                  height: size.height,
+                  width: size.width,
+                  color: Colors.black,
+                ),
+              ),
+              BlurryContainer(
+                blur: 15,
+                elevation: 0,
+                borderRadius: const BorderRadius.all(Radius.circular(0)),
+                width: size.width,
+                height: size.height,
+                color: Colors.transparent,
+                child: TabBarView(children: [
+                  //home page class
+                  Text("data"),
+                  //store page class
+                  Text("data"),
+                  //add post class
+                  Text("data"),
+                  //wallet page class
+                  Text("data"),
+                  //profile page class
+                  UserProfile(),
+                ]),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
