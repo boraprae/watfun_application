@@ -163,7 +163,7 @@ class _CreateNewPostState extends State<CreateNewPost> {
     _context = context;
     Size size = MediaQuery.of(context).size;
     return Container(
-      color: bgBlack,
+      color: Colors.transparent,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -319,65 +319,65 @@ class _CreateNewPostState extends State<CreateNewPost> {
                   ),
                 ),
                 //? TagFiledTag here (still cannor remove below hinttext)
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(vertical: 16.0),
-                //   child: SizedBox(
-                //     height: 70,
-                //     child: TextFieldTags(
-                //       tagsStyler: TagsStyler(
-                //         showHashtag: false,
-                //         tagMargin: const EdgeInsets.only(right: 4.0),
-                //         tagCancelIcon:
-                //             Icon(Icons.cancel, size: 15.0, color: Colors.white),
-                //         tagCancelIconPadding:
-                //             EdgeInsets.only(left: 4.0, top: 2.0),
-                //         tagPadding: EdgeInsets.only(
-                //             top: 2.0, bottom: 4.0, left: 8.0, right: 4.0),
-                //         tagDecoration: BoxDecoration(
-                //           color: pinkG,
-                //         ),
-                //         tagTextStyle: TextStyle(
-                //             fontWeight: FontWeight.normal, color: Colors.white),
-                //       ),
-                //       textFieldStyler: TextFieldStyler(
-                //         textFieldFilled: true,
-                //         textStyle: TextStyle(
-                //           color: Colors.white,
-                //           fontSize: 12,
-                //         ),
-                //         hintText: "Add your tags here",
-                //         hintStyle: TextStyle(
-                //             fontSize: 12.0,
-                //             color: Colors.white.withOpacity(0.5)),
-                //         isDense: false,
-                //         textFieldFocusedBorder: OutlineInputBorder(
-                //           borderSide: BorderSide(color: pinkG, width: 0.5),
-                //         ),
-                //         textFieldEnabledBorder: OutlineInputBorder(
-                //           borderSide:
-                //               BorderSide(color: Colors.white, width: 0.5),
-                //         ),
-                //       ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: SizedBox(
+                    height: 70,
+                    child: TextFieldTags(
+                      tagsStyler: TagsStyler(
+                        showHashtag: false,
+                        tagMargin: const EdgeInsets.only(right: 4.0),
+                        tagCancelIcon:
+                            Icon(Icons.cancel, size: 15.0, color: Colors.white),
+                        tagCancelIconPadding:
+                            EdgeInsets.only(left: 4.0, top: 2.0),
+                        tagPadding: EdgeInsets.only(
+                            top: 2.0, bottom: 4.0, left: 8.0, right: 4.0),
+                        tagDecoration: BoxDecoration(
+                          color: pinkG,
+                        ),
+                        tagTextStyle: TextStyle(
+                            fontWeight: FontWeight.normal, color: Colors.white),
+                      ),
+                      textFieldStyler: TextFieldStyler(
+                        textFieldFilled: true,
+                        textStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                        hintText: "Add your tags here",
+                        hintStyle: TextStyle(
+                            fontSize: 12.0,
+                            color: Colors.white.withOpacity(0.5)),
+                        isDense: false,
+                        textFieldFocusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: pinkG, width: 0.5),
+                        ),
+                        textFieldEnabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 0.5),
+                        ),
+                      ),
                       
-                //       onDelete: (tag) {
-                //         tags.remove(tag.toString());
-                //         print('onDelete: $tags');
-                //       },
-                //       onTag: (tag) {
+                      onDelete: (tag) {
+                        tags.remove(tag.toString());
+                        print('onDelete: $tags');
+                      },
+                      onTag: (tag) {
                         
-                //         tags.add(tag.toString());
-                //         print('onTag: $tags');
-                //       },
-                //       validator: (String tag) {
-                //         print('validator: $tags');
-                //         if (tag.length > 10) {
-                //           return "Sorry, you can't longer than that.";
-                //         }
-                //         return null;
-                //       },
-                //     ),
-                //   ),
-                // ),
+                        tags.add(tag.toString());
+                        print('onTag: $tags');
+                      },
+                      validator: (String tag) {
+                        print('validator: $tags');
+                        if (tag.length > 10) {
+                          return "Sorry, you can't longer than that.";
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ),
                 // //! Submit button
                 SizedBox(
                   width: size.width,

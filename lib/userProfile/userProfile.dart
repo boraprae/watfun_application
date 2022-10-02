@@ -23,84 +23,55 @@ class _UserProfileState extends State<UserProfile> {
   String _token = '';
   var userInfoList;
   List artworkList = [];
-  List<PhotoItem> _items = [];
+  // List<PhotoItem> _items = [];
   bool _waiting = true;
   bool _haveImg = false;
   bool _waitingUserData = false;
 
-  @override
-  void initState() {
-    super.initState();
-    getToken();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getToken();
+  // }
 
-  void getToken() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    String? userString = await pref.getString('user');
-
-    var userObject = jsonDecode(userString!) as Map<String, dynamic>;
-    _token = userObject['token'];
-    getUserDataAPI(_token);
-    getArtworkAPI(_token);
-  }
-
-  void getUserDataAPI(String token) async {
-    http.Response userInfoResponse = await getUserInfo(token);
-    //ToDo: Change _waitingUserData to false after connect to server
-    setState(() {
-      userInfoList = jsonDecode(userInfoResponse.body);
-      _waitingUserData = true;
-    });
-  }
-
-  Future<http.Response> getUserInfo(String token) {
-    return http.get(
-      Uri.parse('http://10.0.2.2:3000/api/profile'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': token,
-      },
-    );
-  }
-
-  void getArtworkAPI(String token) async {
-    http.Response artworksResponse = await getArtworks(token);
-    artworkList = jsonDecode(artworksResponse.body);
-
-    if (artworkList.length > 0) {
-      _haveImg = true;
-      for (int i = 0; i < artworkList.length; i++) {
-        String date = artworkList[i]['date_time'].toString();
-        List pubDate = date.split(' ');
-
-        _items.add(
-          PhotoItem(
-              'http://10.0.2.2:3000' + artworkList[i]['image_path'],
-              artworkList[i]['title'],
-              artworkList[i]['username'],
-              pubDate[0],
-              artworkList[i]['description'],
-              artworkList[i]['tags_name'],
-              artworkList[i]['type_name']),
-        );
-      }
-      _waiting = false;
-    } else {
-      print("No have img");
-      _haveImg = false;
-      totalLikes = 0;
-    }
-  }
-
-  Future<http.Response> getArtworks(String token) {
-    return http.get(
-      Uri.parse('http://10.0.2.2:3000/api/profile/artwork'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': token,
-      },
-    );
-  }
+  final List<PhotoItem> _items = [
+    PhotoItem(
+      "assets/img/uploadedImg/01.jpg",
+      "Arai",
+      "Sara Yune",
+      "Sep 15, 2021",
+      "lineless commission for Panalee0819 thanks for commissioning",
+      [
+        'Anime',
+        'Fanart',
+      ],
+      '',
+    ),
+    PhotoItem(
+      "assets/img/uploadedImg/02.jpg",
+      "Mai roo",
+      "Stephan Seeber",
+      "Sep 4, 2021",
+      "lineless commission for Panalee0819 thanks for commissioning",
+      [
+        'Anime',
+        'Fanart',
+      ],
+      '',
+    ),
+    PhotoItem(
+      "assets/img/uploadedImg/03.png",
+      "55555",
+      "Stephan Seeber",
+      "Sep 4, 2021",
+      "lineless commission for Panalee0819 thanks for commissioning",
+      [
+        'Anime',
+        'Fanart',
+      ],
+      '',
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +84,7 @@ class _UserProfileState extends State<UserProfile> {
           ))
         : SingleChildScrollView(
             child: Container(
-              color: bgBlack,
+              // color: bgBlack,
               child: Stack(
                 children: [
                   Column(
@@ -123,8 +94,12 @@ class _UserProfileState extends State<UserProfile> {
                       Container(
                         height: 0.15 * size.height,
                         width: size.width,
-                        child: Image.network(
-                          'http://10.0.2.2:3000' + userInfoList['cover_image'],
+                        // child: Image.network(
+                        //   'http://10.0.2.2:3000' + userInfoList['cover_image'],
+                        //   fit: BoxFit.fitWidth,
+                        // ),
+                        child: Image.asset(
+                          'assets/img/missFJ.jpg',
                           fit: BoxFit.fitWidth,
                         ),
                       ),
@@ -151,7 +126,8 @@ class _UserProfileState extends State<UserProfile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              userInfoList['username'],
+                              "userInfoList['username']",
+                              // userInfoList['username'],
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
@@ -162,7 +138,8 @@ class _UserProfileState extends State<UserProfile> {
                               height: 5,
                             ),
                             Text(
-                              userInfoList['bio'],
+                              "userInfoList['username']",
+                              // userInfoList['bio'],
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 10,
@@ -187,7 +164,8 @@ class _UserProfileState extends State<UserProfile> {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 5),
                                       child: Text(
-                                        userInfoList['tags'].toUpperCase(),
+                                        "userInfoList['username']",
+                                        // userInfoList['tags'].toUpperCase(),
                                         style: TextStyle(
                                           fontSize: 10,
                                           color: Colors.white,
@@ -342,8 +320,11 @@ class _UserProfileState extends State<UserProfile> {
                     top: 0.08 * size.height,
                     left: 0.05 * size.width,
                     child: CircleAvatar(
-                      backgroundImage: NetworkImage('http://10.0.2.2:3000' +
-                          userInfoList['profile_image']),
+                      // backgroundImage: NetworkImage('http://10.0.2.2:3000' +
+                      //     userInfoList['profile_image']),
+                      backgroundImage: AssetImage(
+                        'assets/img/seraphine.jpg',
+                      ),
                       radius: 0.12 * size.width,
                     ),
                   ),

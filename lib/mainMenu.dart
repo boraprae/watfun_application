@@ -2,7 +2,7 @@ import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:watfun_application/constantColors.dart';
 import 'package:watfun_application/userProfile/userProfile.dart';
-
+import 'package:watfun_application/artworkPost/createNewPost.dart';
 class MainMenu extends StatefulWidget {
   const MainMenu({Key? key}) : super(key: key);
 
@@ -121,7 +121,7 @@ class _MainMenuState extends State<MainMenu> {
                   //store page class
                   Text("data"),
                   //add post class
-                  Text("data"),
+                 CreateNewPost(),
                   //wallet page class
                   Text("data"),
                   //profile page class
