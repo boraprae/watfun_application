@@ -9,3 +9,5 @@ const lightPurple = Color(0xFFB84AB8);
 const darkLight = Color(0xFF292929);
 const lightGray = Color(0xFF353535);
 const mainBG = Color(0xFF161616);
+const btnTopLeft = Color(0xFF310641);
+const btnTopRight = Color(0xFF7A2997);

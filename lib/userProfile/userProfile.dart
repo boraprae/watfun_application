@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:watfun_application/appBar.dart';
 import 'dart:convert';
 import 'package:watfun_application/constantColors.dart';
 import 'package:watfun_application/artworkPost/postDetail.dart';
@@ -90,6 +91,7 @@ class _UserProfileState extends State<UserProfile> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                     CustomAppBar(),
                       //cover image
                       Container(
                         height: 0.15 * size.height,
@@ -317,7 +319,7 @@ class _UserProfileState extends State<UserProfile> {
                     ],
                   ),
                   Positioned(
-                    top: 0.08 * size.height,
+                    top: 0.15 * size.height,
                     left: 0.05 * size.width,
                     child: CircleAvatar(
                       // backgroundImage: NetworkImage('http://10.0.2.2:3000' +

@@ -26,7 +26,7 @@ class _WelcomePageState extends State<WelcomePage> {
                  height: size.height* 0.4,
                   width: size.width*0.25,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.horizontal(right: Radius.circular(18)),
                     image: DecorationImage(
                       fit: BoxFit.fitHeight,
                       image: AssetImage('assets/img/seraphine.jpg'),
@@ -48,7 +48,7 @@ class _WelcomePageState extends State<WelcomePage> {
                    height: size.height* 0.4,
                   width: size.width*0.25,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.horizontal(left: Radius.circular(18)),
                     image: DecorationImage(
                       fit: BoxFit.fitHeight,
                       image: AssetImage('assets/img/missFJ.jpg'),
@@ -141,7 +141,7 @@ class _WelcomePageState extends State<WelcomePage> {
                    height: size.height* 0.4,
                   width: size.width*0.25,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.horizontal(right: Radius.circular(18)),
                     image: DecorationImage(
                       fit: BoxFit.fitHeight,
                       image: AssetImage('assets/img/seraphine.jpg'),
@@ -163,7 +163,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   height: size.height* 0.4,
                   width: size.width*0.25,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.horizontal(left: Radius.circular(18)),
                     image: DecorationImage(
                       fit: BoxFit.fitHeight,
                       image: AssetImage('assets/img/missFJ.jpg'),
