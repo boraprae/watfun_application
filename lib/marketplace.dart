@@ -11,6 +11,8 @@ class Marketplace extends StatefulWidget {
 }
 
 class _MarketplaceState extends State<Marketplace> {
+  //variable for testing
+  String sortingTag = 'Lastest';
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -35,7 +37,7 @@ class _MarketplaceState extends State<Marketplace> {
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        'Sorting by: ',
+                        'Sorting by: ' + sortingTag,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 10,
@@ -44,8 +46,8 @@ class _MarketplaceState extends State<Marketplace> {
                     ],
                   ),
                   Container(
-                    height: 50,
-                    width: 50,
+                    height: 45,
+                    width: 45,
                     child: RaisedButton(
                       onPressed: () {},
                       shape: RoundedRectangleBorder(
@@ -64,9 +66,13 @@ class _MarketplaceState extends State<Marketplace> {
                             borderRadius: BorderRadius.circular(10.0)),
                         child: Container(
                           constraints:
-                              BoxConstraints(maxWidth: 50.0, minHeight: 50.0),
+                              BoxConstraints(maxWidth: 45.0, minHeight: 45.0),
                           alignment: Alignment.center,
-                          child: Icon(Icons.sort_rounded, size: 20, color: Colors.white,),
+                          child: Icon(
+                            Icons.sort_rounded,
+                            size: 20,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
