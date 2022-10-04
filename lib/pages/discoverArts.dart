@@ -61,153 +61,131 @@ class _DiscoverArtsState extends State<DiscoverArts> {
 
     //** Commission Offer Widget**
     Widget commissionOffer(index) {
-      return Stack(
-        children: [
-          Container(
-            width: size.width,
-            height: size.height * 0.3,
-            decoration: BoxDecoration(
-              color: btnDark,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ClipRRect(
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: Stack(
+          children: [
+            Container(
+              width: size.width,
+              height: size.height * 0.3,
+              decoration: BoxDecoration(
+                color: btnDark,
                 borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  commissionInfo[index]['coverImgPath'],
-                  fit: BoxFit.fitWidth,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset(
+                    commissionInfo[index]['coverImgPath'],
+                   fit: BoxFit.cover
+                  ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: 0,
-            child: BlurryContainer(
-              blur: 5,
-              elevation: 0,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-              width: size.width - 50,
-              color: Colors.black.withOpacity(0.5),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        CircleAvatar(
-                          radius: 20,
-                          backgroundImage: AssetImage(
-                            commissionInfo[index]['userImgPath'],
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              commissionInfo[index]['creatorName'],
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 8,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              commissionInfo[index]['title'],
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Spacer(),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              'Price',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 8,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              commissionInfo[index]['price'].toString() +
-                                  " Baht",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    //** Order Commission Button **//
-                    GestureDetector(
-                      onTap: () {
-                        // Navigator.pushNamed(
-                        //   context,
-                        //   '/separate',
-                        //   arguments: <String, dynamic>{
-                        //     'name': artworkCategory[index],
-                        //   },
-                        // );
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+            Positioned(
+              bottom: 0,
+              child: BlurryContainer(
+                blur: 5,
+                elevation: 0,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                width: size.width - 50,
+                color: Colors.black.withOpacity(0.5),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Container(
-                            width: size.width - 100,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(18),
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  btnTopLeft,
-                                  btnTopRight,
-                                ],
-                              ),
+                          CircleAvatar(
+                            radius: 20,
+                            backgroundImage: AssetImage(
+                              commissionInfo[index]['userImgPath'],
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Text(
-                                'Order Commission',
-                                textAlign: TextAlign.center,
+                          ),
+                           const SizedBox(
+                            width: 10,
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                commissionInfo[index]['creatorName'],
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 8,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                commissionInfo[index]['title'],
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Spacer(),
+                        ],
+                      ),
+                       const SizedBox(
+                        height: 10,
+                      ),
+                      //** Order Commission Button **//
+                      GestureDetector(
+                        onTap: () {
+                          // Navigator.pushNamed(
+                          //   context,
+                          //   '/separate',
+                          //   arguments: <String, dynamic>{
+                          //     'name': artworkCategory[index],
+                          //   },
+                          // );
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: size.width - 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(18),
+                                gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    btnTopLeft,
+                                    btnTopRight,
+                                  ],
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Text(
+                                  'View',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
     }
 
@@ -287,7 +265,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
     //*** End of Category Filter Button ****
     return Column(
       children: [
-        CustomAppBar(),
+        const CustomAppBar(),
         Padding(
           padding: const EdgeInsets.all(18.0),
           child: Column(
@@ -299,7 +277,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Discover Artworks',
                         style: TextStyle(
                             color: Colors.white,
