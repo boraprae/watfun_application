@@ -35,7 +35,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
       'title': 'I will create the custom girl for you.',
       'price': 350,
       'userImgPath': 'assets/artworksUploads/00.jpg',
-      'coverImgPath': 'assets/artworksUploads/07.jpg',
+      'coverImgPath': 'assets/artworksUploads/08.jpg',
     },
     {
       'id': 1,
@@ -51,7 +51,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
       'title': 'I will create the custom girl for you.',
       'price': 350,
       'userImgPath': 'assets/artworksUploads/00.jpg',
-      'coverImgPath': 'assets/artworksUploads/05.jpg',
+      'coverImgPath': 'assets/artworksUploads/11.jpg',
     },
   ];
 
@@ -77,7 +77,6 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                 child: Image.asset(
                   commissionInfo[index]['coverImgPath'],
                   fit: BoxFit.fitWidth,
-                  alignment: Alignment.topCenter,
                 ),
               ),
             ),

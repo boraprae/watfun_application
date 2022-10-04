@@ -23,10 +23,11 @@ class _WelcomePageState extends State<WelcomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                 height: size.height* 0.4,
-                  width: size.width*0.25,
+                  height: size.height * 0.4,
+                  width: size.width * 0.25,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.horizontal(right: Radius.circular(18)),
+                    borderRadius:
+                        BorderRadius.horizontal(right: Radius.circular(18)),
                     image: DecorationImage(
                       fit: BoxFit.fitHeight,
                       image: AssetImage('assets/img/seraphine.jpg'),
@@ -34,8 +35,8 @@ class _WelcomePageState extends State<WelcomePage> {
                   ),
                 ),
                 Container(
-                   height: size.height* 0.3,
-                  width: size.width*0.35,
+                  height: size.height * 0.3,
+                  width: size.width * 0.35,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(18),
                     image: DecorationImage(
@@ -45,10 +46,11 @@ class _WelcomePageState extends State<WelcomePage> {
                   ),
                 ),
                 Container(
-                   height: size.height* 0.4,
-                  width: size.width*0.25,
+                  height: size.height * 0.4,
+                  width: size.width * 0.25,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.horizontal(left: Radius.circular(18)),
+                    borderRadius:
+                        BorderRadius.horizontal(left: Radius.circular(18)),
                     image: DecorationImage(
                       fit: BoxFit.fitHeight,
                       image: AssetImage('assets/img/missFJ.jpg'),
@@ -138,10 +140,11 @@ class _WelcomePageState extends State<WelcomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                   height: size.height* 0.4,
-                  width: size.width*0.25,
+                  height: size.height * 0.4,
+                  width: size.width * 0.25,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.horizontal(right: Radius.circular(18)),
+                    borderRadius:
+                        BorderRadius.horizontal(right: Radius.circular(18)),
                     image: DecorationImage(
                       fit: BoxFit.fitHeight,
                       image: AssetImage('assets/img/seraphine.jpg'),
@@ -149,8 +152,8 @@ class _WelcomePageState extends State<WelcomePage> {
                   ),
                 ),
                 Container(
-                    height: size.height* 0.33,
-                  width: size.width*0.35,
+                  height: size.height * 0.33,
+                  width: size.width * 0.35,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(18),
                     image: DecorationImage(
@@ -160,10 +163,11 @@ class _WelcomePageState extends State<WelcomePage> {
                   ),
                 ),
                 Container(
-                  height: size.height* 0.4,
-                  width: size.width*0.25,
+                  height: size.height * 0.4,
+                  width: size.width * 0.25,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.horizontal(left: Radius.circular(18)),
+                    borderRadius:
+                        BorderRadius.horizontal(left: Radius.circular(18)),
                     image: DecorationImage(
                       fit: BoxFit.fitHeight,
                       image: AssetImage('assets/img/missFJ.jpg'),
