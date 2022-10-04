@@ -1,6 +1,7 @@
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:watfun_application/constantColors.dart';
+import 'package:watfun_application/pages/discoverArts.dart';
 import 'package:watfun_application/pages/marketplace.dart';
 import 'package:watfun_application/pages/userProfile.dart';
 import 'package:watfun_application/pages/createNewPost.dart';
@@ -121,7 +122,7 @@ class _MainMenuState extends State<MainMenu> {
                   //home page class
                   Marketplace(),
                   //store page class
-                  Text("data"),
+                  DiscoverArts(),
                   //add post class
                   CreateNewPost(),
                   //wallet page class
