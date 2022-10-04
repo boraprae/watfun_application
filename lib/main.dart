@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:watfun_application/login/signUp.dart';
+import 'package:watfun_application/pages/signUp.dart';
 import 'package:watfun_application/mainMenu.dart';
 import 'package:watfun_application/welcomePage.dart';
 
-import 'login/signIn.dart';
+import 'pages/signIn.dart';
 
 void main() {
   runApp(

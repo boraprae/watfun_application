@@ -1,9 +1,9 @@
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:watfun_application/constantColors.dart';
-import 'package:watfun_application/marketplace.dart';
-import 'package:watfun_application/userProfile/userProfile.dart';
-import 'package:watfun_application/artworkPost/createNewPost.dart';
+import 'package:watfun_application/pages/marketplace.dart';
+import 'package:watfun_application/pages/userProfile.dart';
+import 'package:watfun_application/pages/createNewPost.dart';
 
 class MainMenu extends StatefulWidget {
   const MainMenu({Key? key}) : super(key: key);

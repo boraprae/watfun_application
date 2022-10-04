@@ -11,3 +11,4 @@ const lightGray = Color(0xFF353535);
 const mainBG = Color(0xFF161616);
 const btnTopLeft = Color(0xFF310641);
 const btnTopRight = Color(0xFF7A2997);
+const btnDark = Color(0xFF2C2C2C);

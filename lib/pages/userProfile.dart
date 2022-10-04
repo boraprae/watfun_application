@@ -3,9 +3,9 @@ import 'package:http/http.dart' as http;
 import 'package:watfun_application/appBar.dart';
 import 'dart:convert';
 import 'package:watfun_application/constantColors.dart';
-import 'package:watfun_application/artworkPost/postDetail.dart';
-import 'package:watfun_application/userProfile/accountSetting.dart';
-import 'package:watfun_application/userProfile/shared/listImg.dart';
+import 'package:watfun_application/widgets/postDetail.dart';
+import 'package:watfun_application/pages/accountSetting.dart';
+import 'package:watfun_application/pages/shared/listImg.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
