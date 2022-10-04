@@ -284,134 +284,135 @@ class _MarketplaceState extends State<Marketplace> {
         ),
       );
     }
-
     //*** End of Category Filter Button ****
-    return Column(
-      children: [
-         const CustomAppBar(),
-        Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                       const Text(
-                        'Discover Commission Offers',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'Sorting by: ' + sortingTag,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+           const CustomAppBar(),
+          Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                         const Text(
+                          'Discover Commission Offers',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
                         ),
-                      ),
-                    ],
-                  ),
-                  //** Sorting Button **//
-                  Container(
-                    height: 45,
-                    width: 45,
-                    child: RaisedButton(
-                      onPressed: () {},
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0)),
-                      padding: EdgeInsets.all(0.0),
-                      child: Ink(
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                btnTopLeft,
-                                btnTopRight,
-                              ],
-                            ),
-                            borderRadius: BorderRadius.circular(10.0)),
-                        child: Container(
-                          constraints:
-                              BoxConstraints(maxWidth: 45.0, minHeight: 45.0),
-                          alignment: Alignment.center,
-                          child: Icon(
-                            Icons.sort_rounded,
-                            size: 20,
+                        Text(
+                          'Sorting by: ' + sortingTag,
+                          style: TextStyle(
                             color: Colors.white,
+                            fontSize: 10,
+                          ),
+                        ),
+                      ],
+                    ),
+                    //** Sorting Button **//
+                    Container(
+                      height: 45,
+                      width: 45,
+                      child: RaisedButton(
+                        onPressed: () {},
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
+                        padding: EdgeInsets.all(0.0),
+                        child: Ink(
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  btnTopLeft,
+                                  btnTopRight,
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(10.0)),
+                          child: Container(
+                            constraints:
+                                BoxConstraints(maxWidth: 45.0, minHeight: 45.0),
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.sort_rounded,
+                              size: 20,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  //** End of Sorting Button **//
-                ],
-              ),
-              //** Searching Button **//
-              Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: SizedBox(
-                  height: 45,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF535353).withOpacity(0.38),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
+                    //** End of Sorting Button **//
+                  ],
+                ),
+                //** Searching Button **//
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: SizedBox(
+                    height: 45,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xFF535353).withOpacity(0.38),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
                       ),
-                    ),
-                    onPressed: () {
-                      // Respond to button press
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Search",
-                            style: TextStyle(
+                      onPressed: () {
+                        // Respond to button press
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Search",
+                              style: TextStyle(
+                                color: Colors.white.withOpacity(0.7),
+                              ),
+                            ),
+                            Icon(
+                              Icons.search_rounded,
+                              size: 25,
                               color: Colors.white.withOpacity(0.7),
                             ),
-                          ),
-                          Icon(
-                            Icons.search_rounded,
-                            size: 25,
-                            color: Colors.white.withOpacity(0.7),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              //** Category Button List**//
-              SizedBox(
-                height: 80.0,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: artworkCategory.length,
-                    itemBuilder: (context, index) {
-                      return listViewChannel(index);
-                    }),
-              ),
-              SizedBox(
-                height: size.height * 0.58,
-                child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: commissionInfo.length,
-                    itemBuilder: (context, index) {
-                      return commissionOffer(index);
-                    }),
-              ),
-            ],
-          ),
-        )
-      ],
+                //** Category Button List**//
+                SizedBox(
+                  height: 80.0,
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: artworkCategory.length,
+                      itemBuilder: (context, index) {
+                        return listViewChannel(index);
+                      }),
+                ),
+                SizedBox(
+                  height: size.height * 0.58,
+                  child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      itemCount: commissionInfo.length,
+                      itemBuilder: (context, index) {
+                        return commissionOffer(index);
+                      }),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }
