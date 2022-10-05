@@ -284,11 +284,12 @@ class _MarketplaceState extends State<Marketplace> {
         ),
       );
     }
+
     //*** End of Category Filter Button ****
     return SingleChildScrollView(
       child: Column(
         children: [
-           const CustomAppBar(),
+          const CustomAppBar(),
           Padding(
             padding: const EdgeInsets.all(18.0),
             child: Column(
@@ -300,7 +301,7 @@ class _MarketplaceState extends State<Marketplace> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                         const Text(
+                        const Text(
                           'Discover Commission Offers',
                           style: TextStyle(
                               color: Colors.white,
@@ -365,7 +366,7 @@ class _MarketplaceState extends State<Marketplace> {
                         ),
                       ),
                       onPressed: () {
-                        // Respond to button press
+                        Navigator.pushNamed(context, '/searchOffer');
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),

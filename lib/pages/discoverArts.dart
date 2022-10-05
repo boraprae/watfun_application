@@ -3,6 +3,7 @@ import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:watfun_application/appBar.dart';
 import 'package:watfun_application/constantColors.dart';
+import 'package:watfun_application/pages/searchingOffer.dart';
 import 'package:watfun_application/widgets/commissionOffer.dart';
 
 class DiscoverArts extends StatefulWidget {
@@ -76,10 +77,8 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                 padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    commissionInfo[index]['coverImgPath'],
-                   fit: BoxFit.cover
-                  ),
+                  child: Image.asset(commissionInfo[index]['coverImgPath'],
+                      fit: BoxFit.cover),
                 ),
               ),
             ),
@@ -104,7 +103,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                               commissionInfo[index]['userImgPath'],
                             ),
                           ),
-                           const SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Column(
@@ -133,7 +132,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                           Spacer(),
                         ],
                       ),
-                       const SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       //** Order Commission Button **//
@@ -343,7 +342,9 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                         ),
                       ),
                       onPressed: () {
-                        // Respond to button press
+                        // Jump to Searching Page
+                        Navigator.pushNamed(context, '/searchOffer');
+                        print('btn on clicked');
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
