@@ -129,7 +129,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                               ),
                             ],
                           ),
-                          Spacer(),
+                          const Spacer(),
                         ],
                       ),
                       const SizedBox(
@@ -153,7 +153,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                               width: size.width - 100,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(18),
-                                gradient: LinearGradient(
+                                gradient: const LinearGradient(
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                   colors: [
@@ -162,8 +162,8 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                                   ],
                                 ),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(12.0),
+                              child: const Padding(
+                                padding: EdgeInsets.all(12.0),
                                 child: Text(
                                   'View',
                                   textAlign: TextAlign.center,
@@ -344,7 +344,6 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                       onPressed: () {
                         // Jump to Searching Page
                         Navigator.pushNamed(context, '/searchOffer');
-                        print('btn on clicked');
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),

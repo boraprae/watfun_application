@@ -169,6 +169,8 @@ class _MarketplaceState extends State<Marketplace> {
                           //     'name': artworkCategory[index],
                           //   },
                           // );
+                          print('can click');
+                          Navigator.pushNamed(context, '/orderCommission');
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

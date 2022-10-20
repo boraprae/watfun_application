@@ -65,7 +65,8 @@ class _SearchingOfferState extends State<SearchingOffer> {
                             children: [
                               IconButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(context, '/mainMenu');
+                                  // Navigator.pushNamed(context, '/mainMenu');
+                                  Navigator.pop(context);
                                 },
                                 icon: const Icon(
                                   Icons.arrow_back,

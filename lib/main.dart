@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:watfun_application/pages/artworkDeatil.dart';
+import 'package:watfun_application/pages/orderCommission.dart';
 import 'package:watfun_application/pages/searchingOffer.dart';
 import 'package:watfun_application/pages/signUp.dart';
 import 'package:watfun_application/mainMenu.dart';
@@ -17,6 +19,8 @@ void main() {
         '/signUp': (context) => RegisterPage(),
         '/mainMenu': (context) => MainMenu(),
         '/searchOffer': (context) => SearchingOffer(),
+        '/orderCommission': (context) => OrderCommission(),
+        '/artworkDetail': (context) => ArtworkDetail()
       },
     ),
   );

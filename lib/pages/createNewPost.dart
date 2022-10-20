@@ -102,7 +102,7 @@ class _CreateNewPostState extends State<CreateNewPost> {
     print('Response: ' + message);
     if (response.statusCode > 299) {
       return showAlert('Error', message);
-    } 
+    }
 
     showAlert('Success', 'Upload complete');
     setState(() {
@@ -114,13 +114,14 @@ class _CreateNewPostState extends State<CreateNewPost> {
 
   var styleItem = [
     'Select style of arts',
-    'Anime & Manga',
-    'K-pop Fanart',
-    'Fantasy',
-    'Series Fanart',
-    'Game Art',
-    'Illustration',
-    'Digital Art'
+    'Realism',
+    'Photorealism',
+    'Impressionism',
+    'Abstract',
+    'Surrealism',
+    'Pop',
+    'Oil',
+    'Watercolour ',
   ];
 
   late Map<dynamic, dynamic> imgData;
@@ -358,13 +359,11 @@ class _CreateNewPostState extends State<CreateNewPost> {
                               BorderSide(color: Colors.white, width: 0.5),
                         ),
                       ),
-                      
                       onDelete: (tag) {
                         tags.remove(tag.toString());
                         print('onDelete: $tags');
                       },
                       onTag: (tag) {
-                        
                         tags.add(tag.toString());
                         print('onTag: $tags');
                       },
