@@ -147,7 +147,7 @@ class _ArtworkDetail extends State<ArtworkDetail> {
                                         ],
                                       ),
                                     ),
-                                    Text(
+                                    const Text(
                                       'Sep 4, 2021',
                                       style: TextStyle(
                                         fontSize: 12,
@@ -157,7 +157,7 @@ class _ArtworkDetail extends State<ArtworkDetail> {
                                   ],
                                 ),
                               ),
-                              Text(
+                              const Text(
                                 'I will create the custom girl for you.',
                                 style: TextStyle(
                                   color: Colors.white,

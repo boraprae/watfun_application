@@ -22,7 +22,7 @@ class _OrderCommissionState extends State<OrderCommission> {
   String totalLikes = '1.2k';
   String username = 'SaraYune';
   String _token = "";
-  TextEditingController newComment = TextEditingController();
+  TextEditingController customerReqController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -85,6 +85,7 @@ class _OrderCommissionState extends State<OrderCommission> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        //Todo: Update Commission Image
                         Container(
                             height: 0.4 * size.height,
                             width: size.width,
@@ -136,6 +137,7 @@ class _OrderCommissionState extends State<OrderCommission> {
                                       onTap: () {
                                         //!-------- Paste code for go to another profile here ----
                                       },
+                                      //Todo: Update User Profile
                                       child: Row(
                                         children: [
                                           CircleAvatar(
@@ -229,23 +231,36 @@ class _OrderCommissionState extends State<OrderCommission> {
                               SizedBox(
                                 width: 10,
                               ),
-                              Container(
+                              SizedBox(
                                 width: size.width - 50,
                                 height: 100,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: grayText,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
+                                //* Input the req of commission
                                 child: TextField(
-                                  controller: newComment,
+                                  controller: customerReqController,
+                                  maxLines: 5, // <-- SEE HERE
+                                  minLines: 1,
+
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
                                   decoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      borderSide: const BorderSide(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      borderSide: const BorderSide(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    contentPadding:
+                                        const EdgeInsets.all(16),
                                     hintText:
                                         'Describe your commission request....',
-                                    hintStyle: TextStyle(
+                                    hintStyle: const TextStyle(
                                       color: grayText,
                                       fontSize: 12,
                                     ),

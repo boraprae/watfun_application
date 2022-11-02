@@ -30,14 +30,10 @@ class _RegisterPageState extends State<RegisterPage> {
     super.initState();
     // futureUserData = fetchData();
     _data = getData();
-    // print(futureUserData);
   }
 
+  //Get User Data
   Future<List> getData() async {
-    // get token from local storage and verify with server
-    // const storage = FlutterSecureStorage();
-    // String token = await storage.read(key: 'token') ?? '';
-
     Response response = await GetConnect().get(_url);
     print(response.body);
     if (response.status.isOk) {
@@ -47,19 +43,6 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  // Future<UserData> fetchData() async {
-  //   final response = await http.get(Uri.parse(_url));
-  //   if (response.statusCode == 200) {
-  //     // If the server did return a 200 OK response,
-  //     // then parse the JSON.
-  //     print(response.body);
-  //     return UserData.fromJson(jsonDecode(response.body));
-  //   } else {
-  //     // If the server did not return a 200 OK response,
-  //     // then throw an exception.
-  //     throw Exception('Failed to load album');
-  //   }
-  // }
   // Future<http.Response> signUp() {
   //   return http.post(
   //     Uri.parse('http://localhost:9000/user'),

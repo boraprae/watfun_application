@@ -31,52 +31,48 @@
             "cover_profile_image_path": ""
         }
     ],
+    "commission_offer": [
+        {
+            "id_commission_offer": 0,
+            "offer_title": "I will create the custom girl for you.",
+            "offer_description": "The half body of anime girl for Panalee0819 thanks for commissioning",
+            "offer_price": 350,
+            "offer_art_type": "Water Color",
+            "offer_tag": "",
+            "offer_result": [
+                "Bust Size",
+                "1 Character",
+                "Color",
+                "Color background",
+                "Delivery in 5 days"
+            ],
+            "offer_image_path": "assets/artworksUploads/00.jpg",
+            "offer_create_date": "Sep 4, 2021",
+            "user_id_user": 1
+        }
+    ],
     "commission_order": [
         {
             "id_commission_order": 1,
-            "order_date": "",
-            "order_request_description": "",
-            "payment_status": "",
-            "progress_status": "",
-            "progress_percentage": "",
-            "user_id_user": "",
-            "offer_id_commission": ""
-        },
-        {
-            "id_commission_order": 2,
-            "order_date": "",
-            "order_request_description": "",
-            "payment_status": "",
-            "progress_status": "",
-            "progress_percentage": "",
-            "user_id_user": "",
-            "offer_id_commission": ""
-        }
-    ],
-    "commission_offer": [
-        {
-            "id_commission_offer": 1,
-            "offer_title": "",
-            "offer_description": "",
-            "offer_price": "",
-            "offer_art_type": "",
-            "offer_tag": "",
-            "offer_result": "",
-            "offer_image_path": "",
-            "offer_create_date": "",
-            "user_id_user": ""
+            "order_date": "Sep 4, 2021",
+            "order_request_description": "Anime girl with red hair",
+            "payment_status": false,
+            "progress_status": false,
+            "progress_percentage": 0,
+            "user_id_user": 1,
+            "offer_id_commission": 1
         }
     ],
     "artworks": [
         {
             "id_artwork": 1,
-            "art_title": "",
-            "art_description": "",
+            "art_title": "(cm) Blake",
+            "art_description": "lineless commission for Panalee0819 thanks for commissioning",
             "art_type": "",
             "art_tag": "",
-            "art_image_path": "",
-            "art_created_date": "",
-            "user_id_user": ""
+            "art_image_path": "assets/artworksUploads/03.jpg",
+            "art_created_date": "Sep 4, 2021",
+            "user_id_user": 0
         }
     ]
 }
