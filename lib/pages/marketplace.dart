@@ -188,14 +188,6 @@ class _MarketplaceState extends State<Marketplace> {
                       //** Order Commission Button **//
                       GestureDetector(
                         onTap: () {
-                          // Navigator.pushNamed(
-                          //   context,
-                          //   '/separate',
-                          //   arguments: <String, dynamic>{
-                          //     'name': artworkCategory[index],
-                          //   },
-                          // );
-                          print('can click');
                           Navigator.pushNamed(context, '/orderCommission', arguments: <String, dynamic>{
                             'commission_offer_detail': data[index]
                           });

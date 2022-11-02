@@ -18,20 +18,6 @@ const { match } = require("assert");
 const { response } = require("express");
 const con = mysql.createConnection(config);
 
-// ============= Dummy data ================
-const user = [
-  { user_id: 1, user_username: "admin", user_password: "1111", user_role: 1 },
-  { user_id: 2, user_username: "user2", user_password: "2222", user_role: 2 },
-  { user_id: 3, user_username: "user3", user_password: "3333", user_role: 2 },
-];
-
-// const data = [
-//   { id: 1, title: "First", detail: "aaa", user_id: 2 },
-//   { id: 2, title: "Second", detail: "bbb", user_id: 2 },
-//   { id: 3, title: "Third", detail: "ccc", user_id: 3 },
-//   { id: 4, title: "Fourth", detail: "ddd", user_id: 3 },
-// ];
-
 //! Start to write my 2022 Version
 //TODO: 1. Login/Register API 2.Upload picture
 
@@ -72,18 +58,20 @@ app.get("/getCommissionOffer", function (req, res) {
     });
 });
 
-app.get("/getCommissionDetail/:id", function (req, res) {
-  const id = req.params.id;
-  axios
-    .get(`http://localhost:9000/commission_offer/${id}`)
-    .then((response) => {
-      console.log(response.data);
-      res.json(response.data);
-      // res.send(response.data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+app.get("/getArtCategory", function (req, res) {
+  const artworkCategory = [
+    { name: "All Category", isOnClicked: true },
+    { name: "Realism", isOnClicked: false },
+    { name: "Photorealism", isOnClicked: false },
+    { name: "Expressionism", isOnClicked: false },
+    { name: "Impressionism", isOnClicked: false },
+    { name: "Abstract", isOnClicked: false },
+    { name: "Surrealism", isOnClicked: false },
+    { name: "Pop", isOnClicked: false },
+    { name: "Oil", isOnClicked: false },
+    { name: "Watercolour ", isOnClicked: false },
+  ];
+  res.render('category', { post: artworkCategory });
 });
 
 // // ==================== Middleware ==============

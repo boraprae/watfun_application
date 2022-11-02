@@ -77,16 +77,16 @@ class _CreateNewPostState extends State<CreateNewPost> {
   @override
   void initState() {
     super.initState();
-    getToken();
+    // getToken();
   }
 
-  void getToken() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    String? userString = await pref.getString('user');
+  // void getToken() async {
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //   String? userString = await pref.getString('user');
 
-    var userObject = jsonDecode(userString!) as Map<String, dynamic>;
-    _token = userObject['token'];
-  }
+  //   var userObject = jsonDecode(userString!) as Map<String, dynamic>;
+  //   _token = userObject['token'];
+  // }
 
   void uploadArtwork(String token) async {
     String apiUrl = "http://10.0.2.2:3000/api/uploadArtwork";
@@ -204,18 +204,65 @@ class _CreateNewPostState extends State<CreateNewPost> {
                         ],
                       ),
                     )),
+
           //!Add title image area
           Padding(
             padding: const EdgeInsets.all(32.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Title',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
+                //!!Dropdown for select the upload type area not disable the first choice yet :(
+                Container(
+                  width: size.width,
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5.0),
+                      color: lightGray),
+                  height: 50,
+                  child: Row(
+                    children: [
+                      DropdownButton(
+                        value: dropdownvalue,
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                        selectedItemBuilder: (BuildContext context) {
+                          return styleItem.map((String styleItem) {
+                            return Text(
+                              styleItem,
+                              style: const TextStyle(
+                                color: Colors.white54,
+                                fontSize: 12,
+                              ),
+                            );
+                          }).toList();
+                        },
+                        underline: SizedBox(),
+                        items: styleItem.map((String styleItem) {
+                          return DropdownMenuItem(
+                            child: Text(styleItem),
+                            value: styleItem,
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            dropdownvalue = newValue!;
+                            print(dropdownvalue);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: Text(
+                    'Title',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 Padding(
@@ -320,63 +367,63 @@ class _CreateNewPostState extends State<CreateNewPost> {
                   ),
                 ),
                 //? TagFiledTag here (still cannor remove below hinttext)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: SizedBox(
-                    height: 70,
-                    child: TextFieldTags(
-                      tagsStyler: TagsStyler(
-                        showHashtag: false,
-                        tagMargin: const EdgeInsets.only(right: 4.0),
-                        tagCancelIcon:
-                            Icon(Icons.cancel, size: 15.0, color: Colors.white),
-                        tagCancelIconPadding:
-                            EdgeInsets.only(left: 4.0, top: 2.0),
-                        tagPadding: EdgeInsets.only(
-                            top: 2.0, bottom: 4.0, left: 8.0, right: 4.0),
-                        tagDecoration: BoxDecoration(
-                          color: pinkG,
-                        ),
-                        tagTextStyle: TextStyle(
-                            fontWeight: FontWeight.normal, color: Colors.white),
-                      ),
-                      textFieldStyler: TextFieldStyler(
-                        textFieldFilled: true,
-                        textStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                        ),
-                        hintText: "Add your tags here",
-                        hintStyle: TextStyle(
-                            fontSize: 12.0,
-                            color: Colors.white.withOpacity(0.5)),
-                        isDense: false,
-                        textFieldFocusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: pinkG, width: 0.5),
-                        ),
-                        textFieldEnabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 0.5),
-                        ),
-                      ),
-                      onDelete: (tag) {
-                        tags.remove(tag.toString());
-                        print('onDelete: $tags');
-                      },
-                      onTag: (tag) {
-                        tags.add(tag.toString());
-                        print('onTag: $tags');
-                      },
-                      validator: (String tag) {
-                        print('validator: $tags');
-                        if (tag.length > 10) {
-                          return "Sorry, you can't longer than that.";
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(vertical: 16.0),
+                //   child: SizedBox(
+                //     height: 70,
+                //     child: TextFieldTags(
+                //       tagsStyler: TagsStyler(
+                //         showHashtag: false,
+                //         tagMargin: const EdgeInsets.only(right: 4.0),
+                //         tagCancelIcon:
+                //             Icon(Icons.cancel, size: 15.0, color: Colors.white),
+                //         tagCancelIconPadding:
+                //             EdgeInsets.only(left: 4.0, top: 2.0),
+                //         tagPadding: EdgeInsets.only(
+                //             top: 2.0, bottom: 4.0, left: 8.0, right: 4.0),
+                //         tagDecoration: BoxDecoration(
+                //           color: pinkG,
+                //         ),
+                //         tagTextStyle: TextStyle(
+                //             fontWeight: FontWeight.normal, color: Colors.white),
+                //       ),
+                //       textFieldStyler: TextFieldStyler(
+                //         textFieldFilled: true,
+                //         textStyle: TextStyle(
+                //           color: Colors.white,
+                //           fontSize: 12,
+                //         ),
+                //         hintText: "Add your tags here",
+                //         hintStyle: TextStyle(
+                //             fontSize: 12.0,
+                //             color: Colors.white.withOpacity(0.5)),
+                //         isDense: false,
+                //         textFieldFocusedBorder: OutlineInputBorder(
+                //           borderSide: BorderSide(color: pinkG, width: 0.5),
+                //         ),
+                //         textFieldEnabledBorder: OutlineInputBorder(
+                //           borderSide:
+                //               BorderSide(color: Colors.white, width: 0.5),
+                //         ),
+                //       ),
+                //       onDelete: (tag) {
+                //         tags.remove(tag.toString());
+                //         print('onDelete: $tags');
+                //       },
+                //       onTag: (tag) {
+                //         tags.add(tag.toString());
+                //         print('onTag: $tags');
+                //       },
+                //       validator: (String tag) {
+                //         print('validator: $tags');
+                //         if (tag.length > 10) {
+                //           return "Sorry, you can't longer than that.";
+                //         }
+                //         return null;
+                //       },
+                //     ),
+                //   ),
+                // ),
                 // //! Submit button
                 SizedBox(
                   width: size.width,

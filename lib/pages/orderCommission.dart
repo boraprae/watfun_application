@@ -25,7 +25,6 @@ class _OrderCommissionState extends State<OrderCommission> {
   String _token = "";
   TextEditingController customerReqController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -37,7 +36,7 @@ class _OrderCommissionState extends State<OrderCommission> {
         child: Stack(
           children: [
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   image: DecorationImage(
                       fit: BoxFit.fitWidth,
                       image: AssetImage('assets/img/neonBG.jpg'))),
@@ -77,7 +76,7 @@ class _OrderCommissionState extends State<OrderCommission> {
                             size: 24,
                           ),
                         ),
-                        Text(
+                        const Text(
                           'Commisson Offer Detail',
                           style: TextStyle(
                             color: Colors.white,
@@ -96,7 +95,8 @@ class _OrderCommissionState extends State<OrderCommission> {
                             height: 0.4 * size.height,
                             width: size.width,
                             child: Image.asset(
-                              data["commission_offer_detail"]["offer_image_path"],
+                              data["commission_offer_detail"]
+                                  ["offer_image_path"],
                               fit: BoxFit.cover,
                             )),
                         Padding(
@@ -149,14 +149,16 @@ class _OrderCommissionState extends State<OrderCommission> {
                                           CircleAvatar(
                                             radius: 10.0,
                                             backgroundImage: AssetImage(
-                                              data["commission_offer_detail"]["profile_image_path"],
+                                              data["commission_offer_detail"]
+                                                  ["profile_image_path"],
                                             ),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8.0),
                                             child: Text(
-                                              data["commission_offer_detail"]["username"],
+                                              data["commission_offer_detail"]
+                                                  ["username"],
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 color: Colors.white,
@@ -189,7 +191,8 @@ class _OrderCommissionState extends State<OrderCommission> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16),
                                 child: Text(
-                                 data["commission_offer_detail"]["offer_description"],
+                                  data["commission_offer_detail"]
+                                      ["offer_description"],
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 12,
@@ -197,7 +200,11 @@ class _OrderCommissionState extends State<OrderCommission> {
                                 ),
                               ),
                               Text(
-                                'Price ' + data["commission_offer_detail"]["offer_price"].toString() + ' Baht',
+                                'Price ' +
+                                    data["commission_offer_detail"]
+                                            ["offer_price"]
+                                        .toString() +
+                                    ' Baht',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
@@ -207,31 +214,20 @@ class _OrderCommissionState extends State<OrderCommission> {
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16),
-                                    //Todo: Make a dynamic result
+                                //Todo: Make a dynamic result
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      '- Bust Size',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
+                                    for (var i
+                                        in data["commission_offer_detail"]
+                                            ["offer_result"])
+                                      Text(
+                                        "- "+ i,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      '- Color',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    Text(
-                                      '- 1 Character',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                      ),
-                                    ),
                                   ],
                                 ),
                               ),
