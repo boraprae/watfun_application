@@ -1,4 +1,5 @@
 require("dotenv").config();
+const axios = require('axios');
 const express = require("express");
 const bcrypt = require("bcrypt");
 // const jwt = require('jsonwebtoken');
@@ -23,12 +24,12 @@ const user = [
   { user_id: 3, user_username: "user3", user_password: "3333", user_role: 2 },
 ];
 
-const data = [
-  { id: 1, title: "First", detail: "aaa", user_id: 2 },
-  { id: 2, title: "Second", detail: "bbb", user_id: 2 },
-  { id: 3, title: "Third", detail: "ccc", user_id: 3 },
-  { id: 4, title: "Fourth", detail: "ddd", user_id: 3 },
-];
+// const data = [
+//   { id: 1, title: "First", detail: "aaa", user_id: 2 },
+//   { id: 2, title: "Second", detail: "bbb", user_id: 2 },
+//   { id: 3, title: "Third", detail: "ccc", user_id: 3 },
+//   { id: 4, title: "Fourth", detail: "ddd", user_id: 3 },
+// ];
 
 //! Start to write my 2022 Version
 //TODO: 1. Login/Register API 2.Upload picture
@@ -43,6 +44,21 @@ app.get("/password/:pass", function (req, res) {
       res.send(hash);
     }
   });
+});
+
+app.get("/getUserFromJson", function (req, res) {
+  axios
+    .get(`http://localhost:9000/user`)
+    .then((response) => {
+      console.log(response.data);
+      res.json(response.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  // res.json(data);
+  console.log("I'm here");
 });
 
 // // ==================== Middleware ==============
@@ -91,49 +107,49 @@ app.get("/password/:pass", function (req, res) {
 
 // ************* Authen routes **************
 app.post("/login", (req, res) => {
-//   setTimeout(() => {
-    const { username, password } = req.body;
-    const sql = "SELECT password FROM user WHERE username =?";
+  //   setTimeout(() => {
+  const { username, password } = req.body;
+  const sql = "SELECT password FROM user WHERE username =?";
 
-    con.query(sql, [username], function (err, result) {
-      if (err) {
-        console.log(err);
-        res.status(500).send("DB error");
+  con.query(sql, [username], function (err, result) {
+    if (err) {
+      console.log(err);
+      res.status(500).send("DB error");
+    } else {
+      if (result.length != 1) {
+        res.status(400).send("username incorrect");
       } else {
-        if (result.length != 1) {
-          res.status(400).send("username incorrect");
-        } else {
-          //check password
-          bcrypt.compare(password, result[0].password, function (err, match) {
-            if (err) {
-              res.status(500).send("Server Error");
+        //check password
+        bcrypt.compare(password, result[0].password, function (err, match) {
+          if (err) {
+            res.status(500).send("Server Error");
+          } else {
+            if (match) {
+              //password is correct
+              res.send("Login OK");
             } else {
-                if(match){
-                    //password is correct
-                    res.send('Login OK');
-                } else {
-                    res.status(400).send("password incorrect");
-                }
+              res.status(400).send("password incorrect");
             }
-          });
-        }
+          }
+        });
       }
-    });
-    // const result = user.filter((value) => {
-    //     return value.user_username == username && value.user_password == password;
-    // });
-    // // res.json(result);
+    }
+  });
+  // const result = user.filter((value) => {
+  //     return value.user_username == username && value.user_password == password;
+  // });
+  // // res.json(result);
 
-    // if (result.length == 1) {
-    //     const payload = { user: username, user_id: result[0].user_id };
-    //     const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: '1d' });
-    //     res.json({ url: '/blogs', token: token });
-    //     // res.send('/blogs');
-    // }
-    // else {
-    //     res.status(400).send('Wrong username or password');
-    // }
-//   }, 3000);
+  // if (result.length == 1) {
+  //     const payload = { user: username, user_id: result[0].user_id };
+  //     const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: '1d' });
+  //     res.json({ url: '/blogs', token: token });
+  //     // res.send('/blogs');
+  // }
+  // else {
+  //     res.status(400).send('Wrong username or password');
+  // }
+  //   }, 3000);
 });
 
 // // jwt creation / encode

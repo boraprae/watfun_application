@@ -1,10 +1,12 @@
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:watfun_application/constantColors.dart';
 import 'package:watfun_application/pages/shared/listUserData.dart';
+import 'package:get/get.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -19,33 +21,45 @@ class _RegisterPageState extends State<RegisterPage> {
   final passwordTextField = TextEditingController();
   bool showPassword = true;
   //Get User Data
-  final String _url = "http://localhost:9000/user";
+  final String _url = "http://10.0.2.2:7000/getUserFromJson";
   late Future<UserData> futureUserData;
+  late Future<List> _data;
 
   @override
   void initState() {
     super.initState();
-    futureUserData = fetchData();
+    // futureUserData = fetchData();
+    _data = getData();
     // print(futureUserData);
   }
 
-  // Future<http.Response> fetchUserData() async {
-  //   return http.get(Uri.parse(_url));
-  // }
+  Future<List> getData() async {
+    // get token from local storage and verify with server
+    // const storage = FlutterSecureStorage();
+    // String token = await storage.read(key: 'token') ?? '';
 
-  Future<UserData> fetchData() async {
-    final response = await http.get(Uri.parse(_url));
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      print(response.body);
-      return UserData.fromJson(jsonDecode(response.body));
+    Response response = await GetConnect().get(_url);
+    print(response.body);
+    if (response.status.isOk) {
+      return response.body;
     } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load album');
+      throw Exception('Error');
     }
   }
+
+  // Future<UserData> fetchData() async {
+  //   final response = await http.get(Uri.parse(_url));
+  //   if (response.statusCode == 200) {
+  //     // If the server did return a 200 OK response,
+  //     // then parse the JSON.
+  //     print(response.body);
+  //     return UserData.fromJson(jsonDecode(response.body));
+  //   } else {
+  //     // If the server did not return a 200 OK response,
+  //     // then throw an exception.
+  //     throw Exception('Failed to load album');
+  //   }
+  // }
   // Future<http.Response> signUp() {
   //   return http.post(
   //     Uri.parse('http://localhost:9000/user'),
