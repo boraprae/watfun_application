@@ -18,9 +18,9 @@ class _RegisterPageState extends State<RegisterPage> {
   final passwordTextField = TextEditingController();
   bool showPassword = true;
 
-  Future<http.Response> signup() {
+  Future<http.Response> signUp() {
     return http.post(
-      Uri.parse('http://10.0.2.2:3000/register'),
+      Uri.parse('http://10.0.2.2:7000/register'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -212,14 +212,15 @@ class _RegisterPageState extends State<RegisterPage> {
                                     content: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Text('You have to complete all fields.'),
+                                        Text(
+                                            'You have to complete all fields.'),
                                       ],
                                     ),
                                   );
                                 },
                               );
                             } else {
-                              var Signup = await signup();
+                              await signUp();
                               emailTextField.clear();
                               usernameTextField.clear();
                               passwordTextField.clear();

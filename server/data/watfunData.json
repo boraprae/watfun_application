@@ -1,0 +1,82 @@
+{
+    "user": [
+        {
+            "id_user": 0,
+            "username": "John Doe",
+            "email": "abc@gmail.com",
+            "password": "123",
+            "payment_info": "",
+            "bio_text": "",
+            "profile_image_path": "",
+            "cover_profile_image_path": ""
+        },
+        {
+            "id_user": 1,
+            "username": "Jenny Kim",
+            "email": "def@gmail.com",
+            "password": "456",
+            "payment_info": "",
+            "bio_text": "",
+            "profile_image_path": "",
+            "cover_profile_image_path": ""
+        },
+        {
+            "id_user": 2,
+            "username": "Megan Kim",
+            "email": "ght@gmail.com",
+            "password": "789",
+            "payment_info": "Krungthai 555-555-55",
+            "bio_text": "",
+            "profile_image_path": "",
+            "cover_profile_image_path": ""
+        }
+    ],
+    "commission_order": [
+        {
+            "id_commission_order": 1,
+            "order_date": "",
+            "order_request_description": "",
+            "payment_status": "",
+            "progress_status": "",
+            "progress_percentage": "",
+            "user_id_user": "",
+            "offer_id_commission": ""
+        },
+        {
+            "id_commission_order": 2,
+            "order_date": "",
+            "order_request_description": "",
+            "payment_status": "",
+            "progress_status": "",
+            "progress_percentage": "",
+            "user_id_user": "",
+            "offer_id_commission": ""
+        }
+    ],
+    "commission_offer": [
+        {
+            "id_commission_offer": 1,
+            "offer_title": "",
+            "offer_description": "",
+            "offer_price": "",
+            "offer_art_type": "",
+            "offer_tag": "",
+            "offer_result": "",
+            "offer_image_path": "",
+            "offer_create_date": "",
+            "user_id_user": ""
+        }
+    ],
+    "artworks": [
+        {
+            "id_artwork": 1,
+            "art_title": "",
+            "art_description": "",
+            "art_type": "",
+            "art_tag": "",
+            "art_image_path": "",
+            "art_created_date": "",
+            "user_id_user": ""
+        }
+    ]
+}

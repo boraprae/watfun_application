@@ -1,32 +1,49 @@
-require('dotenv').config();
-const express = require('express');
+require("dotenv").config();
+const express = require("express");
+const bcrypt = require("bcrypt");
 // const jwt = require('jsonwebtoken');
-const path = require('path');
+const path = require("path");
 const app = express();
 
 // static folders
-app.use('/public', express.static(path.join(__dirname, "/public")));
+app.use("/public", express.static(path.join(__dirname, "/public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //---- mysql -----
 const mysql = require("mysql");
 const config = require("./dbConfig.js");
+const { match } = require("assert");
 const con = mysql.createConnection(config);
 
 // ============= Dummy data ================
 const user = [
-    { 'user_id': 1, 'user_username': 'admin', 'user_password': '1111', 'user_role': 1 },
-    { 'user_id': 2, 'user_username': 'user2', 'user_password': '2222', 'user_role': 2 },
-    { 'user_id': 3, 'user_username': 'user3', 'user_password': '3333', 'user_role': 2 },
-]
+  { user_id: 1, user_username: "admin", user_password: "1111", user_role: 1 },
+  { user_id: 2, user_username: "user2", user_password: "2222", user_role: 2 },
+  { user_id: 3, user_username: "user3", user_password: "3333", user_role: 2 },
+];
 
 const data = [
-    { 'id': 1, 'title': 'First', 'detail': 'aaa', 'user_id': 2 },
-    { 'id': 2, 'title': 'Second', 'detail': 'bbb', 'user_id': 2 },
-    { 'id': 3, 'title': 'Third', 'detail': 'ccc', 'user_id': 3 },
-    { 'id': 4, 'title': 'Fourth', 'detail': 'ddd', 'user_id': 3 },
-]
+  { id: 1, title: "First", detail: "aaa", user_id: 2 },
+  { id: 2, title: "Second", detail: "bbb", user_id: 2 },
+  { id: 3, title: "Third", detail: "ccc", user_id: 3 },
+  { id: 4, title: "Fourth", detail: "ddd", user_id: 3 },
+];
+
+//! Start to write my 2022 Version
+//TODO: 1. Login/Register API 2.Upload picture
+
+app.get("/password/:pass", function (req, res) {
+  const pass = req.params.pass;
+  bcrypt.hash(pass, 10, function (err, hash) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(hash.length);
+      res.send(hash);
+    }
+  });
+});
 
 // // ==================== Middleware ==============
 // function checkUser(req, res, next) {
@@ -72,26 +89,52 @@ const data = [
 //     res.render('blog', { post: data });
 // });
 
-// // ************* Authen routes **************
-// app.post('/login', (req, res) => {
-//     setTimeout(() => {
-//         const { username, password } = req.body;
-//         const result = user.filter((value) => {
-//             return value.user_username == username && value.user_password == password;
-//         });
-//         // res.json(result);
+// ************* Authen routes **************
+app.post("/login", (req, res) => {
+//   setTimeout(() => {
+    const { username, password } = req.body;
+    const sql = "SELECT password FROM user WHERE username =?";
 
-//         if (result.length == 1) {
-//             const payload = { user: username, user_id: result[0].user_id };
-//             const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: '1d' });
-//             res.json({ url: '/blogs', token: token });
-//             // res.send('/blogs');
-//         }
-//         else {
-//             res.status(400).send('Wrong username or password');
-//         }
-//     }, 3000);
-// });
+    con.query(sql, [username], function (err, result) {
+      if (err) {
+        console.log(err);
+        res.status(500).send("DB error");
+      } else {
+        if (result.length != 1) {
+          res.status(400).send("username incorrect");
+        } else {
+          //check password
+          bcrypt.compare(password, result[0].password, function (err, match) {
+            if (err) {
+              res.status(500).send("Server Error");
+            } else {
+                if(match){
+                    //password is correct
+                    res.send('Login OK');
+                } else {
+                    res.status(400).send("password incorrect");
+                }
+            }
+          });
+        }
+      }
+    });
+    // const result = user.filter((value) => {
+    //     return value.user_username == username && value.user_password == password;
+    // });
+    // // res.json(result);
+
+    // if (result.length == 1) {
+    //     const payload = { user: username, user_id: result[0].user_id };
+    //     const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: '1d' });
+    //     res.json({ url: '/blogs', token: token });
+    //     // res.send('/blogs');
+    // }
+    // else {
+    //     res.status(400).send('Wrong username or password');
+    // }
+//   }, 3000);
+});
 
 // // jwt creation / encode
 // app.get('/jwt', (_req, res) => {
@@ -169,7 +212,7 @@ const data = [
 // });
 
 // ---------- Sever starts here ---------
-const PORT = 6000;
+const PORT = 7000;
 app.listen(PORT, () => {
-    console.log('Server is running at ' + PORT);
+  console.log("Server is running at " + PORT);
 });
