@@ -72,6 +72,20 @@ app.get("/getCommissionOffer", function (req, res) {
     });
 });
 
+app.get("/getCommissionDetail/:id", function (req, res) {
+  const id = req.params.id;
+  axios
+    .get(`http://localhost:9000/commission_offer/${id}`)
+    .then((response) => {
+      console.log(response.data);
+      res.json(response.data);
+      // res.send(response.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 // // ==================== Middleware ==============
 // function checkUser(req, res, next) {
 //     let token = req.headers['authorization'] || req.headers['x-access-token'];

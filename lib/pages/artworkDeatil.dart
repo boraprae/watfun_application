@@ -10,11 +10,12 @@ class ArtworkDetail extends StatefulWidget {
 }
 
 class _ArtworkDetail extends State<ArtworkDetail> {
- 
   TextEditingController newComment = TextEditingController();
+  
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+   
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -176,7 +177,6 @@ class _ArtworkDetail extends State<ArtworkDetail> {
                                   ),
                                 ),
                               ),
-                              
                             ],
                           ),
                         ),

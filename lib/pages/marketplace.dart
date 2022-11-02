@@ -197,7 +197,7 @@ class _MarketplaceState extends State<Marketplace> {
                           // );
                           print('can click');
                           Navigator.pushNamed(context, '/orderCommission', arguments: <String, dynamic>{
-                            'id_commission_offer': data[index]["id_commission_offer"]
+                            'commission_offer_detail': data[index]
                           });
                         },
                         child: Row(

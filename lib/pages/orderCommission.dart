@@ -1,6 +1,7 @@
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:watfun_application/constantColors.dart';
+import 'package:get/get.dart';
 
 class OrderCommission extends StatefulWidget {
   const OrderCommission({Key? key}) : super(key: key);
@@ -23,9 +24,14 @@ class _OrderCommissionState extends State<OrderCommission> {
   String username = 'SaraYune';
   String _token = "";
   TextEditingController customerReqController = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    Map<String, dynamic> data =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    print(data);
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -90,7 +96,7 @@ class _OrderCommissionState extends State<OrderCommission> {
                             height: 0.4 * size.height,
                             width: size.width,
                             child: Image.asset(
-                              'assets/artworksUploads/00.jpg',
+                              data["commission_offer_detail"]["offer_image_path"],
                               fit: BoxFit.cover,
                             )),
                         Padding(
@@ -143,14 +149,14 @@ class _OrderCommissionState extends State<OrderCommission> {
                                           CircleAvatar(
                                             radius: 10.0,
                                             backgroundImage: AssetImage(
-                                              'assets/img/seraphine.jpg',
+                                              data["commission_offer_detail"]["profile_image_path"],
                                             ),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8.0),
                                             child: Text(
-                                              'SeraYune',
+                                              data["commission_offer_detail"]["username"],
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 color: Colors.white,
@@ -160,6 +166,7 @@ class _OrderCommissionState extends State<OrderCommission> {
                                         ],
                                       ),
                                     ),
+                                    //Todo: Add date
                                     Text(
                                       'Sep 4, 2021',
                                       style: TextStyle(
@@ -171,7 +178,7 @@ class _OrderCommissionState extends State<OrderCommission> {
                                 ),
                               ),
                               Text(
-                                'I will create the custom girl for you.',
+                                data["commission_offer_detail"]["offer_title"],
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
@@ -182,7 +189,7 @@ class _OrderCommissionState extends State<OrderCommission> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16),
                                 child: Text(
-                                  'The half body of anime girl for Panalee0819 thanks for commissioning',
+                                 data["commission_offer_detail"]["offer_description"],
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 12,
@@ -190,7 +197,7 @@ class _OrderCommissionState extends State<OrderCommission> {
                                 ),
                               ),
                               Text(
-                                'Price ' + "350" + ' Baht',
+                                'Price ' + data["commission_offer_detail"]["offer_price"].toString() + ' Baht',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
@@ -200,6 +207,7 @@ class _OrderCommissionState extends State<OrderCommission> {
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16),
+                                    //Todo: Make a dynamic result
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -256,8 +264,7 @@ class _OrderCommissionState extends State<OrderCommission> {
                                         color: Colors.white,
                                       ),
                                     ),
-                                    contentPadding:
-                                        const EdgeInsets.all(16),
+                                    contentPadding: const EdgeInsets.all(16),
                                     hintText:
                                         'Describe your commission request....',
                                     hintStyle: const TextStyle(
@@ -288,7 +295,7 @@ class _OrderCommissionState extends State<OrderCommission> {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(18),
-                                          gradient: LinearGradient(
+                                          gradient: const LinearGradient(
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,
                                             colors: [
@@ -297,8 +304,8 @@ class _OrderCommissionState extends State<OrderCommission> {
                                             ],
                                           ),
                                         ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(12.0),
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(12.0),
                                           child: Text(
                                             'Place Order',
                                             textAlign: TextAlign.center,
