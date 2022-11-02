@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:watfun_application/constantColors.dart';
+import 'package:watfun_application/pages/shared/listUserData.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -17,20 +18,47 @@ class _RegisterPageState extends State<RegisterPage> {
   final emailTextField = TextEditingController();
   final passwordTextField = TextEditingController();
   bool showPassword = true;
+  //Get User Data
+  final String _url = "http://localhost:9000/user";
+  late Future<UserData> futureUserData;
 
-  Future<http.Response> signUp() {
-    return http.post(
-      Uri.parse('http://10.0.2.2:7000/register'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'username': usernameTextField.text,
-        'email': emailTextField.text,
-        'password': passwordTextField.text,
-      }),
-    );
+  @override
+  void initState() {
+    super.initState();
+    futureUserData = fetchData();
+    // print(futureUserData);
   }
+
+  // Future<http.Response> fetchUserData() async {
+  //   return http.get(Uri.parse(_url));
+  // }
+
+  Future<UserData> fetchData() async {
+    final response = await http.get(Uri.parse(_url));
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      print(response.body);
+      return UserData.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
+  }
+  // Future<http.Response> signUp() {
+  //   return http.post(
+  //     Uri.parse('http://localhost:9000/user'),
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json; charset=UTF-8',
+  //     },
+  //     body: jsonEncode(<String, String>{
+  //       'username': usernameTextField.text,
+  //       'email': emailTextField.text,
+  //       'password': passwordTextField.text,
+  //     }),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +248,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 },
                               );
                             } else {
-                              await signUp();
+                              // await signUp();
                               emailTextField.clear();
                               usernameTextField.clear();
                               passwordTextField.clear();
