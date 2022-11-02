@@ -1,5 +1,5 @@
 require("dotenv").config();
-const axios = require('axios');
+const axios = require("axios");
 const express = require("express");
 const bcrypt = require("bcrypt");
 // const jwt = require('jsonwebtoken');
@@ -15,6 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 const mysql = require("mysql");
 const config = require("./dbConfig.js");
 const { match } = require("assert");
+const { response } = require("express");
 const con = mysql.createConnection(config);
 
 // ============= Dummy data ================
@@ -50,15 +51,25 @@ app.get("/getUserFromJson", function (req, res) {
   axios
     .get(`http://localhost:9000/user`)
     .then((response) => {
-      console.log(response.data);
+      //console.log(response.data);
       res.json(response.data);
     })
     .catch((err) => {
       console.log(err);
     });
+});
 
-  // res.json(data);
-  console.log("I'm here");
+app.get("/getCommissionOffer", function (req, res) {
+  axios
+    .get(`http://localhost:9000/commission_offer`)
+    .then((response) => {
+      console.log(response.data);
+      res.json(response.data);
+      // res.send(response.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 // // ==================== Middleware ==============

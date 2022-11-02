@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:watfun_application/appBar.dart';
 import 'package:watfun_application/constantColors.dart';
 import 'package:watfun_application/widgets/commissionOffer.dart';
+import 'package:get/get.dart';
 
 class Marketplace extends StatefulWidget {
   const Marketplace({Key? key}) : super(key: key);
@@ -14,7 +16,11 @@ class Marketplace extends StatefulWidget {
 
 class _MarketplaceState extends State<Marketplace> {
   //variable for testing
-  String sortingTag = 'Lastest';
+  String sortingTag = 'Latest';
+  //Get User Data
+  final String _url = "http://10.0.2.2:7000/getCommissionOffer";
+  late Future<List> _data;
+  bool _waiting = true;
   List artworkCategory = [
     {'name': 'All Category', 'isOnClicked': true},
     {'name': 'Realism', 'isOnClicked': false},
@@ -56,11 +62,31 @@ class _MarketplaceState extends State<Marketplace> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _data = getData();
+  }
+
+  //Get Commission Offer
+  Future<List> getData() async {
+    Response response = await GetConnect().get(_url);
+    // print(response.body);
+    if (response.status.isOk) {
+      setState(() {
+        _waiting = false;
+      });
+      return response.body;
+    } else {
+      throw Exception('Error');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
     //** Commission Offer Widget**
-    Widget commissionOffer(index) {
+    Widget commissionOffer(index, data) {
       return Padding(
         padding: const EdgeInsets.only(bottom: 12),
         child: Stack(
@@ -76,7 +102,7 @@ class _MarketplaceState extends State<Marketplace> {
                 padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(commissionInfo[index]['coverImgPath'],
+                  child: Image.asset(data[index]['offer_image_path'],
                       fit: BoxFit.cover),
                 ),
               ),
@@ -99,18 +125,19 @@ class _MarketplaceState extends State<Marketplace> {
                           CircleAvatar(
                             radius: 20,
                             backgroundImage: AssetImage(
-                              commissionInfo[index]['userImgPath'],
+                              data[index]['profile_image_path'],
                             ),
                           ),
                           SizedBox(
                             width: 10,
                           ),
+                          //Todo: Change to user data
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                commissionInfo[index]['creatorName'],
+                                data[index]['username'],
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 8,
@@ -120,7 +147,7 @@ class _MarketplaceState extends State<Marketplace> {
                                 height: 5,
                               ),
                               Text(
-                                commissionInfo[index]['title'],
+                                data[index]['offer_title'],
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 10,
@@ -144,8 +171,7 @@ class _MarketplaceState extends State<Marketplace> {
                                 height: 5,
                               ),
                               Text(
-                                commissionInfo[index]['price'].toString() +
-                                    " Baht",
+                                data[index]['offer_price'].toString() + " Baht",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
@@ -170,7 +196,9 @@ class _MarketplaceState extends State<Marketplace> {
                           //   },
                           // );
                           print('can click');
-                          Navigator.pushNamed(context, '/orderCommission');
+                          Navigator.pushNamed(context, '/orderCommission', arguments: <String, dynamic>{
+                            'id_commission_offer': data[index]["id_commission_offer"]
+                          });
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -402,15 +430,33 @@ class _MarketplaceState extends State<Marketplace> {
                         return listViewChannel(index);
                       }),
                 ),
-                SizedBox(
-                  height: size.height * 0.58,
-                  child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      itemCount: commissionInfo.length,
-                      itemBuilder: (context, index) {
-                        return commissionOffer(index);
-                      }),
-                ),
+                //** Commission Offer **/
+                _waiting
+                    ? Center(
+                        child: const CircularProgressIndicator(
+                        backgroundColor: bgBlack,
+                        color: purpleG,
+                      ))
+                    : SizedBox(
+                        height: size.height * 0.58,
+                        child: FutureBuilder(
+                          future: _data,
+                          builder: (context, snapshot) {
+                            late List data = snapshot.data as List;
+                            if (snapshot.hasData) {
+                              return ListView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: data.length,
+                                  itemBuilder: (context, index) {
+                                    return commissionOffer(index, data);
+                                  });
+                            } else if (snapshot.hasError) {
+                              return const Text('Error');
+                            }
+                            return const CircularProgressIndicator();
+                          },
+                        ),
+                      ),
               ],
             ),
           )

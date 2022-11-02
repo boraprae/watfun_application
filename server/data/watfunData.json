@@ -7,7 +7,7 @@
             "password": "123",
             "payment_info": "",
             "bio_text": "",
-            "profile_image_path": "",
+            "profile_image_path": "assets/artworksUploads/10.jpg",
             "cover_profile_image_path": ""
         },
         {
@@ -17,7 +17,7 @@
             "password": "456",
             "payment_info": "",
             "bio_text": "",
-            "profile_image_path": "",
+            "profile_image_path": "assets/artworksUploads/11.jpg",
             "cover_profile_image_path": ""
         },
         {
@@ -27,7 +27,7 @@
             "password": "789",
             "payment_info": "Krungthai 555-555-55",
             "bio_text": "",
-            "profile_image_path": "",
+            "profile_image_path": "assets/artworksUploads/12.jpg",
             "cover_profile_image_path": ""
         }
     ],
@@ -37,7 +37,7 @@
             "offer_title": "I will create the custom girl for you.",
             "offer_description": "The half body of anime girl for Panalee0819 thanks for commissioning",
             "offer_price": 350,
-            "offer_art_type": "Water Color",
+            "offer_art_type": "Abstract",
             "offer_tag": "",
             "offer_result": [
                 "Bust Size",
@@ -48,7 +48,29 @@
             ],
             "offer_image_path": "assets/artworksUploads/00.jpg",
             "offer_create_date": "Sep 4, 2021",
-            "user_id_user": 1
+            "user_id_user": 1,
+            "username": "Jenny Kim",
+            "profile_image_path": "assets/artworksUploads/11.jpg"
+        },
+        {
+            "id_commission_offer": 1,
+            "offer_title": "I will create the custom girl for you.",
+            "offer_description": "The half body of anime girl for Panalee0819 thanks for commissioning",
+            "offer_price": 1350,
+            "offer_art_type": "Surrealism",
+            "offer_tag": "",
+            "offer_result": [
+                "Bust Size",
+                "1 Character",
+                "Color",
+                "Color background",
+                "Delivery in 5 days"
+            ],
+            "offer_image_path": "assets/artworksUploads/01.jpg",
+            "offer_create_date": "Sep 4, 2021",
+            "user_id_user": 1,
+            "username": "Jenny Kim",
+            "profile_image_path": "assets/artworksUploads/11.jpg"
         }
     ],
     "commission_order": [
