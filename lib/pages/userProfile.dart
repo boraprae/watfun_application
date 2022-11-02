@@ -28,6 +28,10 @@ class _UserProfileState extends State<UserProfile> {
   bool _waiting = true;
   bool _haveImg = false;
   bool _waitingUserData = false;
+  String username = 'SaraYune';
+  String bioText = 'Don’t follow your dream, just follow my arts';
+  String profileImg = 'assets/artworksUploads/05.jpg';
+  String profileCoverImg = 'assets/artworksUploads/02.jpg';
 
   // @override
   // void initState() {
@@ -37,7 +41,7 @@ class _UserProfileState extends State<UserProfile> {
 
   final List<PhotoItem> _items = [
     PhotoItem(
-      "assets/img/uploadedImg/01.jpg",
+      "assets/artworksUploads/01.jpg",
       "Arai",
       "Sara Yune",
       "Sep 15, 2021",
@@ -49,7 +53,7 @@ class _UserProfileState extends State<UserProfile> {
       '',
     ),
     PhotoItem(
-      "assets/img/uploadedImg/02.jpg",
+      "assets/artworksUploads/02.jpg",
       "Mai roo",
       "Stephan Seeber",
       "Sep 4, 2021",
@@ -61,7 +65,7 @@ class _UserProfileState extends State<UserProfile> {
       '',
     ),
     PhotoItem(
-      "assets/img/uploadedImg/03.png",
+      "assets/artworksUploads/03.jpg",
       "55555",
       "Stephan Seeber",
       "Sep 4, 2021",
@@ -77,263 +81,155 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return _waitingUserData
-        ? Center(
-            child: const CircularProgressIndicator(
-            backgroundColor: bgBlack,
-            color: purpleG,
-          ))
-        : SingleChildScrollView(
-            child: Container(
-              // color: bgBlack,
-              child: Stack(
-                children: [
-                  Column(
+    return SingleChildScrollView(
+      child: Container(
+        color: bgBlack,
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //cover image
+                Container(
+                  height: 0.15 * size.height,
+                  width: size.width,
+                  child: Image.asset(
+                    profileCoverImg,
+                    fit: BoxFit.fitWidth,
+                  ),
+                ),
+                //User's stat
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(180, 0, 36, 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      textForm(totalArtwork.toStringAsFixed(0), 'Offers'),
+                      textForm(totalLikes.toStringAsFixed(0), 'Artworks'),
+                      textForm(totalFollowing.toStringAsFixed(0), 'Follower'),
+                      textForm(totalFollower.toStringAsFixed(0), 'Following'),
+                    ],
+                  ),
+                ),
+                //User's bio
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(36, 18, 36, 0),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                     CustomAppBar(),
-                      //cover image
-                      Container(
-                        height: 0.15 * size.height,
+                      Text(
+                        username,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        bioText,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                 Container(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
                         width: size.width,
-                        // child: Image.network(
-                        //   'http://10.0.2.2:3000' + userInfoList['cover_image'],
-                        //   fit: BoxFit.fitWidth,
-                        // ),
-                        child: Image.asset(
-                          'assets/img/missFJ.jpg',
-                          fit: BoxFit.fitWidth,
-                        ),
-                      ),
-                      //User's stat
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(180, 0, 36, 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            textForm(
-                                _items.length.toStringAsFixed(0), 'Artworks'),
-                            textForm(totalLikes.toStringAsFixed(0), 'Likes'),
-                            textForm(
-                                totalFollowing.toStringAsFixed(0), 'Follower'),
-                            textForm(
-                                totalFollower.toStringAsFixed(0), 'Following'),
-                          ],
-                        ),
-                      ),
-                      //User's bio
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(36, 18, 36, 0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "userInfoList['username']",
-                              // userInfoList['username'],
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "userInfoList['username']",
-                              // userInfoList['bio'],
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Row(
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'UNIQUE',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 10,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 5),
-                                      child: Text(
-                                        "userInfoList['username']",
-                                        // userInfoList['tags'].toUpperCase(),
-                                        style: TextStyle(
-                                          fontSize: 10,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 0.3 * size.width,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'BADGES',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 10,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 5),
-                                      child: Text(
-                                        ':X',
-                                        style: TextStyle(
-                                          fontSize: 10,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              width: size.width,
-                              child: OutlineButton.icon(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => AccountSetting()),
-                                  );
-                                },
-                                icon: Icon(
-                                  Icons.settings,
-                                  color: Colors.white,
-                                  size: 0.04 * size.width,
-                                ),
-                                label: Text(
-                                  'Settings',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                borderSide: BorderSide(
-                                  color: Colors.white,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Divider(color: grayText),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(36, 8, 36, 8),
-                        child: Text(
-                          'Gallery',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
+                        child: OutlineButton.icon(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.settings,
                             color: Colors.white,
+                            size: 0.04 * size.width,
+                          ),
+                          label: Text(
+                            'Settings',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.white,
+                            ),
+                          ),
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
                           ),
                         ),
                       ),
-                      _haveImg
-                          ? _waiting
-                              ? Center(
-                                  child: const CircularProgressIndicator(
-                                  backgroundColor: bgBlack,
-                                  color: purpleG,
-                                ))
-                              : Container(
-                                  width: size.width,
-                                  height: size.height * 0.8,
-                                  child: GridView.builder(
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisSpacing: 1,
-                                      mainAxisSpacing: 1,
-                                      crossAxisCount: 3,
-                                    ),
-                                    itemCount: _items.length,
-                                    itemBuilder: (context, index) {
-                                      // Item rendering
-                                      return new GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  PostDetail(),
-                                              settings: RouteSettings(
-                                                  arguments: _items[index]),
-                                            ),
-                                          );
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: NetworkImage(
-                                                  _items[index].image),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                )
-                          : Center(
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 0.1 * size.height,
-                                  ),
-                                  Icon(
-                                    Icons.no_photography,
-                                    color: Colors.grey,
-                                    size: 0.1 * size.height,
-                                  ),
-                                  Text(
-                                    'Doesn\'t have any artwork.',
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                     ],
                   ),
-                  Positioned(
-                    top: 0.15 * size.height,
-                    left: 0.05 * size.width,
-                    child: CircleAvatar(
-                      // backgroundImage: NetworkImage('http://10.0.2.2:3000' +
-                      //     userInfoList['profile_image']),
-                      backgroundImage: AssetImage(
-                        'assets/img/seraphine.jpg',
-                      ),
-                      radius: 0.12 * size.width,
+                ),
+                Divider(color: grayText),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(36, 8, 36, 8),
+                  child: Text(
+                    'Gallery',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      color: Colors.white,
                     ),
                   ),
-                ],
+                ),
+                //Gallery
+                Container(
+                  width: size.width,
+                  height: size.height * 0.8,
+                  child: GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisSpacing: 1,
+                      mainAxisSpacing: 1,
+                      crossAxisCount: 3,
+                    ),
+                    itemCount: _items.length,
+                    itemBuilder: (context, index) {
+                      // Item rendering
+                      return new GestureDetector(
+                        onTap: () {
+                          print(index);
+                          print(_items[index]);
+                          // Navigator.pushNamed(context, '/postDetail');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PostDetail(),
+                              settings: RouteSettings(arguments: _items[index]),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage(_items[index].image),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              top: 0.08 * size.height,
+              left: 0.05 * size.width,
+              child: CircleAvatar(
+                backgroundImage: AssetImage(profileImg),
+                radius: 0.12 * size.width,
               ),
             ),
-          );
+          ],
+        ),
+      ),
+    );
   }
 }
 

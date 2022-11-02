@@ -26,8 +26,10 @@ class _CreateNewPostState extends State<CreateNewPost> {
   List tags = [];
   File? _image;
   var dropdownvalue = 'Select style of arts';
+  var createTypeValue = 'Select type of creation';
   String _token = "";
   late BuildContext _context;
+
   // Future<http.Response> upload(String token, { body }) {
   //   return http.post(
   //     Uri.parse('http://10.0.2.2:3000/api/uploadArtwork'),
@@ -56,23 +58,23 @@ class _CreateNewPostState extends State<CreateNewPost> {
     );
   }
 
-  Future<http.StreamedResponse> uploadImage(filename, url, token) async {
-    var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.files.add(await http.MultipartFile.fromPath('image', filename));
-    request.headers['Authorization'] = token;
-    request.fields['title'] = artTitleController.text;
-    request.fields['description'] = artDescriptionController.text;
-    if (dropdownvalue != "Select style of arts") {
-      request.fields['art_type'] = dropdownvalue;
-    }
-    if (tags.length != 0) {
-      request.fields['tags'] = tags.join(',');
-    }
+  // Future<http.StreamedResponse> uploadImage(filename, url, token) async {
+  //   var request = http.MultipartRequest('POST', Uri.parse(url));
+  //   request.files.add(await http.MultipartFile.fromPath('image', filename));
+  //   request.headers['Authorization'] = token;
+  //   request.fields['title'] = artTitleController.text;
+  //   request.fields['description'] = artDescriptionController.text;
+  //   if (dropdownvalue != "Select style of arts") {
+  //     request.fields['art_type'] = dropdownvalue;
+  //   }
+  //   if (tags.length != 0) {
+  //     request.fields['tags'] = tags.join(',');
+  //   }
 
-    print(request.fields.entries);
-    var res = await request.send();
-    return res;
-  }
+  //   print(request.fields.entries);
+  //   var res = await request.send();
+  //   return res;
+  // }
 
   @override
   void initState() {
@@ -88,27 +90,27 @@ class _CreateNewPostState extends State<CreateNewPost> {
   //   _token = userObject['token'];
   // }
 
-  void uploadArtwork(String token) async {
-    String apiUrl = "http://10.0.2.2:3000/api/uploadArtwork";
+  // void uploadArtwork(String token) async {
+  //   String apiUrl = "http://10.0.2.2:3000/api/uploadArtwork";
 
-    if (_image == null) {
-      return showAlert('Error', 'Please select an image');
-    }
+  //   if (_image == null) {
+  //     return showAlert('Error', 'Please select an image');
+  //   }
 
-    http.StreamedResponse response =
-        await uploadImage(_image!.path, apiUrl, token);
+  //   http.StreamedResponse response =
+  //       await uploadImage(_image!.path, apiUrl, token);
 
-    String message = await response.stream.bytesToString();
-    print('Response: ' + message);
-    if (response.statusCode > 299) {
-      return showAlert('Error', message);
-    }
+  //   String message = await response.stream.bytesToString();
+  //   print('Response: ' + message);
+  //   if (response.statusCode > 299) {
+  //     return showAlert('Error', message);
+  //   }
 
-    showAlert('Success', 'Upload complete');
-    setState(() {
-      _image = null;
-    });
-  }
+  //   showAlert('Success', 'Upload complete');
+  //   setState(() {
+  //     _image = null;
+  //   });
+  // }
 
   //! dropdown static value
 
@@ -122,6 +124,12 @@ class _CreateNewPostState extends State<CreateNewPost> {
     'Pop',
     'Oil',
     'Watercolour ',
+  ];
+
+  var uploadType = [
+    'Select type of creation',
+    'Create Commission Offer',
+    'Create Artwork Post',
   ];
 
   late Map<dynamic, dynamic> imgData;
@@ -212,6 +220,7 @@ class _CreateNewPostState extends State<CreateNewPost> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 //!!Dropdown for select the upload type area not disable the first choice yet :(
+                //Todo: Find solution to fix error in framework
                 Container(
                   width: size.width,
                   padding: EdgeInsets.all(16),
@@ -222,14 +231,14 @@ class _CreateNewPostState extends State<CreateNewPost> {
                   child: Row(
                     children: [
                       DropdownButton(
-                        value: dropdownvalue,
+                        value: createTypeValue,
                         style: TextStyle(
                           color: Colors.black,
                         ),
                         selectedItemBuilder: (BuildContext context) {
-                          return styleItem.map((String styleItem) {
+                          return uploadType.map((String uploadType) {
                             return Text(
-                              styleItem,
+                              uploadType,
                               style: const TextStyle(
                                 color: Colors.white54,
                                 fontSize: 12,
@@ -238,16 +247,16 @@ class _CreateNewPostState extends State<CreateNewPost> {
                           }).toList();
                         },
                         underline: SizedBox(),
-                        items: styleItem.map((String styleItem) {
+                        items: uploadType.map((String uploadType) {
                           return DropdownMenuItem(
-                            child: Text(styleItem),
-                            value: styleItem,
+                            child: Text(uploadType),
+                            value: uploadType,
                           );
                         }).toList(),
-                        onChanged: (String? newValue) {
+                        onChanged: (String? updateValue) {
                           setState(() {
-                            dropdownvalue = newValue!;
-                            print(dropdownvalue);
+                            createTypeValue = updateValue!;
+                            print(createTypeValue);
                           });
                         },
                       ),
@@ -425,36 +434,39 @@ class _CreateNewPostState extends State<CreateNewPost> {
                 //   ),
                 // ),
                 // //! Submit button
-                SizedBox(
-                  width: size.width,
-                  height: 45,
-                  child: ElevatedButton(
-                    //? variable foe submit
-                    //!_image
-                    //!artTitleController
-                    //!artDescriptionController
-                    //!dropdownvalue
-                    //!tag
-                    onPressed: () {
-                      uploadArtwork(_token);
-                    },
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(bgBlack),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
-                            side: BorderSide(
-                              color: lightPurple,
-                              width: 0.5,
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: SizedBox(
+                    width: size.width,
+                    height: 45,
+                    child: ElevatedButton(
+                      //? variable foe submit
+                      //!_image
+                      //!artTitleController
+                      //!artDescriptionController
+                      //!dropdownvalue
+                      //!tag
+                      onPressed: () {
+                        // uploadArtwork(_token);
+                      },
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(bgBlack),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                              side: BorderSide(
+                                color: lightPurple,
+                                width: 0.5,
+                              ),
                             ),
-                          ),
-                        )),
+                          )),
 
-                    child: Text(
-                      'Submit',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: lightPurple,
+                      child: Text(
+                        'Submit',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: lightPurple,
+                        ),
                       ),
                     ),
                   ),

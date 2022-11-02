@@ -520,7 +520,7 @@ class _PostDetailState extends State<PostDetail> {
                   },
                   child: Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.redeem,
                         size: 26.0,
                         color: purpleG,
@@ -546,13 +546,18 @@ class _PostDetailState extends State<PostDetail> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            //? Artwork Image
             Container(
               height: 0.4 * size.height,
               width: size.width,
-              child: Image.network(
+              child: Image.asset(
                 _items.image,
                 fit: BoxFit.fitWidth,
               ),
+              // child: Image.network(
+              //   _items.image,
+              //   fit: BoxFit.fitWidth,
+              // ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
@@ -607,10 +612,11 @@ class _PostDetailState extends State<PostDetail> {
                           },
                           child: Row(
                             children: [
+                              //! User Profile Image
                               CircleAvatar(
                                 radius: 10.0,
                                 backgroundImage: AssetImage(
-                                  'assets/img/winter.jpg',
+                                  'assets/artworksUploads/05.jpg',
                                 ),
                               ),
                               Padding(
@@ -690,12 +696,13 @@ class _PostDetailState extends State<PostDetail> {
                       ),
                     ),
                   ),
+                  //! User Profile Image(Comment)
                   Row(
                     children: [
                       CircleAvatar(
                         radius: 10.0,
                         backgroundImage: AssetImage(
-                          'assets/img/winter.jpg',
+                          'assets/artworksUploads/05.jpg',
                         ),
                       ),
                       SizedBox(
