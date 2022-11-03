@@ -94,7 +94,9 @@
             "art_tag": "",
             "art_image_path": "assets/artworksUploads/03.jpg",
             "art_created_date": "Sep 4, 2021",
-            "user_id_user": 2
+            "user_id_user": 1,
+            "username": "Jenny Kim",
+            "profile_image_path": "assets/artworksUploads/11.jpg"
         }
     ]
 }

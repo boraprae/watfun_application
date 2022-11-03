@@ -11,11 +11,13 @@ class ArtworkDetail extends StatefulWidget {
 
 class _ArtworkDetail extends State<ArtworkDetail> {
   TextEditingController newComment = TextEditingController();
-  
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-   
+    Map<String, dynamic> data =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    print(data);
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -62,7 +64,7 @@ class _ArtworkDetail extends State<ArtworkDetail> {
                           ),
                         ),
                         Text(
-                          'Commisson Offer Detail',
+                          'Artworks',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -79,7 +81,7 @@ class _ArtworkDetail extends State<ArtworkDetail> {
                             height: 0.4 * size.height,
                             width: size.width,
                             child: Image.asset(
-                              'assets/artworksUploads/00.jpg',
+                              data['artwork_detail']['art_image_path'],
                               fit: BoxFit.cover,
                             )),
                         Padding(
@@ -131,14 +133,16 @@ class _ArtworkDetail extends State<ArtworkDetail> {
                                           CircleAvatar(
                                             radius: 10.0,
                                             backgroundImage: AssetImage(
-                                              'assets/img/seraphine.jpg',
+                                              data['artwork_detail']
+                                                  ['profile_image_path'],
                                             ),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8.0),
                                             child: Text(
-                                              'SeraYune',
+                                              data['artwork_detail']
+                                                  ['username'],
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 color: Colors.white,
@@ -158,8 +162,8 @@ class _ArtworkDetail extends State<ArtworkDetail> {
                                   ],
                                 ),
                               ),
-                              const Text(
-                                'I will create the custom girl for you.',
+                              Text(
+                                data['artwork_detail']['art_title'],
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
@@ -170,7 +174,7 @@ class _ArtworkDetail extends State<ArtworkDetail> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16),
                                 child: Text(
-                                  'The half body of anime girl for Panalee0819 thanks for commissioning',
+                                   data['artwork_detail']['art_description'],
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 12,

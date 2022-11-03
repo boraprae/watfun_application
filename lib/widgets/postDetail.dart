@@ -5,6 +5,7 @@ import 'package:watfun_application/constantColors.dart';
 import 'package:watfun_application/pages/shared/listImg.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 
 class PostDetail extends StatefulWidget {
   var userData;
@@ -17,6 +18,11 @@ class PostDetail extends StatefulWidget {
 class _PostDetailState extends State<PostDetail> {
   TextEditingController newComment = TextEditingController();
   int _selectedIndex = 0;
+
+//Get artwork data
+  final String _url = "http://10.0.2.2:7000/getArtworks";
+  late Future<List> _data;
+  bool _waiting = true;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -94,12 +100,26 @@ class _PostDetailState extends State<PostDetail> {
     );
   }
 
-
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _data = getData();
+  }
+
+  
+  //Get Commission Offer
+  Future<List> getData() async {
+    Response response = await GetConnect().get(_url);
+    // print(response.body);
+    if (response.status.isOk) {
+      setState(() {
+        _waiting = false;
+      });
+      return response.body;
+    } else {
+      throw Exception('Error');
+    }
   }
 
   void getName(String name, int id) {
@@ -415,13 +435,12 @@ class _PostDetailState extends State<PostDetail> {
     } else {
       print("**This is an item which you selected na :)**");
       print("Item name: $itemName ID: $itemId, Total: $totalItem");
-      
+
       Navigator.pop(context);
       showAlert('Success', 'Gift sent!');
     }
     setState(() {});
 
-    //?-- waiting for kranny ;-; --?
   }
 
   @override
@@ -474,7 +493,7 @@ class _PostDetailState extends State<PostDetail> {
                 )),
           ],
         ),
-        //tab bar wil paste here
+        //?tab bar wil paste here
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,

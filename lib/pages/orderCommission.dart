@@ -30,7 +30,7 @@ class _OrderCommissionState extends State<OrderCommission> {
     Size size = MediaQuery.of(context).size;
     Map<String, dynamic> data =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    print(data);
+    // print(data);
     return Scaffold(
       body: SafeArea(
         child: Stack(

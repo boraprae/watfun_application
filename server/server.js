@@ -57,6 +57,18 @@ app.get("/getCommissionOffer", function (req, res) {
       console.log(err);
     });
 });
+app.get("/getArtworks", function (req, res) {
+  axios
+    .get(`http://localhost:9000/artworks`)
+    .then((response) => {
+      console.log(response.data);
+      res.json(response.data);
+      // res.send(response.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 
 app.get("/getArtCategory", function (req, res) {
   const artworkCategory = [

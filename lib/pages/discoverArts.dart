@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:watfun_application/appBar.dart';
 import 'package:watfun_application/constantColors.dart';
 import 'package:watfun_application/pages/searchingOffer.dart';
-import 'package:watfun_application/widgets/commissionOffer.dart';
+import 'package:get/get.dart';
 
 class DiscoverArts extends StatefulWidget {
   const DiscoverArts({Key? key}) : super(key: key);
@@ -15,7 +15,11 @@ class DiscoverArts extends StatefulWidget {
 
 class _DiscoverArtsState extends State<DiscoverArts> {
   //variable for testing
-  String sortingTag = 'Lastest';
+  String sortingTag = 'Latest';
+  //Get User Data
+  final String _url = "http://10.0.2.2:7000/getArtworks";
+  late Future<List> _data;
+  bool _waiting = true;
   List artworkCategory = [
     {'name': 'All Category', 'isOnClicked': true},
     {'name': 'Realism', 'isOnClicked': false},
@@ -57,11 +61,31 @@ class _DiscoverArtsState extends State<DiscoverArts> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _data = getData();
+  }
+
+  //Get Artwork Data
+  Future<List> getData() async {
+    Response response = await GetConnect().get(_url);
+    print(response.body);
+    if (response.status.isOk) {
+      setState(() {
+        _waiting = false;
+      });
+      return response.body;
+    } else {
+      throw Exception('Error');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    //** Commission Offer Widget**
-    Widget commissionOffer(index) {
+    //**Artwork Widget**
+    Widget artworkWidget(index, data) {
       return Padding(
         padding: const EdgeInsets.only(bottom: 12),
         child: Stack(
@@ -77,7 +101,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                 padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(commissionInfo[index]['coverImgPath'],
+                  child: Image.asset(data[index]['art_image_path'],
                       fit: BoxFit.cover),
                 ),
               ),
@@ -100,7 +124,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                           CircleAvatar(
                             radius: 20,
                             backgroundImage: AssetImage(
-                              commissionInfo[index]['userImgPath'],
+                              data[index]['profile_image_path'],
                             ),
                           ),
                           const SizedBox(
@@ -111,7 +135,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                commissionInfo[index]['creatorName'],
+                                data[index]['username'],
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 8,
@@ -121,7 +145,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                                 height: 5,
                               ),
                               Text(
-                                commissionInfo[index]['title'],
+                                data[index]['art_title'],
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 10,
@@ -135,7 +159,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                       const SizedBox(
                         height: 10,
                       ),
-                      //** Order Commission Button **//
+                      //** View Button **//
                       GestureDetector(
                         onTap: () {
                           // Navigator.pushNamed(
@@ -145,6 +169,10 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                           //     'name': artworkCategory[index],
                           //   },
                           // );
+                          Navigator.pushNamed(context, '/artworkDetail',
+                              arguments: <String, dynamic>{
+                                'artwork_detail': data[index]
+                              });
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -377,15 +405,32 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                         return listViewChannel(index);
                       }),
                 ),
-                SizedBox(
-                  height: size.height * 0.58,
-                  child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      itemCount: commissionInfo.length,
-                      itemBuilder: (context, index) {
-                        return commissionOffer(index);
-                      }),
-                ),
+                //**Artwork View */
+                _waiting
+                    ? Center(
+                        child: const CircularProgressIndicator(
+                        backgroundColor: bgBlack,
+                        color: purpleG,
+                      ))
+                    : SizedBox(
+                        height: size.height * 0.58,
+                        child: FutureBuilder(
+                            future: _data,
+                            builder: (context, snapshot) {
+                              late List data = snapshot.data as List;
+                              if (snapshot.hasData) {
+                                return ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: data.length,
+                                    itemBuilder: (context, index) {
+                                      return artworkWidget(index, data);
+                                    });
+                              } else if (snapshot.hasError) {
+                                return const Text('Error');
+                              }
+                              return const CircularProgressIndicator();
+                            }),
+                      ),
               ],
             ),
           )

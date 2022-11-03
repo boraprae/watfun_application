@@ -33,34 +33,7 @@ class _MarketplaceState extends State<Marketplace> {
     {'name': 'Oil', 'isOnClicked': false},
     {'name': 'Watercolour ', 'isOnClicked': false},
   ];
-  //Test Data
-  List commissionInfo = [
-    {
-      'id': 0,
-      'creatorName': 'SaraYune',
-      'title': 'I will create the custom girl for you.',
-      'price': 350,
-      'userImgPath': 'assets/artworksUploads/00.jpg',
-      'coverImgPath': 'assets/artworksUploads/00.jpg',
-    },
-    {
-      'id': 1,
-      'creatorName': 'SaraYune',
-      'title': 'I will create the custom girl for you.',
-      'price': 350,
-      'userImgPath': 'assets/artworksUploads/00.jpg',
-      'coverImgPath': 'assets/artworksUploads/01.jpg',
-    },
-    {
-      'id': 2,
-      'creatorName': 'SaraYune',
-      'title': 'I will create the custom girl for you.',
-      'price': 350,
-      'userImgPath': 'assets/artworksUploads/00.jpg',
-      'coverImgPath': 'assets/artworksUploads/02.jpg',
-    },
-  ];
-
+ 
   @override
   void initState() {
     super.initState();
