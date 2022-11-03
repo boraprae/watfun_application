@@ -94,74 +94,12 @@ class _PostDetailState extends State<PostDetail> {
     );
   }
 
-  Future getUserGift(String token) async {
-    return http.get(Uri.parse('http://10.0.2.2:3000/api/user_gift'),
-        headers: <String, String>{
-          // 'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': token,
 
-          // body: jsonEncode(<String,Sting>{
-          //   'id':
-          //   'type_name': 'name',
-          //   'password': passwordTextField.text
-          // }),
-        });
-  }
-
-  Future sendGift(String token, int gift_id, int amount, int user_id) async {
-    print('Gift ID: $gift_id, $amount, $user_id');
-    return http.post(
-      Uri.parse('http://10.0.2.2:3000/api/send_gift'),
-      headers: <String, String>{
-        // 'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': token,
-      },
-      body: {
-        'test': 'hgeh',
-        'gift_id': gift_id.toString(),
-        'amount': amount.toString(),
-        'user_id': user_id.toString()
-      },
-    );
-  }
-
-  void prepareGiftData() {
-    for (int gift = 0; gift < giftStore.length; gift++) {
-      for (int dbGift = 0; dbGift < _userGiftData.length; dbGift++) {
-        if (giftStore[gift]['itemId'] == _userGiftData[dbGift]['gift_id']) {
-          giftStore[gift]['itemAmount'] =
-              int.parse(_userGiftData[dbGift]['amount']);
-          break;
-        }
-      }
-    }
-
-    print(giftStore);
-  }
-
-  void getToken() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    String? userString = await pref.getString('user');
-
-    var userObject = jsonDecode(userString!) as Map<String, dynamic>;
-    var localToken = userObject['token'];
-    _token = localToken;
-    http.Response userGiftResponse = await getUserGift(localToken);
-    if (userGiftResponse.statusCode > 299) {
-      return print(userGiftResponse.body);
-    }
-    var userGiftObj = jsonDecode(userGiftResponse.body);
-    _userGiftData = userGiftObj;
-    prepareGiftData();
-
-    setState(() {});
-  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getToken();
   }
 
   void getName(String name, int id) {
@@ -477,12 +415,7 @@ class _PostDetailState extends State<PostDetail> {
     } else {
       print("**This is an item which you selected na :)**");
       print("Item name: $itemName ID: $itemId, Total: $totalItem");
-      http.Response giftSendResponse = await sendGift(
-          _token, itemId, totalItem, int.parse(widget.userData['user_id']));
-      if (giftSendResponse.statusCode > 299) {
-        return showAlert('Error', giftSendResponse.body);
-      }
-
+      
       Navigator.pop(context);
       showAlert('Success', 'Gift sent!');
     }

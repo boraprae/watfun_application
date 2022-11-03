@@ -188,9 +188,10 @@ class _MarketplaceState extends State<Marketplace> {
                       //** Order Commission Button **//
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, '/orderCommission', arguments: <String, dynamic>{
-                            'commission_offer_detail': data[index]
-                          });
+                          Navigator.pushNamed(context, '/orderCommission',
+                              arguments: <String, dynamic>{
+                                'commission_offer_detail': data[index]
+                              });
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -199,7 +200,7 @@ class _MarketplaceState extends State<Marketplace> {
                               width: size.width - 100,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(18),
-                                gradient: LinearGradient(
+                                gradient: const LinearGradient(
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                   colors: [
@@ -208,8 +209,8 @@ class _MarketplaceState extends State<Marketplace> {
                                   ],
                                 ),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(12.0),
+                              child: const Padding(
+                                padding: EdgeInsets.all(12.0),
                                 child: Text(
                                   'Order Commission',
                                   textAlign: TextAlign.center,

@@ -138,11 +138,19 @@ class _UserProfileState extends State<UserProfile> {
                       SizedBox(
                         height: 15,
                       ),
-                 Container(
+                      Container(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         width: size.width,
                         child: OutlineButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            //path to setting page
+                            Navigator.pushNamed(
+                              context, '/profileSetting',
+                              // arguments: <String, dynamic>{
+                              //   'commission_offer_detail': data[index]
+                              // },
+                            );
+                          },
                           icon: Icon(
                             Icons.settings,
                             color: Colors.white,
@@ -183,7 +191,8 @@ class _UserProfileState extends State<UserProfile> {
                   width: size.width,
                   height: size.height * 0.8,
                   child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisSpacing: 1,
                       mainAxisSpacing: 1,
                       crossAxisCount: 3,

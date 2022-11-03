@@ -21,7 +21,7 @@ class _SearchingOfferState extends State<SearchingOffer> {
         child: Stack(
           children: [
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   image: DecorationImage(
                       fit: BoxFit.fitWidth,
                       image: AssetImage('assets/img/neonBG.jpg'))),

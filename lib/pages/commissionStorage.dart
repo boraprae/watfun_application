@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:watfun_application/constantColors.dart';
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:watfun_application/appBar.dart';
-import 'package:watfun_application/constantColors.dart';
+import 'package:get/get.dart';
 
 class CommissionStorage extends StatefulWidget {
   const CommissionStorage({Key? key}) : super(key: key);
@@ -12,7 +12,11 @@ class CommissionStorage extends StatefulWidget {
 }
 
 class _CommissionStorageState extends State<CommissionStorage> {
-  String sortingTag = 'Lastest';
+  String sortingTag = 'Latest';
+  final String _url = "http://10.0.2.2:7000/getCommissionOffer";
+  late Future<List> _data;
+  bool _waiting = true;
+
   List artworkCategory = [
     {'name': 'All Category', 'isOnClicked': true},
     {'name': 'Realism', 'isOnClicked': false},
@@ -53,6 +57,26 @@ class _CommissionStorageState extends State<CommissionStorage> {
     },
   ];
   @override
+  void initState() {
+    super.initState();
+    _data = getData();
+  }
+
+  //Get Commission Offer
+  Future<List> getData() async {
+    Response response = await GetConnect().get(_url);
+    // print(response.body);
+    if (response.status.isOk) {
+      setState(() {
+        _waiting = false;
+      });
+      return response.body;
+    } else {
+      throw Exception('Error');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
@@ -80,6 +104,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                 ),
               ),
             ),
+            //Todo: Map with data from server
             Positioned(
               bottom: 0,
               child: BlurryContainer(
@@ -168,6 +193,13 @@ class _CommissionStorageState extends State<CommissionStorage> {
                           //     'name': artworkCategory[index],
                           //   },
                           // );
+                          Navigator.pushNamed(
+                            context,
+                            '/orderCommission',
+                            // arguments: <String, dynamic>{
+                            //   'commission_offer_detail': data[index]
+                            // },
+                          );
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -235,7 +267,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                         ),
                         Text(
                           'Sorting by: ' + sortingTag,
-                          style:  const TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 10,
                           ),
