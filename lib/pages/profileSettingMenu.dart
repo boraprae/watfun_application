@@ -8,12 +8,12 @@ import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:watfun_application/appBar.dart';
 import 'package:get/get.dart';
 
-class ProfileSetting extends StatefulWidget {
+class ProfileSettingMenu extends StatefulWidget {
   @override
-  State<ProfileSetting> createState() => _ProfileSettingState();
+  State<ProfileSettingMenu> createState() => _ProfileSettingMenuState();
 }
 
-class _ProfileSettingState extends State<ProfileSetting> {
+class _ProfileSettingMenuState extends State<ProfileSettingMenu> {
   String _token = '';
   var userInfoList;
   //Todo: the bool default value is true
@@ -75,7 +75,10 @@ class _ProfileSettingState extends State<ProfileSetting> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/editProfile');
+                      Navigator.pushNamed(
+                        context,
+                        '/editProfileInfo',
+                      );
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,

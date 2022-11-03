@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:watfun_application/pages/artworkDeatil.dart';
 import 'package:watfun_application/pages/changePassword.dart';
 import 'package:watfun_application/pages/commissionProgress.dart';
+import 'package:watfun_application/pages/editProfileInfo.dart';
 import 'package:watfun_application/pages/orderCommission.dart';
-import 'package:watfun_application/pages/profileSetting.dart';
+import 'package:watfun_application/pages/profileSettingMenu.dart';
 import 'package:watfun_application/pages/searchingOffer.dart';
 import 'package:watfun_application/pages/signUp.dart';
 import 'package:watfun_application/mainMenu.dart';
@@ -25,8 +26,9 @@ void main() {
         '/orderCommission': (context) => OrderCommission(),
         '/artworkDetail': (context) => ArtworkDetail(),
         '/commissionProgress': (context)=> CommissionProgress(),
-        '/profileSetting': (context) => ProfileSetting(),
+        '/profileSetting': (context) => ProfileSettingMenu(),
         '/changePassword': (context)=> ChangePassword(),
+        '/editProfileInfo': (context) => EditProfile(),
       },
     ),
   );
