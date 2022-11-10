@@ -17,7 +17,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
   //variable for testing
   String sortingTag = 'Latest';
   //Get User Data
-  final String _url = "http://10.0.2.2:7000/getArtworks";
+  final String _url = "http://10.0.2.2:9000/artworks";
   late Future<List> _data;
   bool _waiting = true;
   List artworkCategory = [

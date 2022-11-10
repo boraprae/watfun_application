@@ -18,7 +18,7 @@ class _MarketplaceState extends State<Marketplace> {
   //variable for testing
   String sortingTag = 'Latest';
   //Get User Data
-  final String _url = "http://10.0.2.2:7000/getCommissionOffer";
+  final String _url = "http://10.0.2.2:9000/commission_offer";
   late Future<List> _data;
   bool _waiting = true;
   List artworkCategory = [
@@ -33,7 +33,7 @@ class _MarketplaceState extends State<Marketplace> {
     {'name': 'Oil', 'isOnClicked': false},
     {'name': 'Watercolour ', 'isOnClicked': false},
   ];
- 
+
   @override
   void initState() {
     super.initState();
@@ -43,7 +43,7 @@ class _MarketplaceState extends State<Marketplace> {
   //Get Commission Offer
   Future<List> getData() async {
     Response response = await GetConnect().get(_url);
-    // print(response.body);
+    //print(response.body);
     if (response.status.isOk) {
       setState(() {
         _waiting = false;
@@ -101,7 +101,7 @@ class _MarketplaceState extends State<Marketplace> {
                               data[index]['profile_image_path'],
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           //Todo: Change to user data
@@ -111,17 +111,17 @@ class _MarketplaceState extends State<Marketplace> {
                             children: [
                               Text(
                                 data[index]['username'],
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 8,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               Text(
                                 data[index]['offer_title'],
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 10,
                                 ),
@@ -133,19 +133,19 @@ class _MarketplaceState extends State<Marketplace> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Text(
+                              const Text(
                                 'Price',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 8,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               Text(
                                 data[index]['offer_price'].toString() + " Baht",
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -155,7 +155,7 @@ class _MarketplaceState extends State<Marketplace> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       //** Order Commission Button **//

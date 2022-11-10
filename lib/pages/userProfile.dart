@@ -83,7 +83,6 @@ class _UserProfileState extends State<UserProfile> {
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Container(
-        color: bgBlack,
         child: Stack(
           children: [
             Column(
@@ -204,7 +203,10 @@ class _UserProfileState extends State<UserProfile> {
                         onTap: () {
                           print(index);
                           print(_items[index]);
-                          // Navigator.pushNamed(context, '/postDetail');
+                          // Navigator.pushNamed(context, '/artworkDetail',
+                          //     arguments: <String, dynamic>{
+                          //       'artwork_detail': _items[index]
+                          //     });
                           Navigator.push(
                             context,
                             MaterialPageRoute(
