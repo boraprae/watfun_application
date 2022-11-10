@@ -1,4 +1,46 @@
 {
+    "artworkCategory": [
+        {
+            "name": "All Category",
+            "isOnClicked": true
+        },
+        {
+            "name": "Realism",
+            "isOnClicked": false
+        },
+        {
+            "name": "Photorealism",
+            "isOnClicked": false
+        },
+        {
+            "name": "Expressionism",
+            "isOnClicked": false
+        },
+        {
+            "name": "Impressionism",
+            "isOnClicked": false
+        },
+        {
+            "name": "Abstract",
+            "isOnClicked": false
+        },
+        {
+            "name": "Surrealism",
+            "isOnClicked": false
+        },
+        {
+            "name": "Pop",
+            "isOnClicked": false
+        },
+        {
+            "name": "Oil",
+            "isOnClicked": false
+        },
+        {
+            "name": "Water color",
+            "isOnClicked": false
+        }
+    ],
     "user": [
         {
             "id_user": 0,

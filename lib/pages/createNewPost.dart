@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
@@ -11,6 +12,7 @@ import 'package:watfun_application/constantColors.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 
 class CreateNewPost extends StatefulWidget {
   const CreateNewPost({Key? key}) : super(key: key);
@@ -30,16 +32,46 @@ class _CreateNewPostState extends State<CreateNewPost> {
   TextEditingController offerPriceController = TextEditingController();
   TextEditingController offerResultController = TextEditingController();
 
-  List tags = [];
-  var dropdownvalue = 'Select style of arts';
-  var createTypeValue = 'Select type of creation';
-  String _token = "";
+  //Image
   late BuildContext _context;
-
   late Map<dynamic, dynamic> imgData;
 
   //! Pick image function
   File? _image;
+  //Tag
+  List tags = [];
+  var dropdownvalue = 'Select style of arts';
+  var createTypeValue = 'Select type of creation';
+  //Get category
+  final String _categoryURL = "http://10.0.2.2:9000/artworkCategory";
+  late Future<List> _data;
+  late Future<List> _artworkCategory;
+
+  @override
+  void initState() {
+    super.initState();
+    //Not check loading data yet
+    getCategory();
+  }
+
+  //Get category List
+  Future<List> getCategory() async {
+    Response response = await GetConnect().get(_categoryURL);
+    print(response.body);
+    if (response.status.isOk) {
+      setState(() {
+        //Update dropdown list
+        var _data = response.body;
+        for (int i = 1; i < _data.length; i++) {
+          //add art style to dropdown value
+          styleItem.add(response.body[i]["name"]);
+        }
+      });
+      return response.body;
+    } else {
+      throw Exception('Error');
+    }
+  }
 
   Future pickImage() async {
     try {
@@ -90,22 +122,9 @@ class _CreateNewPostState extends State<CreateNewPost> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   //! dropdown static value
   var styleItem = [
     'Select style of arts',
-    'Realism',
-    'Photorealism',
-    'Impressionism',
-    'Abstract',
-    'Surrealism',
-    'Pop',
-    'Oil',
-    'Watercolour ',
   ];
 
   var uploadType = [
@@ -118,6 +137,7 @@ class _CreateNewPostState extends State<CreateNewPost> {
   Widget build(BuildContext context) {
     _context = context;
     Size size = MediaQuery.of(context).size;
+
     return SingleChildScrollView(
       child: Container(
         color: Colors.transparent,

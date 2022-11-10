@@ -18,52 +18,17 @@ class _DiscoverArtsState extends State<DiscoverArts> {
   String sortingTag = 'Latest';
   //Get User Data
   final String _url = "http://10.0.2.2:9000/artworks";
+  final String _categoryURL = "http://10.0.2.2:9000/artworkCategory";
   late Future<List> _data;
+  late Future<List> _artworkCategory;
   bool _waiting = true;
-  List artworkCategory = [
-    {'name': 'All Category', 'isOnClicked': true},
-    {'name': 'Realism', 'isOnClicked': false},
-    {'name': 'Photorealism', 'isOnClicked': false},
-    {'name': 'Expressionism', 'isOnClicked': false},
-    {'name': 'Impressionism', 'isOnClicked': false},
-    {'name': 'Abstract', 'isOnClicked': false},
-    {'name': 'Surrealism', 'isOnClicked': false},
-    {'name': 'Pop', 'isOnClicked': false},
-    {'name': 'Oil', 'isOnClicked': false},
-    {'name': 'Watercolour ', 'isOnClicked': false},
-  ];
-  //Test Data
-  List commissionInfo = [
-    {
-      'id': 0,
-      'creatorName': 'SaraYune',
-      'title': 'I will create the custom girl for you.',
-      'price': 350,
-      'userImgPath': 'assets/artworksUploads/00.jpg',
-      'coverImgPath': 'assets/artworksUploads/08.jpg',
-    },
-    {
-      'id': 1,
-      'creatorName': 'SaraYune',
-      'title': 'I will create the custom girl for you.',
-      'price': 350,
-      'userImgPath': 'assets/artworksUploads/00.jpg',
-      'coverImgPath': 'assets/artworksUploads/06.jpg',
-    },
-    {
-      'id': 2,
-      'creatorName': 'SaraYune',
-      'title': 'I will create the custom girl for you.',
-      'price': 350,
-      'userImgPath': 'assets/artworksUploads/00.jpg',
-      'coverImgPath': 'assets/artworksUploads/11.jpg',
-    },
-  ];
 
   @override
   void initState() {
     super.initState();
     _data = getData();
+    //Not check loading data yet
+    _artworkCategory = getCategory();
   }
 
   //Get Artwork Data
@@ -74,6 +39,17 @@ class _DiscoverArtsState extends State<DiscoverArts> {
       setState(() {
         _waiting = false;
       });
+      return response.body;
+    } else {
+      throw Exception('Error');
+    }
+  }
+
+  //Get category List
+  Future<List> getCategory() async {
+    Response response = await GetConnect().get(_categoryURL);
+    print(response.body);
+    if (response.status.isOk) {
       return response.body;
     } else {
       throw Exception('Error');
@@ -217,7 +193,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
     }
 
 //*** Category Filter Button ****
-    Widget listViewChannel(index) {
+    Widget listViewChannel(index, data) {
       return GestureDetector(
         onTap: () {
           // Navigator.pushNamed(
@@ -228,14 +204,14 @@ class _DiscoverArtsState extends State<DiscoverArts> {
           //   },
           // );
           setState(() {
-            artworkCategory[index]['isOnClicked'] = true;
-            for (int i = 0; i < artworkCategory.length; i++) {
+            data[index]['isOnClicked'] = true;
+            for (int i = 0; i < data.length; i++) {
               if (i != index) {
-                artworkCategory[i]['isOnClicked'] = false;
+                data[i]['isOnClicked'] = false;
               }
             }
             //print for test the value
-            print(artworkCategory[index]['name']);
+            print(data[index]['name']);
           });
         },
         child: Row(
@@ -243,7 +219,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 3),
-              child: artworkCategory[index]['isOnClicked']
+              child: data[index]['isOnClicked']
                   ? Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(18),
@@ -259,7 +235,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Text(
-                          artworkCategory[index]['name'],
+                          data[index]['name'],
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 11,
@@ -275,7 +251,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Text(
-                          artworkCategory[index]['name'],
+                          data[index]['name'],
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 11,
@@ -398,11 +374,21 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                 //** Category Button List**//
                 SizedBox(
                   height: 80.0,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: artworkCategory.length,
-                      itemBuilder: (context, index) {
-                        return listViewChannel(index);
+                  child: FutureBuilder(
+                      future: _artworkCategory,
+                      builder: (context, snapshot) {
+                        late List data = snapshot.data as List;
+                        if (snapshot.hasData) {
+                          return ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                return listViewChannel(index, data);
+                              });
+                        } else if (snapshot.hasError) {
+                          return const Text('Error');
+                        }
+                        return const CircularProgressIndicator();
                       }),
                 ),
                 //**Artwork View */
