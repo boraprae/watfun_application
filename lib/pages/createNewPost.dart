@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -40,12 +41,14 @@ class _CreateNewPostState extends State<CreateNewPost> {
   File? _image;
   //Tag
   List tags = [];
-  var dropdownvalue = 'Select style of arts';
+  var artStyleValue = 'Select style of arts';
   var createTypeValue = 'Select type of creation';
   //Get category
   final String _categoryURL = "http://10.0.2.2:9000/artworkCategory";
+  final String _artworkURL = "http://10.0.2.2:9000/artworks";
   late Future<List> _data;
   late Future<List> _artworkCategory;
+  var _base64String;
 
   @override
   void initState() {
@@ -57,7 +60,6 @@ class _CreateNewPostState extends State<CreateNewPost> {
   //Get category List
   Future<List> getCategory() async {
     Response response = await GetConnect().get(_categoryURL);
-    print(response.body);
     if (response.status.isOk) {
       setState(() {
         //Update dropdown list
@@ -75,17 +77,42 @@ class _CreateNewPostState extends State<CreateNewPost> {
 
   Future pickImage() async {
     try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final XFile? image =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
       if (image == null) return;
+      // read picked image byte data.
+      Uint8List imagebytes = await image.readAsBytes();
 
+      // using base64 encoder convert image into base64 string.
+      _base64String = base64Encode(imagebytes);
+      print(_base64String);
       // final imageTemporary = File(image.path);
-      final imagePermanent = await saveImagePermanently(image.path);
-      setState(() {
-        this._image = imagePermanent;
-      });
+      // final imagePermanent = await saveImagePermanently(image.path);
+      // setState(() {
+      //   this._image = imagePermanent;
+      // });
+      // print(_image!.path);
+      setState(() {});
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }
+  }
+
+  Future addNewPostToServer() async {
+    Response response = await GetConnect().post(
+      _artworkURL,
+      jsonEncode(<String, dynamic>{
+        "art_title": artTitleController.text,
+        "art_description": artDescriptionController.text,
+        "art_type": artStyleValue,
+        "art_image_base64": _base64String,
+        "art_created_date": "Sep 4, 2021",
+        "user_id_user": 1,
+        "username": "Jenny Kim",
+        "profile_image_path": "assets/artworksUploads/11.jpg"
+      }),
+    );
+    print(response.statusCode);
   }
 
   //!Save to local storage
@@ -95,14 +122,6 @@ class _CreateNewPostState extends State<CreateNewPost> {
     final image = File('${directory.path}/$name');
 
     return File(imagePath).copy(image.path);
-  }
-
-  Future submitData(imagePath, title, description, type, tags) async {
-    print("img path:" + imagePath);
-    print("title:" + title);
-    print("description:" + description);
-    print("type:" + type);
-    print("tags:" + tags);
   }
 
   Future showAlert(String title, String alertMessage) async {
@@ -147,40 +166,40 @@ class _CreateNewPostState extends State<CreateNewPost> {
           children: [
             //!Add images button area
             Container(
-                height: 0.3 * size.height,
-                width: size.width,
-                decoration: BoxDecoration(color: darkLight),
-                child: _image != null
-                    ? Image.file(
-                        _image!,
-                        fit: BoxFit.fitWidth,
-                      )
-                    : TextButton(
-                        onPressed: () => pickImage(),
-                        style: TextButton.styleFrom(
-                          primary: Colors.white,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.add_a_photo_outlined,
-                              size: 0.05 * size.height,
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'Tap to select your artworks',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 12,
-                                ),
+              height: 0.3 * size.height,
+              width: size.width,
+              decoration: BoxDecoration(color: darkLight),
+              child: _image != null
+                  ? Image.file(
+                      _image!,
+                      fit: BoxFit.fitWidth,
+                    )
+                  : TextButton(
+                      onPressed: () => pickImage(),
+                      style: TextButton.styleFrom(
+                        primary: Colors.white,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.add_a_photo_outlined,
+                            size: 0.05 * size.height,
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'Tap to select your artworks',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 12,
                               ),
                             ),
-                          ],
-                        ),
-                      )),
-
+                          ),
+                        ],
+                      ),
+                    ),
+            ),
             //!Add title image area
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
@@ -327,7 +346,7 @@ class _CreateNewPostState extends State<CreateNewPost> {
                               child: Row(
                                 children: [
                                   DropdownButton(
-                                    value: dropdownvalue,
+                                    value: artStyleValue,
                                     style: TextStyle(
                                       color: Colors.black,
                                     ),
@@ -352,8 +371,8 @@ class _CreateNewPostState extends State<CreateNewPost> {
                                     }).toList(),
                                     onChanged: (String? newValue) {
                                       setState(() {
-                                        dropdownvalue = newValue!;
-                                        print(dropdownvalue);
+                                        artStyleValue = newValue!;
+                                        print(artStyleValue);
                                       });
                                     },
                                   ),
@@ -477,7 +496,7 @@ class _CreateNewPostState extends State<CreateNewPost> {
                               child: Row(
                                 children: [
                                   DropdownButton(
-                                    value: dropdownvalue,
+                                    value: artStyleValue,
                                     style: TextStyle(
                                       color: Colors.black,
                                     ),
@@ -502,8 +521,8 @@ class _CreateNewPostState extends State<CreateNewPost> {
                                     }).toList(),
                                     onChanged: (String? newValue) {
                                       setState(() {
-                                        dropdownvalue = newValue!;
-                                        print(dropdownvalue);
+                                        artStyleValue = newValue!;
+                                        print(artStyleValue);
                                       });
                                     },
                                   ),
@@ -512,6 +531,12 @@ class _CreateNewPostState extends State<CreateNewPost> {
                             ),
                           ],
                         ),
+                  //!!Test image value
+                 
+                  //How to use image from decode
+                  // _base64String == null
+                  //     ? Container()
+                  //     : Image.memory(base64Decode(_base64String)),
 
                   // //! Submit button
                   Padding(
@@ -522,11 +547,12 @@ class _CreateNewPostState extends State<CreateNewPost> {
                       child: ElevatedButton(
                         //? variable foe submit
                         //!_image
-                        //!artTitleController
+                        //!creation_type
                         //!artDescriptionController
-                        //!dropdownvalue
+                        //!artStyleValue
                         //!tag
                         onPressed: () {
+                          addNewPostToServer();
                           // uploadArtwork(_token);
                         },
                         style: ButtonStyle(

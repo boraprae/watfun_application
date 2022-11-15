@@ -77,7 +77,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                 padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(data[index]['art_image_path'],
+                  child: Image.memory(base64Decode(data[index]['art_image_base64']),
                       fit: BoxFit.cover),
                 ),
               ),

@@ -35,7 +35,6 @@ class _MarketplaceState extends State<Marketplace> {
   //Get Commission Offer
   Future<List> getData() async {
     Response response = await GetConnect().get(_url);
-    //print(response.body);
     if (response.status.isOk) {
       setState(() {
         _waiting = false;
@@ -49,7 +48,6 @@ class _MarketplaceState extends State<Marketplace> {
   //Get category List
   Future<List> getCategory() async {
     Response response = await GetConnect().get(_categoryURL);
-    print(response.body);
     if (response.status.isOk) {
       return response.body;
     } else {

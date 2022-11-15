@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:watfun_application/constantColors.dart';
@@ -80,8 +82,8 @@ class _ArtworkDetail extends State<ArtworkDetail> {
                         Container(
                             height: 0.4 * size.height,
                             width: size.width,
-                            child: Image.asset(
-                              data['artwork_detail']['art_image_path'],
+                            child: Image.memory(
+                              base64Decode(data['artwork_detail']['art_image_base64']),
                               fit: BoxFit.cover,
                             )),
                         Padding(
