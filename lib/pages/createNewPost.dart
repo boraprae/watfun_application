@@ -86,12 +86,12 @@ class _CreateNewPostState extends State<CreateNewPost> {
       _base64String = base64Encode(imagebytes);
       print(_base64String);
       // final imageTemporary = File(image.path);
-      // final imagePermanent = await saveImagePermanently(image.path);
-      // setState(() {
-      //   this._image = imagePermanent;
-      // });
+      final imagePermanent = await saveImagePermanently(image.path);
+      setState(() {
+        this._image = imagePermanent;
+      });
       // print(_image!.path);
-      setState(() {});
+      // setState(() {});
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }
