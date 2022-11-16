@@ -280,10 +280,10 @@ class _CommissionStorageState extends State<CommissionStorage> {
                       width: 45,
                       child: ElevatedButton(
                         onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0)),
-                        ),
+                         style: ElevatedButton.styleFrom( shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
+                        padding: EdgeInsets.all(0.0),),
+                       
                         child: Ink(
                           decoration: BoxDecoration(
                               gradient: LinearGradient(

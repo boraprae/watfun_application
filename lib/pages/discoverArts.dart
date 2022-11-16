@@ -391,7 +391,11 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                         } else if (snapshot.hasError) {
                           return const Text('Error');
                         }
-                        return const CircularProgressIndicator();
+                        return const Center(
+                            child: const CircularProgressIndicator(
+                          backgroundColor: bgBlack,
+                          color: purpleG,
+                        ));
                       }),
                 ),
                 //**Artwork View */

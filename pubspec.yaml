@@ -42,6 +42,7 @@ dependencies:
   path_provider: ^2.0.11
   textfield_tags: ^1.4.3
   get: ^4.6.5
+  quickalert: ^1.0.0
 
 dev_dependencies:
   flutter_test:
