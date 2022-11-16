@@ -93,7 +93,6 @@ class _OrderCommissionState extends State<OrderCommission> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         //Todo: Update Commission Image
-
                         Container(
                             height: 0.4 * size.height,
                             width: size.width,
@@ -191,8 +190,7 @@ class _OrderCommissionState extends State<OrderCommission> {
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
+                                padding: const EdgeInsets.fromLTRB(0, 8, 0, 16),
                                 child: Text(
                                   data["commission_offer_detail"]
                                       ["offer_description"],
@@ -210,7 +208,7 @@ class _OrderCommissionState extends State<OrderCommission> {
                                     ' Baht',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 16,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -221,7 +219,7 @@ class _OrderCommissionState extends State<OrderCommission> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    Text("The product: "+
                                       data["commission_offer_detail"]
                                           ["offer_result"],
                                       style: TextStyle(
