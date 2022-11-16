@@ -43,6 +43,7 @@ dependencies:
   textfield_tags: ^1.4.3
   get: ^4.6.5
   quickalert: ^1.0.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

@@ -15,6 +15,7 @@ import 'package:textfield_tags/textfield_tags.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class CreateNewPost extends StatefulWidget {
   const CreateNewPost({Key? key}) : super(key: key);
@@ -85,8 +86,7 @@ class _CreateNewPostState extends State<CreateNewPost> {
 
       // using base64 encoder convert image into base64 string.
       _base64String = base64Encode(imagebytes);
-      print(_base64String);
-      // final imageTemporary = File(image.path);
+      // print(_base64String);
       final imagePermanent = await saveImagePermanently(image.path);
       setState(() {
         this._image = imagePermanent;
@@ -97,28 +97,23 @@ class _CreateNewPostState extends State<CreateNewPost> {
   }
 
   Future addNewPostToServer(context) async {
+    //get current date
+    String currentDate = DateFormat("MMM dd, yyyy").format(DateTime.now());
     //TODO: 1. Check condition of createTypeValue 2.Null check operator
     if (createTypeValue == 'Create Artwork Post') {
       if (_base64String == null) {
         QuickAlert.show(
           context: context,
           type: QuickAlertType.error,
-          title: "Error",
+          title: "Warning",
           text: "You don't upload the picture yet",
           confirmBtnText: "OK",
           confirmBtnColor: lightGray,
         );
-      } else if (artStyleValue == 'Select Style of Arts') {
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.warning,
-          title: "Are you sure?",
-          text: "You don't want to select the style of your artwork.",
-          confirmBtnText: "OK",
-          confirmBtnColor: lightGray,
-        );
       } else if (artTitleController.text != "" &&
-          artDescriptionController.text != "") {
+          artDescriptionController.text != "" &&
+          artStyleValue != 'Select Style of Arts') {
+        //upload data to json server
         Response response = await GetConnect().post(
           _artworkURL,
           jsonEncode(<String, dynamic>{
@@ -126,10 +121,10 @@ class _CreateNewPostState extends State<CreateNewPost> {
             "art_description": artDescriptionController.text,
             "art_type": artStyleValue,
             "art_image_base64": _base64String,
-            "art_created_date": "Sep 4, 2021",
+            "art_created_date": currentDate,
             "user_id_user": 1,
             "username": "Jenny Kim",
-            "profile_image_path": "assets/artworksUploads/11.jpg"
+            "profile_image_path": "assets/artworksUploads/05.jpg"
           }),
         );
         print(response.statusCode);
@@ -143,7 +138,7 @@ class _CreateNewPostState extends State<CreateNewPost> {
           this._image = null;
         });
         //alert
-         QuickAlert.show(
+        QuickAlert.show(
           context: context,
           type: QuickAlertType.success,
           title: "Success",
@@ -155,28 +150,73 @@ class _CreateNewPostState extends State<CreateNewPost> {
         QuickAlert.show(
           context: context,
           type: QuickAlertType.error,
-          title: "Can not upload",
-          text: "Please add the title or description of your artwork!",
+          title: "Warning",
+          text: "Please complete the information.",
           confirmBtnText: "OK",
           confirmBtnColor: lightGray,
         );
       }
     } else if (createTypeValue == 'Create Commission Offer') {
-      Response response = await GetConnect().post(
-        _commissionOfferURL,
-        jsonEncode(<String, dynamic>{
-          "offer_title": offerTitleController.text,
-          "offer_description": offerDescriptionController.text,
-          "offer_price": offerPriceController.text,
-          "offer_art_type": artStyleValue,
-          "offer_result": offerResultController.text,
-          "offer_image_base64": _base64String,
-          "offer_create_date": "Sep 4, 2021",
-          "user_id_user": 1,
-          "username": "Jenny Kim",
-          "profile_image_path": "assets/artworksUploads/11.jpg"
-        }),
-      );
+      if (offerTitleController.text != "" &&
+          offerDescriptionController.text != "" &&
+          offerPriceController.text != "" &&
+          offerResultController.text != "" &&
+          artStyleValue != 'Select Style of Arts') {
+        Response response = await GetConnect().post(
+          _commissionOfferURL,
+          jsonEncode(<String, dynamic>{
+            "offer_title": offerTitleController.text,
+            "offer_description": offerDescriptionController.text,
+            "offer_price": offerPriceController.text,
+            "offer_art_type": artStyleValue,
+            "offer_result": offerResultController.text,
+            "offer_image_base64": _base64String,
+            "offer_create_date": currentDate,
+            "user_id_user": 1,
+            "username": "Jenny Kim",
+            "profile_image_path": "assets/artworksUploads/05.jpg"
+          }),
+        );
+        print(response.statusCode);
+        //reset all
+        setState(() {
+          offerTitleController.clear();
+          offerDescriptionController.clear();
+          offerPriceController.clear();
+          offerResultController.clear();
+          artStyleValue = 'Select Style of Arts';
+          createTypeValue = 'Select Type of Creation';
+          _base64String = null;
+          this._image = null;
+        });
+        //alert
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.success,
+          title: "Success",
+          text: "Your commission offer already create!",
+          confirmBtnText: "OK",
+          confirmBtnColor: lightGray,
+        );
+      } else if (_base64String == null) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: "Warning",
+          text: "You don't upload the picture yet",
+          confirmBtnText: "OK",
+          confirmBtnColor: lightGray,
+        );
+      } else {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: "Warning",
+          text: "Please complete the information.",
+          confirmBtnText: "OK",
+          confirmBtnColor: lightGray,
+        );
+      }
     } else {
       //**Validate Alert**
       QuickAlert.show(
