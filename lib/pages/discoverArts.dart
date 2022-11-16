@@ -34,7 +34,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
   //Get Artwork Data
   Future<List> getData() async {
     Response response = await GetConnect().get(_url);
-    print(response.body);
+    // print(response.body);
     if (response.status.isOk) {
       setState(() {
         _waiting = false;
@@ -48,7 +48,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
   //Get category List
   Future<List> getCategory() async {
     Response response = await GetConnect().get(_categoryURL);
-    print(response.body);
+    // print(response.body);
     if (response.status.isOk) {
       return response.body;
     } else {
@@ -212,7 +212,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
               }
             }
             //print for test the value
-            print(data[index]['name']);
+            // print(data[index]['name']);
           });
         },
         child: Row(
