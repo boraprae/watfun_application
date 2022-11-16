@@ -319,11 +319,13 @@ class _MarketplaceState extends State<Marketplace> {
                     Container(
                       height: 45,
                       width: 45,
-                      child: RaisedButton(
+                      child: ElevatedButton(
                         onPressed: () {},
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0)),
-                        padding: EdgeInsets.all(0.0),
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                          padding: EdgeInsets.all(0.0),
+                        ),
                         child: Ink(
                           decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -358,7 +360,7 @@ class _MarketplaceState extends State<Marketplace> {
                     height: 45,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Color(0xFF535353).withOpacity(0.38),
+                        backgroundColor: Color(0xFF535353).withOpacity(0.38),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
                         ),

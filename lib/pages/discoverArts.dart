@@ -77,7 +77,8 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                 padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.memory(base64Decode(data[index]['art_image_base64']),
+                  child: Image.memory(
+                      base64Decode(data[index]['art_image_base64']),
                       fit: BoxFit.cover),
                 ),
               ),
@@ -301,11 +302,13 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                     Container(
                       height: 45,
                       width: 45,
-                      child: RaisedButton(
+                      child: ElevatedButton(
                         onPressed: () {},
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0)),
-                        padding: EdgeInsets.all(0.0),
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                          padding: EdgeInsets.all(0.0),
+                        ),
                         child: Ink(
                           decoration: BoxDecoration(
                               gradient: LinearGradient(

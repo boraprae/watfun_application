@@ -136,7 +136,7 @@ class _EditProfileState extends State<EditProfile> {
                                 emailController),
                             buildTextField(
                                 "Phone Number",
-                               " userInfoList['phone_number']",
+                                " userInfoList['phone_number']",
                                 phoneNumberController),
                             buildTextField("Gender", "userInfoList['gender']",
                                 genderController),
@@ -147,10 +147,12 @@ class _EditProfileState extends State<EditProfile> {
                             SizedBox(
                               height: 0.05 * size.height,
                               width: size.width,
-                              child: OutlineButton(
-                                borderSide: BorderSide(
-                                  color: purpleG,
-                                  width: 1,
+                              child: OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                    color: purpleG,
+                                    width: 1,
+                                  ),
                                 ),
                                 onPressed: () {
                                   //!------ Function for save button here -------!
@@ -182,7 +184,8 @@ class _EditProfileState extends State<EditProfile> {
                       children: [
                         CircleAvatar(
                           radius: 0.12 * size.width,
-                          backgroundImage: AssetImage('assets/artworksUploads/05.jpg'),
+                          backgroundImage:
+                              AssetImage('assets/artworksUploads/05.jpg'),
                           // backgroundImage: NetworkImage('http://10.0.2.2:3000' +
                           //     userInfoList['profile_image']),
                         ),
@@ -212,13 +215,15 @@ class _EditProfileState extends State<EditProfile> {
                     right: 0.03 * size.width,
                     child: SizedBox(
                       height: 0.03 * size.height,
-                      child: OutlineButton(
+                      child: OutlinedButton(
                         onPressed: () {
                           //!----- Function for change profile cover paste here------
                         },
-                        borderSide: BorderSide(
-                          color: Colors.white,
-                          width: 0.5,
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                            color: Colors.white,
+                            width: 0.5,
+                          ),
                         ),
                         child: Row(
                           children: [

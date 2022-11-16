@@ -140,7 +140,7 @@ class _UserProfileState extends State<UserProfile> {
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         width: size.width,
-                        child: OutlineButton.icon(
+                        child: OutlinedButton.icon(
                           onPressed: () {
                             //path to setting page
                             Navigator.pushNamed(
@@ -162,11 +162,13 @@ class _UserProfileState extends State<UserProfile> {
                               color: Colors.white,
                             ),
                           ),
-                          borderSide: BorderSide(
-                            color: Colors.white,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(
+                              color: Colors.white,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
                           ),
                         ),
                       ),

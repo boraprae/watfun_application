@@ -16,7 +16,7 @@ class _WelcomePageState extends State<WelcomePage> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: Stack(overflow: Overflow.clip, children: [
+        child: Stack(children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 220),
             child: Row(

@@ -83,20 +83,25 @@ class _ChangePasswordState extends State<ChangePassword> {
                 Container(
                   margin: EdgeInsets.all(10),
                   height: 50.0,
-                  child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0.0),
-                        side: BorderSide(color: Colors.purple)),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: bgBlack,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0.0),
+                          side: BorderSide(color: Colors.purple)),
+                      padding: EdgeInsets.fromLTRB(120, 0, 120, 0),
+                    ),
                     onPressed: () {
                       // Navigator.push(
                       //   context,
                       //   MaterialPageRoute(builder: (context) => Profile()),
                       // );
                     },
-                    padding: EdgeInsets.fromLTRB(120, 0, 120, 0),
-                    color: bgBlack,
-                    textColor: Colors.purple,
-                    child: Text("Save", style: TextStyle(fontSize: 15)),
+                    child: Text("Save",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.purple,
+                        )),
                   ),
                 ),
               ],
