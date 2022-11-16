@@ -39,13 +39,12 @@ class _CreateNewPostState extends State<CreateNewPost> {
 
   //! Pick image function
   File? _image;
-  //Tag
-  List tags = [];
-  var artStyleValue = 'Select style of arts';
-  var createTypeValue = 'Select type of creation';
+  var artStyleValue = 'Select Style of Arts';
+  var createTypeValue = 'Select Type of Creation';
   //Get category
   final String _categoryURL = "http://10.0.2.2:9000/artworkCategory";
   final String _artworkURL = "http://10.0.2.2:9000/artworks";
+  final String _commissionOfferURL = "http://10.0.2.2:9000/commission_offer";
   late Future<List> _data;
   late Future<List> _artworkCategory;
   var _base64String;
@@ -99,20 +98,39 @@ class _CreateNewPostState extends State<CreateNewPost> {
   }
 
   Future addNewPostToServer() async {
-    Response response = await GetConnect().post(
-      _artworkURL,
-      jsonEncode(<String, dynamic>{
-        "art_title": artTitleController.text,
-        "art_description": artDescriptionController.text,
-        "art_type": artStyleValue,
-        "art_image_base64": _base64String,
-        "art_created_date": "Sep 4, 2021",
-        "user_id_user": 1,
-        "username": "Jenny Kim",
-        "profile_image_path": "assets/artworksUploads/11.jpg"
-      }),
-    );
-    print(response.statusCode);
+    //TODO: 1. Check condition of createTypeValue 2.Null check operator
+    if (createTypeValue == 'Create Artwork Post') {
+      Response response = await GetConnect().post(
+        _artworkURL,
+        jsonEncode(<String, dynamic>{
+          "art_title": artTitleController.text,
+          "art_description": artDescriptionController.text,
+          "art_type": artStyleValue,
+          "art_image_base64": _base64String,
+          "art_created_date": "Sep 4, 2021",
+          "user_id_user": 1,
+          "username": "Jenny Kim",
+          "profile_image_path": "assets/artworksUploads/11.jpg"
+        }),
+      );
+      print(response.statusCode);
+    } else if (createTypeValue == 'Create Commission Offer') {
+      Response response = await GetConnect().post(
+        _commissionOfferURL,
+        jsonEncode(<String, dynamic>{
+          "offer_title": offerTitleController.text,
+          "offer_description": offerDescriptionController.text,
+          "offer_price": offerPriceController.text,
+          "offer_art_type": artStyleValue,
+          "offer_result": offerResultController.text,
+          "offer_image_base64": _base64String,
+          "offer_create_date": "Sep 4, 2021",
+          "user_id_user": 1,
+          "username": "Jenny Kim",
+          "profile_image_path": "assets/artworksUploads/11.jpg"
+        }),
+      );
+    }
   }
 
   //!Save to local storage
@@ -143,11 +161,11 @@ class _CreateNewPostState extends State<CreateNewPost> {
 
   //! dropdown static value
   var styleItem = [
-    'Select style of arts',
+    'Select Style of Arts',
   ];
 
   var uploadType = [
-    'Select type of creation',
+    'Select Type of Creation',
     'Create Commission Offer',
     'Create Artwork Post',
   ];
@@ -240,10 +258,10 @@ class _CreateNewPostState extends State<CreateNewPost> {
                               value: uploadType,
                             );
                           }).toList(),
+                          //createTypeValue here
                           onChanged: (String? updateValue) {
                             setState(() {
                               createTypeValue = updateValue!;
-                              print(createTypeValue);
                             });
                           },
                         ),
@@ -532,7 +550,7 @@ class _CreateNewPostState extends State<CreateNewPost> {
                           ],
                         ),
                   //!!Test image value
-                 
+
                   //How to use image from decode
                   // _base64String == null
                   //     ? Container()

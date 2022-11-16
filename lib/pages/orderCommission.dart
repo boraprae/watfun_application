@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:watfun_application/constantColors.dart';
@@ -91,12 +93,13 @@ class _OrderCommissionState extends State<OrderCommission> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         //Todo: Update Commission Image
+
                         Container(
                             height: 0.4 * size.height,
                             width: size.width,
-                            child: Image.asset(
-                              data["commission_offer_detail"]
-                                  ["offer_image_path"],
+                            child: Image.memory(
+                              base64Decode(data["commission_offer_detail"]
+                                  ["offer_image_base64"]),
                               fit: BoxFit.cover,
                             )),
                         Padding(
@@ -218,16 +221,14 @@ class _OrderCommissionState extends State<OrderCommission> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    for (var i
-                                        in data["commission_offer_detail"]
-                                            ["offer_result"])
-                                      Text(
-                                        "- "+ i,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                        ),
+                                    Text(
+                                      data["commission_offer_detail"]
+                                          ["offer_result"],
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
                                       ),
+                                    ),
                                   ],
                                 ),
                               ),
