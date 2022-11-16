@@ -105,35 +105,6 @@ class _CommissionProgressState extends State<CommissionProgress> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  // Container(
-                                  //   color: pinkG,
-                                  //   padding: EdgeInsets.all(6.0),
-                                  //   child: Text(
-                                  //     'Amime',
-                                  //     style: TextStyle(
-                                  //       color: Colors.white,
-                                  //       fontSize: 8,
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  // SizedBox(
-                                  //   width: 5,
-                                  // ),
-                                  // Container(
-                                  //   color: pinkG,
-                                  //   padding: EdgeInsets.all(6.0),
-                                  //   child: Text(
-                                  //     'HalfBodyPaint',
-                                  //     style: TextStyle(
-                                  //       color: Colors.white,
-                                  //       fontSize: 8,
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                ],
-                              ),
                               Padding(
                                 padding:
                                     const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),

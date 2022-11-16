@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:watfun_application/constantColors.dart';
 import 'package:get/get.dart';
 
@@ -25,7 +27,52 @@ class _OrderCommissionState extends State<OrderCommission> {
   String totalLikes = '1.2k';
   String username = 'SaraYune';
   String _token = "";
+
+  final String _orderURL = "http://10.0.2.2:9000/commission_order";
   TextEditingController customerReqController = TextEditingController();
+
+  Future placeCommissionOrder(context, commissionID, userID) async {
+    //get current date
+    String currentDate = DateFormat("MMM dd, yyyy").format(DateTime.now());
+
+    if (customerReqController.text != "") {
+      Response response = await GetConnect().post(
+        _orderURL,
+        jsonEncode(<String, dynamic>{
+          "order_date": currentDate,
+          "order_request_description": customerReqController.text,
+          "payment_status": false,
+          "progress_status": false,
+          "progress_percentage": 0,
+          "user_id_user": userID,
+          "offer_id_commission": commissionID,
+        }),
+      );
+      print(response.statusCode);
+      //reset all
+      setState(() {
+        customerReqController.clear();
+      });
+      //alert
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.success,
+        title: "Success",
+        text: "Your order already place!",
+        confirmBtnText: "OK",
+        confirmBtnColor: lightGray,
+      );
+    } else {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: "Warning",
+        text: "Please describe your request.",
+        confirmBtnText: "OK",
+        confirmBtnColor: lightGray,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,35 +154,6 @@ class _OrderCommissionState extends State<OrderCommission> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  // Container(
-                                  //   color: pinkG,
-                                  //   padding: EdgeInsets.all(6.0),
-                                  //   child: Text(
-                                  //     'Amime',
-                                  //     style: TextStyle(
-                                  //       color: Colors.white,
-                                  //       fontSize: 8,
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  // SizedBox(
-                                  //   width: 5,
-                                  // ),
-                                  // Container(
-                                  //   color: pinkG,
-                                  //   padding: EdgeInsets.all(6.0),
-                                  //   child: Text(
-                                  //     'HalfBodyPaint',
-                                  //     style: TextStyle(
-                                  //       color: Colors.white,
-                                  //       fontSize: 8,
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                ],
-                              ),
                               Padding(
                                 padding:
                                     const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
@@ -172,7 +190,8 @@ class _OrderCommissionState extends State<OrderCommission> {
                                     ),
                                     //Todo: Add date
                                     Text(
-                                      'Sep 4, 2021',
+                                      data["commission_offer_detail"]
+                                          ["offer_create_date"],
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: grayText,
@@ -219,9 +238,10 @@ class _OrderCommissionState extends State<OrderCommission> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("The product: "+
-                                      data["commission_offer_detail"]
-                                          ["offer_result"],
+                                    Text(
+                                      "The product: " +
+                                          data["commission_offer_detail"]
+                                              ["offer_result"],
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 12,
@@ -269,10 +289,16 @@ class _OrderCommissionState extends State<OrderCommission> {
                                   ),
                                 ),
                               ),
+                              //! Place order button
                               Padding(
                                 padding: const EdgeInsets.only(top: 16),
                                 child: GestureDetector(
                                   onTap: () {
+                                    placeCommissionOrder(
+                                        context,
+                                        data["commission_offer_detail"]["id"],
+                                        data["commission_offer_detail"]
+                                            ["user_id_user"]);
                                     // Navigator.pushNamed(
                                     //   context,
                                     //   '/separate',

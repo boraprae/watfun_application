@@ -17,18 +17,6 @@ class _CommissionStorageState extends State<CommissionStorage> {
   late Future<List> _data;
   bool _waiting = true;
 
-  List artworkCategory = [
-    {'name': 'All Category', 'isOnClicked': true},
-    {'name': 'Realism', 'isOnClicked': false},
-    {'name': 'Photorealism', 'isOnClicked': false},
-    {'name': 'Expressionism', 'isOnClicked': false},
-    {'name': 'Impressionism', 'isOnClicked': false},
-    {'name': 'Abstract', 'isOnClicked': false},
-    {'name': 'Surrealism', 'isOnClicked': false},
-    {'name': 'Pop', 'isOnClicked': false},
-    {'name': 'Oil', 'isOnClicked': false},
-    {'name': 'Watercolour ', 'isOnClicked': false},
-  ];
   //Test Data
   List commissionInfo = [
     {

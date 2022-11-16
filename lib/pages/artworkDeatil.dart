@@ -92,35 +92,6 @@ class _ArtworkDetail extends State<ArtworkDetail> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  // Container(
-                                  //   color: pinkG,
-                                  //   padding: EdgeInsets.all(6.0),
-                                  //   child: Text(
-                                  //     'Amime',
-                                  //     style: TextStyle(
-                                  //       color: Colors.white,
-                                  //       fontSize: 8,
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  // SizedBox(
-                                  //   width: 5,
-                                  // ),
-                                  // Container(
-                                  //   color: pinkG,
-                                  //   padding: EdgeInsets.all(6.0),
-                                  //   child: Text(
-                                  //     'HalfBodyPaint',
-                                  //     style: TextStyle(
-                                  //       color: Colors.white,
-                                  //       fontSize: 8,
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                ],
-                              ),
                               Padding(
                                 padding:
                                     const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
@@ -145,7 +116,7 @@ class _ArtworkDetail extends State<ArtworkDetail> {
                                             child: Text(
                                               data['artwork_detail']
                                                   ['username'],
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontSize: 12,
                                                 color: Colors.white,
                                               ),
@@ -154,9 +125,9 @@ class _ArtworkDetail extends State<ArtworkDetail> {
                                         ],
                                       ),
                                     ),
-                                    const Text(
-                                      'Sep 4, 2021',
-                                      style: TextStyle(
+                                   Text(
+                                      data['artwork_detail']["art_created_date"],
+                                      style: const TextStyle(
                                         fontSize: 12,
                                         color: grayText,
                                       ),
