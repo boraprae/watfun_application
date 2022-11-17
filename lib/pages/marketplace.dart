@@ -437,7 +437,11 @@ class _MarketplaceState extends State<Marketplace> {
                             } else if (snapshot.hasError) {
                               return const Text('Error');
                             }
-                            return const CircularProgressIndicator();
+                            return const Center(
+                                child: const CircularProgressIndicator(
+                              backgroundColor: bgBlack,
+                              color: purpleG,
+                            ));
                           },
                         ),
                       ),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:watfun_application/constantColors.dart';
@@ -13,9 +15,6 @@ class CommissionProgress extends StatefulWidget {
 class _CommissionProgressState extends State<CommissionProgress> {
   int itemCount = 0;
   bool showTextAlert = false;
-  bool selectedItem = false;
-  String textAlert = 'Please select the item first';
-  String selectedItemText = 'You don\'t select any gift yet.';
   String itemName = '';
   int currentItemId = 1;
 
@@ -23,6 +22,8 @@ class _CommissionProgressState extends State<CommissionProgress> {
   String totalLikes = '1.2k';
   String username = 'SaraYune';
   String _token = "";
+  bool _editStatus = true;
+
   TextEditingController customerReqController = TextEditingController();
 
   @override
@@ -30,7 +31,8 @@ class _CommissionProgressState extends State<CommissionProgress> {
     Size size = MediaQuery.of(context).size;
     Map<String, dynamic> data =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    print(data);
+    print(data['order_detail']);
+    print(data['order_info']);
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -94,9 +96,9 @@ class _CommissionProgressState extends State<CommissionProgress> {
                         Container(
                             height: 0.4 * size.height,
                             width: size.width,
-                            child: Image.asset(
-                              data["commission_offer_detail"]
-                                  ["offer_image_path"],
+                            child: Image.memory(
+                              base64Decode(
+                                  data["order_detail"]["offer_image_base64"]),
                               fit: BoxFit.cover,
                             )),
                         Padding(
@@ -120,7 +122,7 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                           CircleAvatar(
                                             radius: 10.0,
                                             backgroundImage: AssetImage(
-                                              data["commission_offer_detail"]
+                                              data["order_detail"]
                                                   ["profile_image_path"],
                                             ),
                                           ),
@@ -128,8 +130,7 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8.0),
                                             child: Text(
-                                              data["commission_offer_detail"]
-                                                  ["username"],
+                                              data["order_detail"]["username"],
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 color: Colors.white,
@@ -141,7 +142,8 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                     ),
                                     //Todo: Add date
                                     Text(
-                                      'Sep 4, 2021',
+                                      "Ordered on: " +
+                                          data["order_info"]["order_date"],
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: grayText,
@@ -151,7 +153,7 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                 ),
                               ),
                               Text(
-                                data["commission_offer_detail"]["offer_title"],
+                                data["order_detail"]["offer_title"],
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
@@ -162,8 +164,7 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16),
                                 child: Text(
-                                  data["commission_offer_detail"]
-                                      ["offer_description"],
+                                  data["order_detail"]["offer_description"],
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 12,
@@ -172,8 +173,7 @@ class _CommissionProgressState extends State<CommissionProgress> {
                               ),
                               Text(
                                 'Price ' +
-                                    data["commission_offer_detail"]
-                                            ["offer_price"]
+                                    data["order_detail"]["offer_price"]
                                         .toString() +
                                     ' Baht',
                                 style: TextStyle(
@@ -184,29 +184,76 @@ class _CommissionProgressState extends State<CommissionProgress> {
                               ),
                               Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                                //Todo: Make a dynamic result
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    for (var i
-                                        in data["commission_offer_detail"]
-                                            ["offer_result"])
-                                      Text(
-                                        "- "+ i,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                  ],
+                                    const EdgeInsets.symmetric(vertical: 8),
+                                child: Divider(
+                                  color: Colors.white,
                                 ),
                               ),
-                              // Divider(color: grayText),
-                              SizedBox(
-                                width: 10,
+                              Text(
+                                "Customer Request",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                             
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: Text(
+                                  data['order_info']
+                                      ['order_request_description'],
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 16),
+                                child: Text(
+                                  "Commission Progress Status",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                data['order_info']['progress_percentage']
+                                        .toString() +
+                                    "%",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 16),
+                                child: Text(
+                                  "Payment Status",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              data['order_info']['payment_status'] == false
+                                  ? Text(
+                                      "Unpaid",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                      ),
+                                    )
+                                  : Text(
+                                      "Paid",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                      ),
+                                    ),
                               Padding(
                                 padding: const EdgeInsets.only(top: 16),
                                 child: GestureDetector(
@@ -218,6 +265,9 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                     //     'name': artworkCategory[index],
                                     //   },
                                     // );
+                                    setState(() {
+                                      _editStatus = false;
+                                    });
                                     Navigator.pop(context);
                                   },
                                   child: Row(
@@ -240,7 +290,7 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                         child: const Padding(
                                           padding: EdgeInsets.all(12.0),
                                           child: Text(
-                                            'Place Order',
+                                            'Edit Progress',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               color: Colors.white,
