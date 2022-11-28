@@ -143,7 +143,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                       CircleAvatar(
                                         radius: 15,
                                         backgroundImage: AssetImage(
-                                         data[0]["profile_image_path"],
+                                          data[0]["profile_image_path"],
                                         ),
                                       ),
                                       SizedBox(
@@ -192,8 +192,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                             height: 5,
                                           ),
                                           Text(
-                                            data[0]['offer_price'] +
-                                                " Baht",
+                                            data[0]['offer_price'] + " Baht",
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 10,
@@ -285,94 +284,105 @@ class _CommissionStorageState extends State<CommissionStorage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // const Text(
-                        //   'Your Commission Order',
-                        //   style: TextStyle(
-                        //       color: Colors.white,
-                        //       fontSize: 16,
-                        //       fontWeight: FontWeight.bold),
-                        // ),
-                        // Text(
-                        //   'Sorting by: ' + sortingTag,
-                        //   style: const TextStyle(
-                        //     color: Colors.white,
-                        //     fontSize: 10,
-                        //   ),
-                        // ),
+                        const Text(
+                          'Your Commission Order',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          'Sorting by: ' + sortingTag,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                          ),
+                        ),
                       ],
                     ),
                     //** Sorting Button **//
-                    // Container(
-                    //   height: 45,
-                    //   width: 45,
-                    //   child: ElevatedButton(
-                    //     onPressed: () {},
-                    //     style: ElevatedButton.styleFrom(
-                    //       shape: RoundedRectangleBorder(
-                    //           borderRadius: BorderRadius.circular(10.0)),
-                    //       padding: EdgeInsets.all(0.0),
-                    //     ),
-                    //     child: Ink(
-                    //       decoration: BoxDecoration(
-                    //           gradient: LinearGradient(
-                    //             begin: Alignment.topLeft,
-                    //             end: Alignment.bottomRight,
-                    //             colors: [
-                    //               btnTopLeft,
-                    //               btnTopRight,
-                    //             ],
-                    //           ),
-                    //           borderRadius: BorderRadius.circular(10.0)),
-                    //       child: Container(
-                    //         constraints:
-                    //             BoxConstraints(maxWidth: 45.0, minHeight: 45.0),
-                    //         alignment: Alignment.center,
-                    //         child: Icon(
-                    //           Icons.sort_rounded,
-                    //           size: 20,
-                    //           color: Colors.white,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
+                    Container(
+                      height: 45,
+                      width: 45,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                          padding: EdgeInsets.all(0.0),
+                        ),
+                        child: Ink(
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  btnTopLeft,
+                                  btnTopRight,
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(10.0)),
+                          child: Container(
+                            constraints:
+                                BoxConstraints(maxWidth: 45.0, minHeight: 45.0),
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.sort_rounded,
+                              size: 20,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                     //** End of Sorting Button **//
                   ],
                 ),
                 //** List of commission order **//
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(vertical: 8),
-                //   child: _waitingOfferData
-                //       ? Center(
-                //           child: const CircularProgressIndicator(
-                //           backgroundColor: bgBlack,
-                //           color: purpleG,
-                //         ))
-                //       : SizedBox(
-                //           height: size.height * 0.35,
-                //           width: size.width,
-                //           child: FutureBuilder(
-                //               future: _offerData,
-                //               builder: (context, snapshot) {
-                //                 late List data = snapshot.data as List;
-                //                 if (snapshot.hasData) {
-                //                   return ListView.builder(
-                //                       scrollDirection: Axis.horizontal,
-                //                       itemCount: data.length,
-                //                       itemBuilder: (context, index) {
-                //                         return commissionOffer(index, data);
-                //                       });
-                //                 } else if (snapshot.hasError) {
-                //                   return const Text('Error');
-                //                 }
-                //                 return const Center(
-                //                     child: const CircularProgressIndicator(
-                //                   backgroundColor: bgBlack,
-                //                   color: purpleG,
-                //                 ));
-                //               }),
-                //         ),
-                // ),
+                _waiting
+                    ? Center(
+                        child: const CircularProgressIndicator(
+                        backgroundColor: bgBlack,
+                        color: purpleG,
+                      ))
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: SizedBox(
+                          height: size.height * 0.35,
+                          width: size.width,
+                          child: FutureBuilder(
+                              future: _orderData,
+                              builder: (context, snapshot) {
+                                late List data = snapshot.data as List;
+                                if (snapshot.hasData) {
+                                  return data.length == 0
+                                      ? Center(
+                                          child: Text(
+                                            "No have any order :<",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        )
+                                      : ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: data.length,
+                                          itemBuilder: (context, index) {
+                                            //Invalid value: Only valid value is 0: 1
+                                            return commissionOffer(index, data);
+                                          });
+                                } else if (snapshot.hasError) {
+                                  return const Text('Error');
+                                }
+                                return const Center(
+                                    child: const CircularProgressIndicator(
+                                  backgroundColor: bgBlack,
+                                  color: purpleG,
+                                ));
+                              }),
+                        ),
+                      ),
                 //! Customer Commission Order
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -451,13 +461,23 @@ class _CommissionStorageState extends State<CommissionStorage> {
                               builder: (context, snapshot) {
                                 late List data = snapshot.data as List;
                                 if (snapshot.hasData) {
-                                  return ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: data.length,
-                                      itemBuilder: (context, index) {
-                                        //Invalid value: Only valid value is 0: 1
-                                        return commissionOffer(index, data);
-                                      });
+                                  return data.length == 0
+                                      ? Center(
+                                          child: Text(
+                                            "No have any order :<",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        )
+                                      : ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: data.length,
+                                          itemBuilder: (context, index) {
+                                            //Invalid value: Only valid value is 0: 1
+                                            return commissionOffer(index, data);
+                                          });
                                 } else if (snapshot.hasError) {
                                   return const Text('Error');
                                 }
