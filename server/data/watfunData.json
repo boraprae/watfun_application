@@ -115,76 +115,7 @@
     }
   ],
   "commission_order": [
-    {
-      "order_date": "Nov 17, 2022",
-      "order_request_description": "333",
-      "payment_status": false,
-      "progress_status": false,
-      "progress_percentage": 0,
-      "user_id_user": 1,
-      "offer_id_commission": 2,
-      "id": 1
-    },
-    {
-      "order_date": "Nov 17, 2022",
-      "order_request_description": "rewr",
-      "payment_status": false,
-      "progress_status": false,
-      "progress_percentage": 0,
-      "user_id_user": 1,
-      "offer_id_commission": 1,
-      "id": 2
-    },
-    {
-      "order_date": "Nov 17, 2022",
-      "order_request_description": "eeee",
-      "payment_status": false,
-      "progress_status": false,
-      "progress_percentage": 0,
-      "user_id_user": 1,
-      "offer_id_commission": 2,
-      "id": 3
-    },
-    {
-      "order_date": "Nov 17, 2022",
-      "order_request_description": "This is 4th com ",
-      "payment_status": false,
-      "progress_status": false,
-      "progress_percentage": 0,
-      "user_id_user": 1,
-      "offer_id_commission": 1,
-      "id": 4
-    },
-    {
-      "order_date": "Nov 17, 2022",
-      "order_request_description": "kjlkkjkkll",
-      "payment_status": false,
-      "progress_status": false,
-      "progress_percentage": 0,
-      "user_id_user": 1,
-      "offer_id_commission": 3,
-      "id": 5
-    },
-    {
-      "order_date": "Nov 17, 2022",
-      "order_request_description": "hi",
-      "payment_status": false,
-      "progress_status": false,
-      "progress_percentage": 0,
-      "user_id_user": 1,
-      "offer_id_commission": 3,
-      "id": 6
-    },
-    {
-      "order_date": "Nov 28, 2022",
-      "order_request_description": "gtryyg",
-      "payment_status": false,
-      "progress_status": false,
-      "progress_percentage": 0,
-      "user_id_user": 1,
-      "offer_id_commission": 1,
-      "id": 7
-    }
+    
   ],
   "artworks": [
     {
