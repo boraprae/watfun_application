@@ -60,7 +60,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
     }
   }
 
-  void filterOrderList(id) async {
+  Future filterOrderList(id) async {
     List offerData = await _offerData;
     // print(offerData);
     List summary = [];
@@ -83,7 +83,6 @@ class _CommissionStorageState extends State<CommissionStorage> {
     //** Commission Offer Widget**
     Widget commissionOffer(index, data) {
       filterOrderList(data[index]['offer_id_commission']);
-      // print(offerDetail[0]['offer_image_base64']);
       return dataStatus == false
           ? const Center(
               child: const CircularProgressIndicator(
@@ -91,156 +90,98 @@ class _CommissionStorageState extends State<CommissionStorage> {
               color: purpleG,
             ))
           : Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: Stack(
-                children: [
-                  Container(
-                    width: size.width - 200,
-                    height: size.height * 0.25,
-                    decoration: BoxDecoration(
-                      color: btnDark,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.memory(
-                            base64Decode(
-                              offerDetail[0]["offer_image_base64"],
-                            ),
-                            fit: BoxFit.cover,
-                          )),
-                    ),
-                  ),
-                  //Todo: Map with data from server
-                  Positioned(
-                    bottom: 0,
-                    child: BlurryContainer(
-                      blur: 5,
-                      elevation: 0,
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      width: size.width - 200,
-                      color: Colors.black.withOpacity(0.5),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                //user image profile
-                                CircleAvatar(
-                                  radius: 15,
-                                  backgroundImage: AssetImage(
-                                    offerDetail[0]["profile_image_path"],
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      offerDetail[0]['username'],
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 6,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      offerDetail[0]['offer_title'],
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 8,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Spacer(),
-                                Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'Price',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 6,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      offerDetail[0]['offer_price'] + " Baht",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            //** Order Commission Button **//
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, '/commissionProgress',
-                                    arguments: <String, dynamic>{
-                                      'order_detail': offerDetail[0],
-                                      'order_info': data[index],
-                                    });
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: size.width - 270,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(18),
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                        colors: [
-                                          btnTopLeft,
-                                          btnTopRight,
-                                        ],
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Text(
-                                        'View Progress',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 8,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Container(
+                width: size.width,
+                height: size.height * 0.1,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Color(0xFF272626).withOpacity(0.5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      //user image profile
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundImage: AssetImage(
+                          offerDetail[0]["profile_image_path"],
                         ),
                       ),
-                    ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            data[index]['order_date'],
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.8),
+                              fontSize: 10,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            offerDetail[0]['offer_title'],
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Spacer(),
+                      //** Order Commission Button **//
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/commissionProgress',
+                              arguments: <String, dynamic>{
+                                'order_detail': offerDetail[0],
+                                'order_info': data[index],
+                              });
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: size.width * 0.15,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(18),
+                                gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    btnTopLeft,
+                                    btnTopRight,
+                                  ],
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Text(
+                                  'View',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 8,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
-                ],
+                ),
               ),
             );
     }
@@ -417,8 +358,8 @@ class _CommissionStorageState extends State<CommissionStorage> {
                         color: purpleG,
                       ))
                     : Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: SizedBox(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: SizedBox(
                           height: size.height * 0.35,
                           width: size.width,
                           child: FutureBuilder(
@@ -427,7 +368,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                 late List data = snapshot.data as List;
                                 if (snapshot.hasData) {
                                   return ListView.builder(
-                                      scrollDirection: Axis.horizontal,
+                                      scrollDirection: Axis.vertical,
                                       itemCount: data.length,
                                       itemBuilder: (context, index) {
                                         //Invalid value: Only valid value is 0: 1
@@ -443,7 +384,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                 ));
                               }),
                         ),
-                    ),
+                      ),
               ],
             ),
           ),
