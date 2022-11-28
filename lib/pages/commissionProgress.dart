@@ -31,7 +31,7 @@ class _CommissionProgressState extends State<CommissionProgress> {
     Size size = MediaQuery.of(context).size;
     Map<String, dynamic> data =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    print(data['order_detail']);
+    // print(data['order_detail']);
     print(data['order_info']);
     return Scaffold(
       body: SafeArea(

@@ -60,7 +60,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
     }
   }
 
-  Future filterOrderList(id) async {
+  void filterOrderList(id) async {
     List offerData = await _offerData;
     // print(offerData);
     List summary = [];
@@ -74,6 +74,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
       offerDetail = summary;
       dataStatus = true;
     });
+    print(offerData);
   }
 
   @override
@@ -83,6 +84,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
     //** Commission Offer Widget**
     Widget commissionOffer(index, data) {
       filterOrderList(data[index]['offer_id_commission']);
+
       return dataStatus == false
           ? const Center(
               child: const CircularProgressIndicator(
@@ -129,7 +131,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                             height: 5,
                           ),
                           Text(
-                            offerDetail[0]['offer_title'],
+                            offerDetail[0]["offer_title"],
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 12,
@@ -367,13 +369,23 @@ class _CommissionStorageState extends State<CommissionStorage> {
                               builder: (context, snapshot) {
                                 late List data = snapshot.data as List;
                                 if (snapshot.hasData) {
-                                  return ListView.builder(
-                                      scrollDirection: Axis.vertical,
-                                      itemCount: data.length,
-                                      itemBuilder: (context, index) {
-                                        //Invalid value: Only valid value is 0: 1
-                                        return commissionOffer(index, data);
-                                      });
+                                  return data.length == 0
+                                      ? Center(
+                                          child: Text(
+                                            "No have any order :<",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        )
+                                      : ListView.builder(
+                                          scrollDirection: Axis.vertical,
+                                          itemCount: data.length,
+                                          itemBuilder: (context, index) {
+                                            //Invalid value: Only valid value is 0: 1
+                                            return commissionOffer(index, data);
+                                          });
                                 } else if (snapshot.hasError) {
                                   return const Text('Error');
                                 }
