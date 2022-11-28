@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:watfun_application/constantColors.dart';
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:watfun_application/appBar.dart';
@@ -18,29 +19,62 @@ class _CommissionStorageState extends State<CommissionStorage> {
   final String _offerURL = "http://10.0.2.2:9000/commission_offer";
   final String _orderURL = "http://10.0.2.2:9000/commission_order";
   late Future<List> _orderData;
+  late Future<List> _myOrderData;
   late Future<List> _offerData;
   bool _waiting = true;
   bool _waitingOfferData = true;
   //get offer information by ID
   var offerDetail;
   var dataStatus = false;
+  String currentUser = '';
 
   @override
   void initState() {
     super.initState();
     _orderData = getData();
     _offerData = getOfferData();
+    _myOrderData = getMyOrderData();
+  }
+
+  //Get All Commission Order
+  Future<List> getData() async {
+    Response response = await GetConnect().get(_orderURL);
+    // print(response.body); //get email as a token for identify who is current user
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('userToken');
+    if (response.status.isOk) {
+      print("token in storage page " + token!);
+      setState(() {
+        _waiting = false;
+        currentUser = token;
+      });
+      return response.body;
+    } else {
+      throw Exception('Error');
+    }
   }
 
   //Get Commission Order
-  Future<List> getData() async {
+  Future<List> getMyOrderData() async {
     Response response = await GetConnect().get(_orderURL);
-    // print(response.body);
+    // print(response.body); //get email as a token for identify who is current user
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('userToken');
     if (response.status.isOk) {
+      print("token in storage page " + token!);
+      List orderInfo = await response.body;
+      List myOrder = [];
+      for (int i = 0; i < orderInfo.length; i++) {
+        if (token == orderInfo[i]["order_user_email"]) {
+          myOrder.add(orderInfo[i]);
+        }
+      }
+      print(myOrder);
       setState(() {
         _waiting = false;
+        currentUser = token;
       });
-      return response.body;
+      return myOrder;
     } else {
       throw Exception('Error');
     }
@@ -61,6 +95,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
     }
   }
 
+//Filter index data
   Future filterOrderList(id) async {
     List offerData = await _offerData;
     List summary = [];
@@ -69,11 +104,6 @@ class _CommissionStorageState extends State<CommissionStorage> {
         summary.add(offerData[i]);
       }
     }
-    //has one
-    // setState(() {
-    //   offerDetail = summary;
-    //   dataStatus = true;
-    // });
     return summary;
   }
 
@@ -83,8 +113,6 @@ class _CommissionStorageState extends State<CommissionStorage> {
 
     //** Commission Offer Widget**
     Widget commissionOffer(index, dataN) {
-      //This function seems has a problem
-      // filterOrderList(data[index]['offer_id_commission']);
       //assign offer detail
       offerDetail = filterOrderList(dataN[index]['offer_id_commission']);
       return dataStatus == false
@@ -140,12 +168,12 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       //user image profile
-                                      CircleAvatar(
-                                        radius: 15,
-                                        backgroundImage: AssetImage(
-                                          data[0]["profile_image_path"],
-                                        ),
-                                      ),
+                                      // CircleAvatar(
+                                      //   radius: 15,
+                                      //   backgroundImage: AssetImage(
+                                      //     data[0]["profile_image_path"],
+                                      //   ),
+                                      // ),
                                       SizedBox(
                                         width: 10,
                                       ),
@@ -156,7 +184,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            data[0]['username'],
+                                            "data[0]['username']",
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 6,
@@ -338,7 +366,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                     //** End of Sorting Button **//
                   ],
                 ),
-                //** List of commission order **//
+                //** List of your commission order **//
                 _waiting
                     ? Center(
                         child: const CircularProgressIndicator(
@@ -351,7 +379,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                           height: size.height * 0.35,
                           width: size.width,
                           child: FutureBuilder(
-                              future: _orderData,
+                              future: _myOrderData,
                               builder: (context, snapshot) {
                                 late List data = snapshot.data as List;
                                 if (snapshot.hasData) {

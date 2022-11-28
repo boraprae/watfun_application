@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:watfun_application/appBar.dart';
 import 'package:watfun_application/constantColors.dart';
 import 'package:watfun_application/widgets/commissionOffer.dart';
@@ -23,6 +24,7 @@ class _MarketplaceState extends State<Marketplace> {
   late Future<List> _data;
   late Future<List> _artworkCategory;
   bool _waiting = true;
+  String currentUser = '';
 
   @override
   void initState() {
@@ -35,9 +37,14 @@ class _MarketplaceState extends State<Marketplace> {
   //Get Commission Offer
   Future<List> getData() async {
     Response response = await GetConnect().get(_url);
+    //get email as a token for identify who is current user
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('userToken');
+    print(token);
     if (response.status.isOk) {
       setState(() {
         _waiting = false;
+        currentUser = token!;
       });
       return response.body;
     } else {
@@ -97,12 +104,12 @@ class _MarketplaceState extends State<Marketplace> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          CircleAvatar(
-                            radius: 20,
-                            backgroundImage: AssetImage(
-                              data[index]['profile_image_path'],
-                            ),
-                          ),
+                          // CircleAvatar(
+                          //   radius: 20,
+                          //   backgroundImage: AssetImage(
+                          //     data[index]['profile_image_path'],
+                          //   ),
+                          // ),
                           const SizedBox(
                             width: 10,
                           ),
@@ -112,7 +119,7 @@ class _MarketplaceState extends State<Marketplace> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                data[index]['username'],
+                                "data[index]['username']",
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 8,
@@ -163,6 +170,7 @@ class _MarketplaceState extends State<Marketplace> {
                       //** Order Commission Button **//
                       GestureDetector(
                         onTap: () {
+                          // print(data[index]);
                           Navigator.pushNamed(context, '/orderCommission',
                               arguments: <String, dynamic>{
                                 'commission_offer_detail': data[index]

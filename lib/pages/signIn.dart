@@ -39,12 +39,11 @@ class _LoginPageState extends State<LoginPage> {
       var verifyStatus = false;
       List userInfo = await response.body;
       for (int i = 0; i < userInfo.length; i++) {
-        print(userInfo[i]["email"]);
-        if (email == userInfo[i]["email"] && password == userInfo[i]["password"]) {
+        if (email == userInfo[i]["email"] &&
+            password == userInfo[i]["password"]) {
           verifyStatus = true;
         }
       }
-      print(verifyStatus);
       return verifyStatus;
     } else {
       throw Exception('Error');
@@ -71,8 +70,13 @@ class _LoginPageState extends State<LoginPage> {
       // var Loging = await login();
       // saveToken(Loging.body);
       //!Change condition to Comparing Data from json-server
-      var loginTicket = await userVerify(emailTextField.text, passwordTextField.text);
+      var loginTicket =
+          await userVerify(emailTextField.text, passwordTextField.text);
       if (loginTicket == true) {
+        //Todo: use shared_preferences to keep the user email as a token
+        // Obtain shared preferences.
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('userToken', emailTextField.text);
         Navigator.pushNamed(context, '/mainMenu');
         emailTextField.clear();
         passwordTextField.clear();
