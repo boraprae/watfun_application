@@ -63,7 +63,6 @@ class _CommissionStorageState extends State<CommissionStorage> {
 
   Future filterOrderList(id) async {
     List offerData = await _offerData;
-    // print(offerData);
     List summary = [];
     for (int i = 0; i < offerData.length; i++) {
       if (id == offerData[i]["id"]) {
