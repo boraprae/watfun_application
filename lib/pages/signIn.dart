@@ -2,9 +2,12 @@ import 'dart:convert';
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:get/get.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:watfun_application/constantColors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:get/get_connect/http/src/response/response.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -14,15 +17,82 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final String _userURL = "http://10.0.2.2:9000/user";
   final emailTextField = TextEditingController();
   final passwordTextField = TextEditingController();
   bool showPassword = true;
 
+  //Get User Data
+  final String _url = "http://10.0.2.2:9000/user";
+  late Future<List> _data;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _data = getData();
+  // }
+
+  //Get Commission Offer
+  Future<bool> userVerify(email, password) async {
+    var response = await GetConnect().get(_url);
+    if (response.status.isOk) {
+      //check user in json-server
+      var verifyStatus = false;
+      List userInfo = await response.body;
+      for (int i = 0; i < userInfo.length; i++) {
+        print(userInfo[i]["email"]);
+        if (email == userInfo[i]["email"] && password == userInfo[i]["password"]) {
+          verifyStatus = true;
+        }
+      }
+      print(verifyStatus);
+      return verifyStatus;
+    } else {
+      throw Exception('Error');
+    }
+  }
+
+  Future signIn() async {
+    if (emailTextField.text == '' || passwordTextField.text == '') {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Warning!'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Please type your email and password first.'),
+              ],
+            ),
+          );
+        },
+      );
+    } else {
+      // var Loging = await login();
+      // saveToken(Loging.body);
+      //!Change condition to Comparing Data from json-server
+      var loginTicket = await userVerify(emailTextField.text, passwordTextField.text);
+      if (loginTicket == true) {
+        Navigator.pushNamed(context, '/mainMenu');
+        emailTextField.clear();
+        passwordTextField.clear();
+      } else {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: "Error",
+          text: "Your input incorrect!",
+          confirmBtnText: "OK",
+          confirmBtnColor: lightGray,
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: bgBlack,
       body: Stack(
@@ -169,41 +239,14 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   //button sign in
                   Padding(
-                    padding:  const EdgeInsets.symmetric(vertical: 24),
+                    padding: const EdgeInsets.symmetric(vertical: 24),
                     child: SizedBox(
                       width: size.width,
                       height: 0.05 * size.height,
                       child: ElevatedButton(
                         onPressed: () async {
-                          // if (emailTextField.text == '' ||
-                          //     passwordTextField.text == '') {
-                          //   showDialog(
-                          //     context: context,
-                          //     builder: (BuildContext context) {
-                          //       return AlertDialog(
-                          //         title: Text('Warning!'),
-                          //         content: Column(
-                          //           mainAxisSize: MainAxisSize.min,
-                          //           children: [
-                          //             Text(
-                          //                 'Please type your email and password first.'),
-                          //           ],
-                          //         ),
-                          //       );
-                          //     },
-                          //   );
-                          // } else {
-                          //   var Loging = await login();
-                          //   saveToken(Loging.body);
-                          //   if (Loging.statusCode < 299) {
-                          //     Navigator.pushNamed(context, '/mainMenu');
-                          //     emailTextField.clear();
-                          //     passwordTextField.clear();
-                          //   } else {
-                          //     loginFailed(Loging.body);
-                          //   }
-                          // }
-                          Navigator.pushNamed(context, '/mainMenu');
+                          await signIn();
+                          // Navigator.pushNamed(context, '/mainMenu');
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.white,
