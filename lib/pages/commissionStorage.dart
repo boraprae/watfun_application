@@ -20,6 +20,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
   final String _orderURL = "http://10.0.2.2:9000/commission_order";
   late Future<List> _orderData;
   late Future<List> _myOrderData;
+  late Future<List> _customerOrderData;
   late Future<List> _offerData;
   bool _waiting = true;
   bool _waitingOfferData = true;
@@ -34,6 +35,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
     _orderData = getData();
     _offerData = getOfferData();
     _myOrderData = getMyOrderData();
+    _customerOrderData = getMyCustomerOrder();
   }
 
   //Get All Commission Order
@@ -69,12 +71,35 @@ class _CommissionStorageState extends State<CommissionStorage> {
           myOrder.add(orderInfo[i]);
         }
       }
-      print(myOrder);
       setState(() {
         _waiting = false;
         currentUser = token;
       });
       return myOrder;
+    } else {
+      throw Exception('Error');
+    }
+  }
+
+  Future<List> getMyCustomerOrder() async {
+    Response response = await GetConnect().get(_orderURL);
+    // print(response.body); //get email as a token for identify who is current user
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('userToken');
+    if (response.status.isOk) {
+      print("token in storage page: " + token!);
+      List orderInfo = await response.body;
+      List myCustomerOrder = [];
+      for (int i = 0; i < orderInfo.length; i++) {
+        if (token != orderInfo[i]["order_user_email"]) {
+          myCustomerOrder.add(orderInfo[i]);
+        }
+      }
+      setState(() {
+        _waiting = false;
+        currentUser = token;
+      });
+      return myCustomerOrder;
     } else {
       throw Exception('Error');
     }
@@ -107,195 +132,200 @@ class _CommissionStorageState extends State<CommissionStorage> {
     return summary;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+  // //?Check if is it my customer or not
+  Widget checkCustomerOrder(index, customerData, size) {
 
-    //** Commission Offer Widget**
-    Widget commissionOffer(index, dataN) {
-      //assign offer detail
-      offerDetail = filterOrderList(dataN[index]['offer_id_commission']);
-      return dataStatus == false
-          ? const Center(
-              child: const CircularProgressIndicator(
-              backgroundColor: bgBlack,
-              color: purpleG,
-            ))
-          : FutureBuilder(
-              future: offerDetail!,
-              builder: (context, snapshot) {
-                late List data = snapshot.data as List;
-                // print(data);
-                if (snapshot.hasData) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 12),
-                    child: Stack(
-                      children: [
-                        Container(
+    return commissionOffer(index, customerData, size);
+  }
+
+  //** Commission Offer Widget**
+  Widget commissionOffer(index, dataN, size) {
+    //assign offer detail
+    offerDetail = filterOrderList(dataN[index]['offer_id_commission']);
+    return dataStatus == false
+        ? const Center(
+            child: const CircularProgressIndicator(
+            backgroundColor: bgBlack,
+            color: purpleG,
+          ))
+        : FutureBuilder(
+            future: offerDetail!,
+            builder: (context, snapshot) {
+              late List data = snapshot.data as List;
+              // print(data);
+              if (snapshot.hasData) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: size.width - 200,
+                        height: size.height * 0.25,
+                        decoration: BoxDecoration(
+                          color: btnDark,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.memory(
+                                base64Decode(
+                                  data[0]["offer_image_base64"],
+                                ),
+                                fit: BoxFit.cover,
+                              )),
+                        ),
+                      ),
+                      //Todo: Map with data from server
+                      Positioned(
+                        bottom: 0,
+                        child: BlurryContainer(
+                          blur: 5,
+                          elevation: 0,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
                           width: size.width - 200,
-                          height: size.height * 0.25,
-                          decoration: BoxDecoration(
-                            color: btnDark,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                          color: Colors.black.withOpacity(0.5),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.memory(
-                                  base64Decode(
-                                    data[0]["offer_image_base64"],
-                                  ),
-                                  fit: BoxFit.cover,
-                                )),
-                          ),
-                        ),
-                        //Todo: Map with data from server
-                        Positioned(
-                          bottom: 0,
-                          child: BlurryContainer(
-                            blur: 5,
-                            elevation: 0,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10)),
-                            width: size.width - 200,
-                            color: Colors.black.withOpacity(0.5),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      //user image profile
-                                      // CircleAvatar(
-                                      //   radius: 15,
-                                      //   backgroundImage: AssetImage(
-                                      //     data[0]["profile_image_path"],
-                                      //   ),
-                                      // ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "data[0]['username']",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 6,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            data[0]['offer_title'],
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 8,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Spacer(),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            'Price',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 6,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            data[0]['offer_price'] + " Baht",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  //** Order Commission Button **//
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.pushNamed(
-                                          context, '/commissionProgress',
-                                          arguments: <String, dynamic>{
-                                            'order_detail': data[0],
-                                            'order_info': dataN[index],
-                                          });
-                                    },
-                                    child: Row(
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    //user image profile
+                                    // CircleAvatar(
+                                    //   radius: 15,
+                                    //   backgroundImage: AssetImage(
+                                    //     data[0]["profile_image_path"],
+                                    //   ),
+                                    // ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Container(
-                                          width: size.width - 270,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(18),
-                                            gradient: LinearGradient(
-                                              begin: Alignment.topLeft,
-                                              end: Alignment.bottomRight,
-                                              colors: [
-                                                btnTopLeft,
-                                                btnTopRight,
-                                              ],
-                                            ),
+                                        Text(
+                                          "data[0]['username']",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 6,
                                           ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(12.0),
-                                            child: Text(
-                                              'View Progress',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 8,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          data[0]['offer_title'],
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 8,
                                           ),
                                         ),
                                       ],
                                     ),
-                                  )
-                                ],
-                              ),
+                                    Spacer(),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          'Price',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 6,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          data[0]['offer_price'] + " Baht",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                //** Order Commission Button **//
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, '/commissionProgress',
+                                        arguments: <String, dynamic>{
+                                          'order_detail': data[0],
+                                          'order_info': dataN[index],
+                                        });
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: size.width - 270,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(18),
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                            colors: [
+                                              btnTopLeft,
+                                              btnTopRight,
+                                            ],
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Text(
+                                            'View Progress',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 8,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                  );
-                } else if (snapshot.hasError) {
-                  return const Text('Error');
-                }
-                return const Center(
-                    child: const CircularProgressIndicator(
-                  backgroundColor: bgBlack,
-                  color: purpleG,
-                ));
-              });
-    }
+                      ),
+                    ],
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return const Text('Error');
+              }
+              return const Center(
+                  child: const CircularProgressIndicator(
+                backgroundColor: bgBlack,
+                color: purpleG,
+              ));
+            });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
 
     return SingleChildScrollView(
       child: Column(
@@ -398,7 +428,8 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                           itemCount: data.length,
                                           itemBuilder: (context, index) {
                                             //Invalid value: Only valid value is 0: 1
-                                            return commissionOffer(index, data);
+                                            return checkCustomerOrder(
+                                                index, data, size);
                                           });
                                 } else if (snapshot.hasError) {
                                   return const Text('Error');
@@ -485,7 +516,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                           height: size.height * 0.35,
                           width: size.width,
                           child: FutureBuilder(
-                              future: _orderData,
+                              future: _customerOrderData,
                               builder: (context, snapshot) {
                                 late List data = snapshot.data as List;
                                 if (snapshot.hasData) {
@@ -504,7 +535,8 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                           itemCount: data.length,
                                           itemBuilder: (context, index) {
                                             //Invalid value: Only valid value is 0: 1
-                                            return commissionOffer(index, data);
+                                            return checkCustomerOrder(
+                                                index, data, size);
                                           });
                                 } else if (snapshot.hasError) {
                                   return const Text('Error');
