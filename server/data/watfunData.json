@@ -43,7 +43,7 @@
   ],
   "user": [
     {
-      "id_user": 0,
+      "id": 0,
       "username": "John Doe",
       "email": "abc@gmail.com",
       "password": "123",
@@ -53,7 +53,7 @@
       "cover_profile_image_path": ""
     },
     {
-      "id_user": 1,
+      "id": 1,
       "username": "Jenny Kim",
       "email": "def@gmail.com",
       "password": "456",
@@ -63,7 +63,7 @@
       "cover_profile_image_path": ""
     },
     {
-      "id_user": 2,
+      "id": 2,
       "username": "Megan Kim",
       "email": "ght@gmail.com",
       "password": "789",
@@ -71,6 +71,36 @@
       "bio_text": "",
       "profile_image_path": "assets/artworksUploads/12.jpg",
       "cover_profile_image_path": ""
+    },
+    {
+      "username": "boraprae",
+      "email": "bo@gmail.com",
+      "password": "12345",
+      "payment_info": "",
+      "bio_text": "",
+      "profile_image_path": "",
+      "cover_profile_image_path": "",
+      "id": 3
+    },
+    {
+      "username": "nani",
+      "email": "nani@gmail.com",
+      "password": "1234",
+      "payment_info": "",
+      "bio_text": "",
+      "profile_image_path": "",
+      "cover_profile_image_path": "",
+      "id": 4
+    },
+    {
+      "username": "yainezu",
+      "email": "yainezu@gmail.com",
+      "password": "12345",
+      "payment_info": "",
+      "bio_text": "",
+      "profile_image_path": "",
+      "cover_profile_image_path": "",
+      "id": 5
     }
   ],
   "commission_offer": [

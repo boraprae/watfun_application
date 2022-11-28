@@ -14,53 +14,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final String _userURL = "http://10.0.2.2:9000/user";
   final emailTextField = TextEditingController();
   final passwordTextField = TextEditingController();
   bool showPassword = true;
 
-  void saveToken(var body) async {
-    Map object = jsonDecode(body) as Map<String, dynamic>;
-    print(object['token']);
-
-    setState(() {});
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String objectString = jsonEncode(object);
-
-    prefs.setString('user', objectString);
-  }
-
-  Future<http.Response> login() {
-    return http.post(
-      Uri.parse('http://10.0.2.2:3000/login'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'email': emailTextField.text,
-        'password': passwordTextField.text
-      }),
-    );
-  }
-
-  Future loginFailed(String alertMessage) async {
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(alertMessage),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Wrong username or password'),
-            ],
-          ),
-        );
-      },
-    );
-    emailTextField.clear();
-    passwordTextField.clear();
-  }
 
   @override
   Widget build(BuildContext context) {

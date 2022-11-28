@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:watfun_application/constantColors.dart';
 import 'package:watfun_application/pages/shared/listUserData.dart';
 import 'package:get/get.dart';
+import 'package:quickalert/quickalert.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -16,46 +17,81 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final usernameTextField = TextEditingController();
-  final emailTextField = TextEditingController();
-  final passwordTextField = TextEditingController();
+  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
   bool showPassword = true;
   //Get User Data
-  final String _url = "http://10.0.2.2:7000/getUserFromJson";
+  final String _url = "http://10.0.2.2:9000/user";
   late Future<UserData> futureUserData;
-  late Future<List> _data;
+  late Future<List> _userData;
 
   @override
   void initState() {
     super.initState();
-    // futureUserData = fetchData();
-    _data = getData();
+    _userData = getUserData();
   }
 
-  //Get User Data
-  Future<List> getData() async {
+  //Get User Info
+  Future<List> getUserData() async {
     Response response = await GetConnect().get(_url);
-    print(response.body);
     if (response.status.isOk) {
+      // setState(() {
+      //   _waiting = false;
+      // });
       return response.body;
     } else {
       throw Exception('Error');
     }
   }
 
-  // Future<http.Response> signUp() {
-  //   return http.post(
-  //     Uri.parse('http://localhost:9000/user'),
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //     },
-  //     body: jsonEncode(<String, String>{
-  //       'username': usernameTextField.text,
-  //       'email': emailTextField.text,
-  //       'password': passwordTextField.text,
-  //     }),
-  //   );
-  // }
+  Future signUp() async {
+    if (usernameController.text == '' ||
+        emailController.text == '' ||
+        passwordController.text == '') {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.warning,
+        title: "Warning",
+        text: "You have to complete all fields.",
+        confirmBtnText: "OK",
+        confirmBtnColor: lightGray,
+      );
+    } else {
+      // send data to json server
+      print(emailController.text);
+      print(usernameController.text);
+      print(passwordController.text);
+      Response response = await GetConnect().post(
+        _url,
+        jsonEncode(
+          <String, dynamic>{
+            "username": usernameController.text,
+            "email": emailController.text,
+            "password": passwordController.text,
+            "payment_info": "",
+            "bio_text": "",
+            "profile_image_path": "",
+            "cover_profile_image_path": "",
+          },
+        ),
+      );
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.success,
+        title: "Success",
+        text: "You are our member now!",
+        confirmBtnText: "OK",
+        confirmBtnColor: lightGray,
+        onConfirmBtnTap: () {
+          Navigator.pushNamed(context, '/welcome');
+        },
+      );
+      emailController.clear();
+      usernameController.clear();
+      passwordController.clear();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +183,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                         TextFormField(
-                          controller: usernameTextField,
+                          controller: usernameController,
                           style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
@@ -171,7 +207,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                         TextFormField(
-                          controller: emailTextField,
+                          controller: emailController,
                           style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
@@ -195,7 +231,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                         TextFormField(
-                          controller: passwordTextField,
+                          controller: passwordController,
                           style: TextStyle(color: Colors.white),
                           obscureText: showPassword,
                           decoration: InputDecoration(
@@ -226,30 +262,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: 0.05 * size.height,
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (usernameTextField.text == '' ||
-                                emailTextField.text == '' ||
-                                passwordTextField.text == '') {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text('Warning!'),
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                            'You have to complete all fields.'),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              );
-                            } else {
-                              // await signUp();
-                              emailTextField.clear();
-                              usernameTextField.clear();
-                              passwordTextField.clear();
-                            }
+                            await signUp();
                           },
                           style: ElevatedButton.styleFrom(
                             primary: Colors.white,
