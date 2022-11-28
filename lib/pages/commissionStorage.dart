@@ -53,6 +53,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
     if (response.status.isOk) {
       setState(() {
         _waitingOfferData = false;
+        dataStatus = true;
       });
       return response.body;
     } else {
@@ -60,9 +61,8 @@ class _CommissionStorageState extends State<CommissionStorage> {
     }
   }
 
-  void filterOrderList(id) async {
+  Future filterOrderList(id) async {
     List offerData = await _offerData;
-    // print(offerData);
     List summary = [];
     for (int i = 0; i < offerData.length; i++) {
       if (id == offerData[i]["id"]) {
@@ -70,11 +70,11 @@ class _CommissionStorageState extends State<CommissionStorage> {
       }
     }
     //has one
-    setState(() {
-      offerDetail = summary;
-      dataStatus = true;
-    });
-    print(offerData);
+    // setState(() {
+    //   offerDetail = summary;
+    //   dataStatus = true;
+    // });
+    return summary;
   }
 
   @override
@@ -82,110 +82,191 @@ class _CommissionStorageState extends State<CommissionStorage> {
     Size size = MediaQuery.of(context).size;
 
     //** Commission Offer Widget**
-    Widget commissionOffer(index, data) {
-      filterOrderList(data[index]['offer_id_commission']);
-
+    Widget commissionOffer(index, dataN) {
+      //This function seems has a problem
+      // filterOrderList(data[index]['offer_id_commission']);
+      //assign offer detail
+      offerDetail = filterOrderList(dataN[index]['offer_id_commission']);
       return dataStatus == false
           ? const Center(
               child: const CircularProgressIndicator(
               backgroundColor: bgBlack,
               color: purpleG,
             ))
-          : Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Container(
-                width: size.width,
-                height: size.height * 0.1,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Color(0xFF272626).withOpacity(0.5),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      //user image profile
-                      CircleAvatar(
-                        radius: 20,
-                        backgroundImage: AssetImage(
-                          offerDetail[0]["profile_image_path"],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            data[index]['order_date'],
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(0.8),
-                              fontSize: 10,
-                            ),
+          : FutureBuilder(
+              future: offerDetail!,
+              builder: (context, snapshot) {
+                late List data = snapshot.data as List;
+                // print(data);
+                if (snapshot.hasData) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 12),
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: size.width - 200,
+                          height: size.height * 0.25,
+                          decoration: BoxDecoration(
+                            color: btnDark,
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            offerDetail[0]["offer_title"],
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Spacer(),
-                      //** Order Commission Button **//
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/commissionProgress',
-                              arguments: <String, dynamic>{
-                                'order_detail': offerDetail[0],
-                                'order_info': data[index],
-                              });
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: size.width * 0.15,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(18),
-                                gradient: LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    btnTopLeft,
-                                    btnTopRight,
-                                  ],
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: Text(
-                                  'View',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 8,
-                                    fontWeight: FontWeight.w600,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.memory(
+                                  base64Decode(
+                                    data[0]["offer_image_base64"],
                                   ),
-                                ),
+                                  fit: BoxFit.cover,
+                                )),
+                          ),
+                        ),
+                        //Todo: Map with data from server
+                        Positioned(
+                          bottom: 0,
+                          child: BlurryContainer(
+                            blur: 5,
+                            elevation: 0,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            width: size.width - 200,
+                            color: Colors.black.withOpacity(0.5),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      //user image profile
+                                      CircleAvatar(
+                                        radius: 15,
+                                        backgroundImage: AssetImage(
+                                          data[0]["profile_image_path"],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            data[0]['username'],
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 6,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            data[0]['offer_title'],
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 8,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Spacer(),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            'Price',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 6,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            data[0]['offer_price'] + " Baht",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  //** Order Commission Button **//
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                          context, '/commissionProgress',
+                                          arguments: <String, dynamic>{
+                                            'order_detail': data[0],
+                                            'order_info': dataN[index],
+                                          });
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          width: size.width - 270,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(18),
+                                            gradient: LinearGradient(
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomRight,
+                                              colors: [
+                                                btnTopLeft,
+                                                btnTopRight,
+                                              ],
+                                            ),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(12.0),
+                                            child: Text(
+                                              'View Progress',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 8,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            );
+                      ],
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return const Text('Error');
+                }
+                return const Center(
+                    child: const CircularProgressIndicator(
+                  backgroundColor: bgBlack,
+                  color: purpleG,
+                ));
+              });
     }
 
     return SingleChildScrollView(
@@ -203,95 +284,106 @@ class _CommissionStorageState extends State<CommissionStorage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // const Text(
-                        //   'Your Commission Order',
-                        //   style: TextStyle(
-                        //       color: Colors.white,
-                        //       fontSize: 16,
-                        //       fontWeight: FontWeight.bold),
-                        // ),
-                        // Text(
-                        //   'Sorting by: ' + sortingTag,
-                        //   style: const TextStyle(
-                        //     color: Colors.white,
-                        //     fontSize: 10,
-                        //   ),
-                        // ),
+                        const Text(
+                          'Your Commission Order',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          'Sorting by: ' + sortingTag,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                          ),
+                        ),
                       ],
                     ),
                     //** Sorting Button **//
-                    // Container(
-                    //   height: 45,
-                    //   width: 45,
-                    //   child: ElevatedButton(
-                    //     onPressed: () {},
-                    //     style: ElevatedButton.styleFrom(
-                    //       shape: RoundedRectangleBorder(
-                    //           borderRadius: BorderRadius.circular(10.0)),
-                    //       padding: EdgeInsets.all(0.0),
-                    //     ),
-                    //     child: Ink(
-                    //       decoration: BoxDecoration(
-                    //           gradient: LinearGradient(
-                    //             begin: Alignment.topLeft,
-                    //             end: Alignment.bottomRight,
-                    //             colors: [
-                    //               btnTopLeft,
-                    //               btnTopRight,
-                    //             ],
-                    //           ),
-                    //           borderRadius: BorderRadius.circular(10.0)),
-                    //       child: Container(
-                    //         constraints:
-                    //             BoxConstraints(maxWidth: 45.0, minHeight: 45.0),
-                    //         alignment: Alignment.center,
-                    //         child: Icon(
-                    //           Icons.sort_rounded,
-                    //           size: 20,
-                    //           color: Colors.white,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
+                    Container(
+                      height: 45,
+                      width: 45,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                          padding: EdgeInsets.all(0.0),
+                        ),
+                        child: Ink(
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  btnTopLeft,
+                                  btnTopRight,
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(10.0)),
+                          child: Container(
+                            constraints:
+                                BoxConstraints(maxWidth: 45.0, minHeight: 45.0),
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.sort_rounded,
+                              size: 20,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                     //** End of Sorting Button **//
                   ],
                 ),
                 //** List of commission order **//
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(vertical: 8),
-                //   child: _waitingOfferData
-                //       ? Center(
-                //           child: const CircularProgressIndicator(
-                //           backgroundColor: bgBlack,
-                //           color: purpleG,
-                //         ))
-                //       : SizedBox(
-                //           height: size.height * 0.35,
-                //           width: size.width,
-                //           child: FutureBuilder(
-                //               future: _offerData,
-                //               builder: (context, snapshot) {
-                //                 late List data = snapshot.data as List;
-                //                 if (snapshot.hasData) {
-                //                   return ListView.builder(
-                //                       scrollDirection: Axis.horizontal,
-                //                       itemCount: data.length,
-                //                       itemBuilder: (context, index) {
-                //                         return commissionOffer(index, data);
-                //                       });
-                //                 } else if (snapshot.hasError) {
-                //                   return const Text('Error');
-                //                 }
-                //                 return const Center(
-                //                     child: const CircularProgressIndicator(
-                //                   backgroundColor: bgBlack,
-                //                   color: purpleG,
-                //                 ));
-                //               }),
-                //         ),
-                // ),
-                //! Customer Commission Order
+                _waiting
+                    ? Center(
+                        child: const CircularProgressIndicator(
+                        backgroundColor: bgBlack,
+                        color: purpleG,
+                      ))
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: SizedBox(
+                          height: size.height * 0.35,
+                          width: size.width,
+                          child: FutureBuilder(
+                              future: _orderData,
+                              builder: (context, snapshot) {
+                                late List data = snapshot.data as List;
+                                if (snapshot.hasData) {
+                                  return data.length == 0
+                                      ? Center(
+                                          child: Text(
+                                            "No have any order :<",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        )
+                                      : ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: data.length,
+                                          itemBuilder: (context, index) {
+                                            //Invalid value: Only valid value is 0: 1
+                                            return commissionOffer(index, data);
+                                          });
+                                } else if (snapshot.hasError) {
+                                  return const Text('Error');
+                                }
+                                return const Center(
+                                    child: const CircularProgressIndicator(
+                                  backgroundColor: bgBlack,
+                                  color: purpleG,
+                                ));
+                              }),
+                        ),
+                      ),
+                //! Customer Commission Order is not from other yet
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -380,7 +472,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                           ),
                                         )
                                       : ListView.builder(
-                                          scrollDirection: Axis.vertical,
+                                          scrollDirection: Axis.horizontal,
                                           itemCount: data.length,
                                           itemBuilder: (context, index) {
                                             //Invalid value: Only valid value is 0: 1
