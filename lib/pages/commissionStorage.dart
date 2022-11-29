@@ -18,7 +18,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
   String sortingTag = 'Latest';
   final String _offerURL = "http://10.0.2.2:9000/commission_offer";
   final String _orderURL = "http://10.0.2.2:9000/commission_order";
-  late Future<List> _orderData;
+  // late Future<List> _orderData;
   late Future<List> _myOrderData;
   late Future<List> _customerOrderData;
   late Future<List> _offerData;
@@ -32,29 +32,29 @@ class _CommissionStorageState extends State<CommissionStorage> {
   @override
   void initState() {
     super.initState();
-    _orderData = getData();
+    // _orderData = getData();
     _offerData = getOfferData();
     _myOrderData = getMyOrderData();
     _customerOrderData = getMyCustomerOrder();
   }
 
   //Get All Commission Order
-  Future<List> getData() async {
-    Response response = await GetConnect().get(_orderURL);
-    // print(response.body); //get email as a token for identify who is current user
-    final prefs = await SharedPreferences.getInstance();
-    final String? token = prefs.getString('userToken');
-    if (response.status.isOk) {
-      print("token in storage page " + token!);
-      setState(() {
-        _waiting = false;
-        currentUser = token;
-      });
-      return response.body;
-    } else {
-      throw Exception('Error');
-    }
-  }
+  // Future<List> getData() async {
+  //   Response response = await GetConnect().get(_orderURL);
+  //   // print(response.body); //get email as a token for identify who is current user
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final String? token = prefs.getString('userToken');
+  //   if (response.status.isOk) {
+  //     print("token in storage page " + token!);
+  //     setState(() {
+  //       _waiting = false;
+  //       currentUser = token;
+  //     });
+  //     return response.body;
+  //   } else {
+  //     throw Exception('Error');
+  //   }
+  // }
 
   //Get Commission Order
   Future<List> getMyOrderData() async {
@@ -86,18 +86,34 @@ class _CommissionStorageState extends State<CommissionStorage> {
     // print(response.body); //get email as a token for identify who is current user
     final prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('userToken');
+    List test = [];
     if (response.status.isOk) {
       print("token in storage page: " + token!);
+      //get all order
       List orderInfo = await response.body;
       List myCustomerOrder = [];
+
       for (int i = 0; i < orderInfo.length; i++) {
+        //if is not my order
+        //TODO: In case no have any customer order
+        //! If แรกไม่ได้ถูก
         if (token != orderInfo[i]["order_user_email"]) {
-          myCustomerOrder.add(orderInfo[i]);
-        }
+          //?======= ให้เพิ่มเฉพาะอันที่เราเป็นเจ้าของ offer =======?
+          //TODO: 1. ไปเอาข้อมูลที่ offer ที่มีอีเมลเหมือน token มา โดยใช้ order id ไปค้นหา 2.ดูว่ามันตรงกันไหม ถ้าตรงให้ add ไม่ตรงให้ข้าม(ดูแค่"user_owner_token")
+          //  myCustomerOrder.add(orderInfo[i]);
+           var isMyCustomer =
+                await filterOrderList(orderInfo[i]['offer_id_commission']);
+            print("Offer Data: " + isMyCustomer[0]["user_owner_token"]);
+            //if is not my commission offer
+            if (isMyCustomer[0]["user_owner_token"] == token  ) {
+              myCustomerOrder.add(orderInfo[i]);
+            }
+            print("Final Data: " + myCustomerOrder.length.toString() );
+        } 
       }
       setState(() {
         _waiting = false;
-        currentUser = token;
+        // currentUser = token;
       });
       return myCustomerOrder;
     } else {
@@ -133,8 +149,14 @@ class _CommissionStorageState extends State<CommissionStorage> {
   }
 
   // //?Check if is it my customer or not
+  //TODO: check from offer_id_commission
   Widget checkCustomerOrder(index, customerData, size) {
-
+    // offerDetail = filterOrderList(customerData[index]['offer_id_commission']);
+    // print(offerDetail);
+    // List myCustomerData = [];
+    // if (offerDetail[0]["user_owner_token"] == currentUser) {
+    //   myCustomerData.add(offerDetail);
+    // }
     return commissionOffer(index, customerData, size);
   }
 
