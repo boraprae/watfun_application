@@ -71,7 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
             "password": passwordController.text,
             "payment_info": "",
             "bio_text": "",
-            "profile_image_path": "",
+            "profile_image_path": "assets/artworksUploads/05.jpg",
             "cover_profile_image_path": "",
           },
         ),

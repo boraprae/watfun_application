@@ -86,7 +86,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
     // print(response.body); //get email as a token for identify who is current user
     final prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('userToken');
-    List test = [];
+  
     if (response.status.isOk) {
       print("token in storage page: " + token!);
       //get all order
@@ -101,15 +101,15 @@ class _CommissionStorageState extends State<CommissionStorage> {
           //?======= ให้เพิ่มเฉพาะอันที่เราเป็นเจ้าของ offer =======?
           //TODO: 1. ไปเอาข้อมูลที่ offer ที่มีอีเมลเหมือน token มา โดยใช้ order id ไปค้นหา 2.ดูว่ามันตรงกันไหม ถ้าตรงให้ add ไม่ตรงให้ข้าม(ดูแค่"user_owner_token")
           //  myCustomerOrder.add(orderInfo[i]);
-           var isMyCustomer =
-                await filterOrderList(orderInfo[i]['offer_id_commission']);
-            print("Offer Data: " + isMyCustomer[0]["user_owner_token"]);
-            //if is not my commission offer
-            if (isMyCustomer[0]["user_owner_token"] == token  ) {
-              myCustomerOrder.add(orderInfo[i]);
-            }
-            print("Final Data: " + myCustomerOrder.length.toString() );
-        } 
+          var isMyCustomer =
+              await filterOrderList(orderInfo[i]['offer_id_commission']);
+          print("Offer Data: " + isMyCustomer[0]["user_owner_token"]);
+          //if is not my commission offer
+          if (isMyCustomer[0]["user_owner_token"] == token) {
+            myCustomerOrder.add(orderInfo[i]);
+          }
+          print("Final Data: " + myCustomerOrder.length.toString());
+        }
       }
       setState(() {
         _waiting = false;
