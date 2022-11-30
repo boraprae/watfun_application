@@ -122,15 +122,15 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                           CircleAvatar(
                                             radius: 10.0,
                                             backgroundImage: AssetImage(
-                                              data["order_detail"]
-                                                  ["profile_image_path"],
+                                              data["order_info"]
+                                                  ["commission_owner_profile"],
                                             ),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8.0),
                                             child: Text(
-                                              data["order_detail"]["username"],
+                                              data["order_info"]['commission_owner_name'],
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 color: Colors.white,
