@@ -222,7 +222,8 @@ class _MarketplaceState extends State<Marketplace> {
                                         context, '/orderCommission',
                                         arguments: <String, dynamic>{
                                           'commission_offer_detail':
-                                              dataN[index]
+                                              dataN[index],
+                                          'owner_info': data[0]
                                         });
                                   },
                                   child: Row(

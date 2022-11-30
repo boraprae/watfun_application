@@ -32,7 +32,8 @@ class _OrderCommissionState extends State<OrderCommission> {
   final String _orderURL = "http://10.0.2.2:9000/commission_order";
   TextEditingController customerReqController = TextEditingController();
 
-  Future placeCommissionOrder(context, commissionID) async {
+  Future placeCommissionOrder(
+      context, commissionID, ownerName, ownerProfile) async {
     //get current date
     String currentDate = DateFormat("MMM dd, yyyy").format(DateTime.now());
     //get email as a token for identify who is current user
@@ -50,6 +51,8 @@ class _OrderCommissionState extends State<OrderCommission> {
           "progress_percentage": 0,
           "order_user_email": token,
           "offer_id_commission": commissionID,
+          "commission_owner_name": ownerName,
+          "commission_owner_profile": ownerProfile,
         }),
       );
       print(response.statusCode);
@@ -83,7 +86,7 @@ class _OrderCommissionState extends State<OrderCommission> {
     Size size = MediaQuery.of(context).size;
     Map<String, dynamic> data =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    // print(data);
+    print(data['owner_info']);
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -170,18 +173,18 @@ class _OrderCommissionState extends State<OrderCommission> {
                                       //Todo: Update User Profile
                                       child: Row(
                                         children: [
-                                          // CircleAvatar(
-                                          //   radius: 10.0,
-                                          //   backgroundImage: AssetImage(
-                                          //     data["commission_offer_detail"]
-                                          //         ["profile_image_path"],
-                                          //   ),
-                                          // ),
+                                          CircleAvatar(
+                                            radius: 10.0,
+                                            backgroundImage: AssetImage(
+                                              data['owner_info']
+                                                  ["profile_image_path"],
+                                            ),
+                                          ),
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8.0),
                                             child: Text(
-                                              "data['commission_offer_detail']['username']",
+                                              data['owner_info']['username'],
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 color: Colors.white,
@@ -298,9 +301,11 @@ class _OrderCommissionState extends State<OrderCommission> {
                                 child: GestureDetector(
                                   onTap: () {
                                     placeCommissionOrder(
-                                      context,
-                                      data["commission_offer_detail"]["id"],
-                                    );
+                                        context,
+                                        data["commission_offer_detail"]["id"],
+                                        data['owner_info']["username"],
+                                        data['owner_info']
+                                            ["profile_image_path"]);
                                     // Navigator.pushNamed(
                                     //   context,
                                     //   '/separate',

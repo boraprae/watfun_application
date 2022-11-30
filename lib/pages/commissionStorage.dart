@@ -217,12 +217,12 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     //user image profile
-                                    // CircleAvatar(
-                                    //   radius: 15,
-                                    //   backgroundImage: AssetImage(
-                                    //     data[0]["profile_image_path"],
-                                    //   ),
-                                    // ),
+                                    CircleAvatar(
+                                      radius: 15,
+                                      backgroundImage: AssetImage(
+                                        dataN[index]["commission_owner_profile"],
+                                      ),
+                                    ),
                                     SizedBox(
                                       width: 10,
                                     ),
@@ -233,7 +233,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "data[0]['username']",
+                                          dataN[index]['commission_owner_name'],
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 6,
