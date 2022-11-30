@@ -4,6 +4,7 @@ import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:watfun_application/constantColors.dart';
 import 'package:get/get.dart';
 
@@ -31,10 +32,14 @@ class _OrderCommissionState extends State<OrderCommission> {
   final String _orderURL = "http://10.0.2.2:9000/commission_order";
   TextEditingController customerReqController = TextEditingController();
 
-  Future placeCommissionOrder(context, commissionID, userID) async {
+  Future placeCommissionOrder(
+      context, commissionID, ownerName, ownerProfile) async {
     //get current date
     String currentDate = DateFormat("MMM dd, yyyy").format(DateTime.now());
-
+    //get email as a token for identify who is current user
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('userToken');
+    print(token);
     if (customerReqController.text != "") {
       Response response = await GetConnect().post(
         _orderURL,
@@ -44,8 +49,10 @@ class _OrderCommissionState extends State<OrderCommission> {
           "payment_status": false,
           "progress_status": false,
           "progress_percentage": 0,
-          "user_id_user": userID,
+          "order_user_email": token,
           "offer_id_commission": commissionID,
+          "commission_owner_name": ownerName,
+          "commission_owner_profile": ownerProfile,
         }),
       );
       print(response.statusCode);
@@ -79,7 +86,7 @@ class _OrderCommissionState extends State<OrderCommission> {
     Size size = MediaQuery.of(context).size;
     Map<String, dynamic> data =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    // print(data);
+    print(data['owner_info']);
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -169,7 +176,7 @@ class _OrderCommissionState extends State<OrderCommission> {
                                           CircleAvatar(
                                             radius: 10.0,
                                             backgroundImage: AssetImage(
-                                              data["commission_offer_detail"]
+                                              data['owner_info']
                                                   ["profile_image_path"],
                                             ),
                                           ),
@@ -177,8 +184,7 @@ class _OrderCommissionState extends State<OrderCommission> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8.0),
                                             child: Text(
-                                              data["commission_offer_detail"]
-                                                  ["username"],
+                                              data['owner_info']['username'],
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 color: Colors.white,
@@ -297,8 +303,9 @@ class _OrderCommissionState extends State<OrderCommission> {
                                     placeCommissionOrder(
                                         context,
                                         data["commission_offer_detail"]["id"],
-                                        data["commission_offer_detail"]
-                                            ["user_id_user"]);
+                                        data['owner_info']["username"],
+                                        data['owner_info']
+                                            ["profile_image_path"]);
                                     // Navigator.pushNamed(
                                     //   context,
                                     //   '/separate',

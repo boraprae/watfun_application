@@ -99,6 +99,8 @@ class _CreateNewPostState extends State<CreateNewPost> {
   Future addNewPostToServer(context) async {
     //get current date
     String currentDate = DateFormat("MMM dd, yyyy").format(DateTime.now());
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('userToken');
     //TODO: 1. Check condition of createTypeValue 2.Null check operator
     if (createTypeValue == 'Create Artwork Post') {
       if (_base64String == null) {
@@ -122,7 +124,7 @@ class _CreateNewPostState extends State<CreateNewPost> {
             "art_type": artStyleValue,
             "art_image_base64": _base64String,
             "art_created_date": currentDate,
-            "user_id_user": 1,
+            "user_id_user": token,
             "username": "Jenny Kim",
             "profile_image_path": "assets/artworksUploads/05.jpg"
           }),
@@ -172,9 +174,7 @@ class _CreateNewPostState extends State<CreateNewPost> {
             "offer_result": offerResultController.text,
             "offer_image_base64": _base64String,
             "offer_create_date": currentDate,
-            "user_id_user": 1,
-            "username": "Jenny Kim",
-            "profile_image_path": "assets/artworksUploads/05.jpg"
+            "user_owner_token": token,
           }),
         );
         print(response.statusCode);
