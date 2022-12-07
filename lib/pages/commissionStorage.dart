@@ -148,20 +148,8 @@ class _CommissionStorageState extends State<CommissionStorage> {
     return summary;
   }
 
-  // //?Check if is it my customer or not
-  //TODO: check from offer_id_commission
-  Widget checkCustomerOrder(index, customerData, size) {
-    // offerDetail = filterOrderList(customerData[index]['offer_id_commission']);
-    // print(offerDetail);
-    // List myCustomerData = [];
-    // if (offerDetail[0]["user_owner_token"] == currentUser) {
-    //   myCustomerData.add(offerDetail);
-    // }
-    return commissionOffer(index, customerData, size);
-  }
-
   //** Commission Offer Widget**
-  Widget commissionOffer(index, dataN, size) {
+  Widget commissionOffer(index, dataN, size, orderType) {
     //assign offer detail
     offerDetail = filterOrderList(dataN[index]['offer_id_commission']);
     return dataStatus == false
@@ -291,6 +279,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                         arguments: <String, dynamic>{
                                           'order_detail': data[0],
                                           'order_info': dataN[index],
+                                          'type': orderType,
                                         });
                                   },
                                   child: Row(
@@ -301,7 +290,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(18),
-                                          gradient: LinearGradient(
+                                          gradient: const LinearGradient(
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,
                                             colors: [
@@ -312,8 +301,16 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(12.0),
-                                          child: Text(
+                                          child: orderType=="myOrder" ? const Text(
                                             'View Progress',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 8,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ) : const Text(
+                                            'Edit Progress',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               color: Colors.white,
@@ -393,7 +390,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                         ),
                         child: Ink(
                           decoration: BoxDecoration(
-                              gradient: LinearGradient(
+                              gradient: const LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [
@@ -406,7 +403,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                             constraints:
                                 BoxConstraints(maxWidth: 45.0, minHeight: 45.0),
                             alignment: Alignment.center,
-                            child: Icon(
+                            child: const Icon(
                               Icons.sort_rounded,
                               size: 20,
                               color: Colors.white,
@@ -420,8 +417,8 @@ class _CommissionStorageState extends State<CommissionStorage> {
                 ),
                 //** List of your commission order **//
                 _waiting
-                    ? Center(
-                        child: const CircularProgressIndicator(
+                    ? const Center(
+                        child: CircularProgressIndicator(
                         backgroundColor: bgBlack,
                         color: purpleG,
                       ))
@@ -436,7 +433,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                 late List data = snapshot.data as List;
                                 if (snapshot.hasData) {
                                   return data.length == 0
-                                      ? Center(
+                                      ? const Center(
                                           child: Text(
                                             "No have any order :<",
                                             style: TextStyle(
@@ -450,8 +447,8 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                           itemCount: data.length,
                                           itemBuilder: (context, index) {
                                             //Invalid value: Only valid value is 0: 1
-                                            return checkCustomerOrder(
-                                                index, data, size);
+                                            return commissionOffer(
+                                                index, data, size, "myOrder");
                                           });
                                 } else if (snapshot.hasError) {
                                   return const Text('Error');
@@ -500,7 +497,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                         ),
                         child: Ink(
                           decoration: BoxDecoration(
-                              gradient: LinearGradient(
+                              gradient: const LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [
@@ -513,7 +510,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                             constraints:
                                 BoxConstraints(maxWidth: 45.0, minHeight: 45.0),
                             alignment: Alignment.center,
-                            child: Icon(
+                            child: const Icon(
                               Icons.sort_rounded,
                               size: 20,
                               color: Colors.white,
@@ -527,8 +524,8 @@ class _CommissionStorageState extends State<CommissionStorage> {
                 ),
                 //** List of commission order **//
                 _waiting
-                    ? Center(
-                        child: const CircularProgressIndicator(
+                    ? const Center(
+                        child: CircularProgressIndicator(
                         backgroundColor: bgBlack,
                         color: purpleG,
                       ))
@@ -543,7 +540,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                 late List data = snapshot.data as List;
                                 if (snapshot.hasData) {
                                   return data.length == 0
-                                      ? Center(
+                                      ? const Center(
                                           child: Text(
                                             "No have any order :<",
                                             style: TextStyle(
@@ -557,8 +554,8 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                           itemCount: data.length,
                                           itemBuilder: (context, index) {
                                             //Invalid value: Only valid value is 0: 1
-                                            return checkCustomerOrder(
-                                                index, data, size);
+                                            return commissionOffer(
+                                                index, data, size, "myCustomerOrder");
                                           });
                                 } else if (snapshot.hasError) {
                                   return const Text('Error');

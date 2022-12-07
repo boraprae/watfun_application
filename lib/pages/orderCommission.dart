@@ -39,7 +39,6 @@ class _OrderCommissionState extends State<OrderCommission> {
     //get email as a token for identify who is current user
     final prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('userToken');
-    print(token);
     if (customerReqController.text != "") {
       Response response = await GetConnect().post(
         _orderURL,

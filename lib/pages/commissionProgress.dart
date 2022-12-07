@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
+import 'package:quickalert/quickalert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:watfun_application/constantColors.dart';
 import 'package:get/get.dart';
 
@@ -18,13 +20,49 @@ class _CommissionProgressState extends State<CommissionProgress> {
   String itemName = '';
   int currentItemId = 1;
 
-  String totalComment = '0';
-  String totalLikes = '1.2k';
-  String username = 'SaraYune';
   String _token = "";
-  bool _editStatus = true;
+  bool _editStatus = false;
 
-  TextEditingController customerReqController = TextEditingController();
+  final progressPercentController = TextEditingController();
+  final String _orderURL = "http://10.0.2.2:9000/commission_order";
+
+  Future updateCommissionProgress(percent, orderID) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('userToken');
+    print(orderID.toString() + " " + percent);
+    print(_orderURL + "/" + orderID.toString());
+    if (progressPercentController.text != "") {
+      Response response = await GetConnect().patch(
+        _orderURL + "/" + orderID.toString(),
+        jsonEncode(<String, dynamic>{
+          "progress_percentage": percent,
+        }),
+      );
+      // print(response.statusCode);
+      //reset all
+      setState(() {
+        progressPercentController.clear();
+      });
+      //alert
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.success,
+        title: "Success",
+        text: "Update Successfully",
+        confirmBtnText: "OK",
+        confirmBtnColor: lightGray,
+      );
+    } else {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: "Warning",
+        text: "Please filled the data.",
+        confirmBtnText: "OK",
+        confirmBtnColor: lightGray,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +168,8 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8.0),
                                             child: Text(
-                                              data["order_info"]['commission_owner_name'],
+                                              data["order_info"]
+                                                  ['commission_owner_name'],
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 color: Colors.white,
@@ -219,15 +258,36 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                   ),
                                 ),
                               ),
-                              Text(
-                                data['order_info']['progress_percentage']
-                                        .toString() +
-                                    "%",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                ),
-                              ),
+                              _editStatus == false
+                                  ? Text(
+                                      data['order_info']['progress_percentage']
+                                              .toString() +
+                                          "%",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                      ),
+                                    )
+                                  : TextFormField(
+                                      controller: progressPercentController,
+                                      style: TextStyle(color: Colors.white),
+                                      decoration: InputDecoration(
+                                          hintText:
+                                              "Type the progress of the percent 0-100",
+                                          hintStyle: TextStyle(
+                                            fontSize: 12,
+                                            color:
+                                                Colors.white.withOpacity(0.5),
+                                          ),
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.white),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.white),
+                                          )),
+                                    ),
                               const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 16),
                                 child: Text(
@@ -254,54 +314,117 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                         fontSize: 12,
                                       ),
                                     ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 16),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    // Navigator.pushNamed(
-                                    //   context,
-                                    //   '/separate',
-                                    //   arguments: <String, dynamic>{
-                                    //     'name': artworkCategory[index],
-                                    //   },
-                                    // );
-                                    setState(() {
-                                      _editStatus = false;
-                                    });
-                                    Navigator.pop(context);
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: size.width - 50,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(18),
-                                          gradient: const LinearGradient(
-                                            begin: Alignment.topLeft,
-                                            end: Alignment.bottomRight,
-                                            colors: [
-                                              btnTopLeft,
-                                              btnTopRight,
+                              Visibility(
+                                visible:
+                                    data['type'] == "myOrder" ? false : true,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 16),
+                                  child: _editStatus == false
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            // Navigator.pushNamed(
+                                            //   context,
+                                            //   '/separate',
+                                            //   arguments: <String, dynamic>{
+                                            //     'name': artworkCategory[index],
+                                            //   },
+                                            // );
+                                            setState(() {
+                                              _editStatus = true;
+                                            });
+                                            // Navigator.pop(context);
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: size.width - 50,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(18),
+                                                  gradient:
+                                                      const LinearGradient(
+                                                    begin: Alignment.topLeft,
+                                                    end: Alignment.bottomRight,
+                                                    colors: [
+                                                      btnTopLeft,
+                                                      btnTopRight,
+                                                    ],
+                                                  ),
+                                                ),
+                                                child: const Padding(
+                                                  padding: EdgeInsets.all(12.0),
+                                                  child: Text(
+                                                    'Edit Progress',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 11,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : GestureDetector(
+                                          onTap: () {
+                                            // Navigator.pushNamed(
+                                            //   context,
+                                            //   '/separate',
+                                            //   arguments: <String, dynamic>{
+                                            //     'name': artworkCategory[index],
+                                            //   },
+                                            // );
+                                            setState(() {
+                                              _editStatus = false;
+                                            });
+                                            updateCommissionProgress(
+                                                progressPercentController.text,
+                                                data['order_info']['id']);
+                                            // print(
+                                            //     progressPercentController.text);
+                                             Navigator.pushNamed(context, "/mainMenu");
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: size.width - 50,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(18),
+                                                  gradient:
+                                                      const LinearGradient(
+                                                    begin: Alignment.topLeft,
+                                                    end: Alignment.bottomRight,
+                                                    colors: [
+                                                      btnTopLeft,
+                                                      btnTopRight,
+                                                    ],
+                                                  ),
+                                                ),
+                                                child: const Padding(
+                                                  padding: EdgeInsets.all(12.0),
+                                                  child: Text(
+                                                    'Submit',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 11,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
                                             ],
                                           ),
                                         ),
-                                        child: const Padding(
-                                          padding: EdgeInsets.all(12.0),
-                                          child: Text(
-                                            'Edit Progress',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 11,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
                                 ),
                               )
                             ],
