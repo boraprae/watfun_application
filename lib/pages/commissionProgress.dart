@@ -291,7 +291,7 @@ class _CommissionProgressState extends State<CommissionProgress> {
                               const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 16),
                                 child: Text(
-                                  "Payment Status",
+                                  "Preview Picture",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 12,
@@ -299,19 +299,48 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                   ),
                                 ),
                               ),
-                              data['order_info']['payment_status'] == false
-                                  ? Text(
-                                      "Unpaid",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
+                              _editStatus == true
+                                  ? ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Color(0xFF353535), // background
+                                        onPrimary: Colors.white, // foreground
                                       ),
+                                      onPressed: () {},
+                                      child: Text("Upload"),
                                     )
-                                  : Text(
-                                      "Paid",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
+                                  : GestureDetector(
+                                      onTap: () {
+                                        // setState(() {
+                                        //   _editStatus = true;
+                                        // });
+                                        // Navigator.pop(context);
+                                      },
+                                      child: Container(
+                                        width: size.width * 0.3,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(18),
+                                          gradient: const LinearGradient(
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                            colors: [
+                                              btnTopLeft,
+                                              btnTopRight,
+                                            ],
+                                          ),
+                                        ),
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(12.0),
+                                          child: Text(
+                                            'Download',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
                               Visibility(
@@ -387,7 +416,8 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                                 data['order_info']['id']);
                                             // print(
                                             //     progressPercentController.text);
-                                             Navigator.pushNamed(context, "/mainMenu");
+                                            Navigator.pushNamed(
+                                                context, "/mainMenu");
                                           },
                                           child: Row(
                                             mainAxisAlignment:
