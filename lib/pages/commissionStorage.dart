@@ -86,7 +86,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
     // print(response.body); //get email as a token for identify who is current user
     final prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('userToken');
-  
+
     if (response.status.isOk) {
       print("token in storage page: " + token!);
       //get all order
@@ -208,7 +208,8 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                     CircleAvatar(
                                       radius: 15,
                                       backgroundImage: AssetImage(
-                                        dataN[index]["commission_owner_profile"],
+                                        dataN[index]
+                                            ["commission_owner_profile"],
                                       ),
                                     ),
                                     SizedBox(
@@ -301,23 +302,25 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(12.0),
-                                          child: orderType=="myOrder" ? const Text(
-                                            'View Progress',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 8,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ) : const Text(
-                                            'Edit Progress',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 8,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
+                                          child: orderType == "myOrder"
+                                              ? const Text(
+                                                  'View Progress',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 8,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                )
+                                              : const Text(
+                                                  'Edit Progress',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 8,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
                                         ),
                                       ),
                                     ],
@@ -554,8 +557,8 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                           itemCount: data.length,
                                           itemBuilder: (context, index) {
                                             //Invalid value: Only valid value is 0: 1
-                                            return commissionOffer(
-                                                index, data, size, "myCustomerOrder");
+                                            return commissionOffer(index, data,
+                                                size, "myCustomerOrder");
                                           });
                                 } else if (snapshot.hasError) {
                                   return const Text('Error');
