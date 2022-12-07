@@ -6,6 +6,7 @@ import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:watfun_application/constantColors.dart';
 import 'package:get/get.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class CommissionProgress extends StatefulWidget {
   const CommissionProgress({Key? key}) : super(key: key);
@@ -70,7 +71,8 @@ class _CommissionProgressState extends State<CommissionProgress> {
     Map<String, dynamic> data =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     // print(data['order_detail']);
-    print(data['order_info']);
+    // // print(data['order_info']);
+    // print(double.parse(data['order_info']['progress_percentage']) / 100);
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -259,13 +261,29 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                 ),
                               ),
                               _editStatus == false
-                                  ? Text(
-                                      data['order_info']['progress_percentage']
-                                              .toString() +
-                                          "%",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(right: 16),
+                                      child: new LinearPercentIndicator(
+                                        barRadius: Radius.circular(15),
+                                        width:
+                                            MediaQuery.of(context).size.width -
+                                                80,
+                                        animation: true,
+                                        lineHeight: 20.0,
+                                        animationDuration: 2500,
+                                        percent: double.parse(data['order_info']
+                                                ['progress_percentage']) /
+                                            100,
+                                        center: Text(
+                                          data['order_info']
+                                                  ['progress_percentage'] +
+                                              " %",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        linearStrokeCap:
+                                            LinearStrokeCap.roundAll,
+                                        progressColor: purpleG,
+                                        backgroundColor: Color(0xFF494949),
                                       ),
                                     )
                                   : TextFormField(
@@ -300,13 +318,32 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                 ),
                               ),
                               _editStatus == true
-                                  ? ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        primary: Color(0xFF353535), // background
-                                        onPrimary: Colors.white, // foreground
+                                  ? SizedBox(
+                                      width: size.width * 0.3,
+                                      height: size.height * 0.04,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                          ),
+                                          primary:
+                                              Color(0xFF353535), // background
+                                          onPrimary: Colors.white.withOpacity(0.5), // foreground
+                                        ),
+                                        onPressed: () {},
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Icon(
+                                              Icons.upload_file_outlined,
+                                              color: Colors.white,
+                                            ),
+                                            Text("Upload"),
+                                          ],
+                                        ),
                                       ),
-                                      onPressed: () {},
-                                      child: Text("Upload"),
                                     )
                                   : GestureDetector(
                                       onTap: () {
@@ -329,16 +366,26 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                             ],
                                           ),
                                         ),
-                                        child: const Padding(
-                                          padding: EdgeInsets.all(12.0),
-                                          child: Text(
-                                            'Download',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 11,
-                                              fontWeight: FontWeight.w600,
-                                            ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Icon(
+                                                Icons.download_outlined,
+                                                color: Colors.white,
+                                              ),
+                                              Text(
+                                                'Download',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
