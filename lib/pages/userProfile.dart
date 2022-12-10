@@ -162,6 +162,7 @@ class _UserProfileState extends State<UserProfile> {
 
                 Padding(
                   padding: const EdgeInsets.fromLTRB(56, 0, 56, 0),
+                  //!The _btnOnPress meaning is Commission Offer = false, Gallery = true
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -176,7 +177,8 @@ class _UserProfileState extends State<UserProfile> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
-                            color: _btnOnPress == false ? Colors.white : grayText,
+                            color:
+                                _btnOnPress == false ? Colors.white : grayText,
                           ),
                         ),
                       ),
@@ -185,7 +187,7 @@ class _UserProfileState extends State<UserProfile> {
                       ),
                       TextButton(
                         onPressed: () {
-                           setState(() {
+                          setState(() {
                             _btnOnPress = true;
                           });
                         },
@@ -194,7 +196,8 @@ class _UserProfileState extends State<UserProfile> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
-                            color: _btnOnPress == true ? Colors.white : grayText,
+                            color:
+                                _btnOnPress == true ? Colors.white : grayText,
                           ),
                         ),
                       ),
@@ -217,7 +220,8 @@ class _UserProfileState extends State<UserProfile> {
                         child: SizedBox(
                           width: size.width * 0.5,
                           child: Divider(
-                            color: _btnOnPress == true ? Colors.white : grayText,
+                            color:
+                                _btnOnPress == true ? Colors.white : grayText,
                             thickness: _btnOnPress == true ? 5 : 1,
                           ),
                         ),
@@ -226,47 +230,53 @@ class _UserProfileState extends State<UserProfile> {
                   ),
                 ),
                 //Gallery
-                Container(
-                  width: size.width,
-                  height: size.height * 0.8,
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisSpacing: 1,
-                      mainAxisSpacing: 1,
-                      crossAxisCount: 3,
-                    ),
-                    itemCount: _items.length,
-                    itemBuilder: (context, index) {
-                      // Item rendering
-                      return new GestureDetector(
-                        onTap: () {
-                          print(index);
-                          print(_items[index]);
-                          // Navigator.pushNamed(context, '/artworkDetail',
-                          //     arguments: <String, dynamic>{
-                          //       'artwork_detail': _items[index]
-                          //     });
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PostDetail(),
-                              settings: RouteSettings(arguments: _items[index]),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(_items[index].image),
-                            ),
+                _btnOnPress == false
+                    ? Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: textForNoContent(),
+                      )
+                    : Container(
+                        width: size.width,
+                        height: size.height * 0.8,
+                        child: GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisSpacing: 1,
+                            mainAxisSpacing: 1,
+                            crossAxisCount: 3,
                           ),
+                          itemCount: _items.length,
+                          itemBuilder: (context, index) {
+                            // Item rendering
+                            return new GestureDetector(
+                              onTap: () {
+                                print(index);
+                                print(_items[index]);
+                                // Navigator.pushNamed(context, '/artworkDetail',
+                                //     arguments: <String, dynamic>{
+                                //       'artwork_detail': _items[index]
+                                //     });
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PostDetail(),
+                                    settings:
+                                        RouteSettings(arguments: _items[index]),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage(_items[index].image),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                ),
+                      ),
               ],
             ),
             Positioned(
@@ -282,4 +292,16 @@ class _UserProfileState extends State<UserProfile> {
       ),
     );
   }
+}
+
+Widget textForNoContent() {
+  return const Center(
+    child: Text(
+      "Have no content yet",
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 14,
+      ),
+    ),
+  );
 }
