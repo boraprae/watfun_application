@@ -47,7 +47,6 @@ dependencies:
   percent_indicator: ^4.2.2
   gallery_saver: ^2.3.2
   image_gallery_saver: ^1.7.1
-  permission_handler: ^10.2.0
 
 dev_dependencies:
   flutter_test:

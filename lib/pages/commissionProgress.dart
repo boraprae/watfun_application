@@ -12,7 +12,6 @@ import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class CommissionProgress extends StatefulWidget {
   const CommissionProgress({Key? key}) : super(key: key);
