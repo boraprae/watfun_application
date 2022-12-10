@@ -1,12 +1,18 @@
 import 'dart:convert';
-
+import 'dart:async';
+import 'dart:io';
 import 'package:blurrycontainer/blurrycontainer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:watfun_application/constantColors.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:gallery_saver/gallery_saver.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class CommissionProgress extends StatefulWidget {
   const CommissionProgress({Key? key}) : super(key: key);
@@ -28,12 +34,38 @@ class _CommissionProgressState extends State<CommissionProgress> {
   final progressPercentController = TextEditingController();
   final String _orderURL = "http://10.0.2.2:9000/commission_order";
 
+  // void requestPersmission() async {
+  //  // await PermissionHandler().requestPermissions([PermissionGroup.storage]);
+  // }
+
+  // @override
+  // void initState() {
+  //   requestPersmission();
+  //   super.initState();
+  // }
+
+  Future<String> _createFileFromString(base64img) async {
+    final encodedStr = "...";
+    Uint8List bytes = base64.decode(base64img);
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    String fullPath = '$dir/watfun.png';
+    print("local file full path ${fullPath}");
+    File file = File(fullPath);
+    await file.writeAsBytes(bytes);
+    print(file.path);
+
+    final result = await ImageGallerySaver.saveImage(bytes);
+    print(result);
+
+    return file.path;
+  }
+
   Future updateCommissionProgress(percent, orderID) async {
     final prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('userToken');
-    print(orderID.toString() + " " + percent.toString());
-    print(_orderURL + "/" + orderID.toString());
-    if (_currentSliderValue >percent) {
+    // print(orderID.toString() + " " + percent.toString());
+    // print(_orderURL + "/" + orderID.toString());
+    if (_currentSliderValue > percent) {
       Response response = await GetConnect().patch(
         _orderURL + "/" + orderID.toString(),
         jsonEncode(<String, dynamic>{
@@ -273,9 +305,13 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                         animation: true,
                                         lineHeight: 20.0,
                                         animationDuration: 1250,
-                                        percent: data['order_info']['progress_percentage']/100,
+                                        percent: data['order_info']
+                                                ['progress_percentage'] /
+                                            100,
                                         center: Text(
-                                          data['order_info']['progress_percentage'].toString() +
+                                          data['order_info']
+                                                      ['progress_percentage']
+                                                  .toString() +
                                               " %",
                                           style: TextStyle(color: Colors.white),
                                         ),
@@ -342,9 +378,28 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                     )
                                   : GestureDetector(
                                       onTap: () {
+                                        _createFileFromString(
+                                            data["order_detail"]
+                                                ["offer_image_base64"]);
                                         // setState(() {
                                         //   _editStatus = true;
                                         // });
+                                        // Uint8List bytes = base64Decode(
+                                        //     data["order_detail"]
+                                        //         ["offer_image_base64"]);
+
+                                        // final decodedBytes = base64Decode(
+                                        //     data["order_detail"]
+                                        //         ["offer_image_base64"]);
+
+                                        // var file =
+                                        //     Io.File("decodedBezkoder.png");
+                                        // file.writeAsBytesSync(decodedBytes);
+                                        // //save to gallery
+                                        // await ImageGallerySaver.saveImage(Uint8List.fromList(file.),
+                                        //     name: "WATFUN", quality: 60);
+                                        // // await GallerySaver.saveImage(file.toString(),
+                                        // //     albumName: "WATFUN");
                                         // Navigator.pop(context);
                                       },
                                       child: Container(

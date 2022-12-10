@@ -63,7 +63,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
     final prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('userToken');
     if (response.status.isOk) {
-      print("token in storage page " + token!);
+      // print("token in storage page " + token!);
       List orderInfo = await response.body;
       List myOrder = [];
       for (int i = 0; i < orderInfo.length; i++) {
@@ -73,7 +73,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
       }
       setState(() {
         _waiting = false;
-        currentUser = token;
+        currentUser = token!;
       });
       return myOrder;
     } else {
@@ -88,7 +88,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
     final String? token = prefs.getString('userToken');
 
     if (response.status.isOk) {
-      print("token in storage page: " + token!);
+      // print("token in storage page: " + token!);
       //get all order
       List orderInfo = await response.body;
       List myCustomerOrder = [];
@@ -103,12 +103,12 @@ class _CommissionStorageState extends State<CommissionStorage> {
           //  myCustomerOrder.add(orderInfo[i]);
           var isMyCustomer =
               await filterOrderList(orderInfo[i]['offer_id_commission']);
-          print("Offer Data: " + isMyCustomer[0]["user_owner_token"]);
+          // print("Offer Data: " + isMyCustomer[0]["user_owner_token"]);
           //if is not my commission offer
           if (isMyCustomer[0]["user_owner_token"] == token) {
             myCustomerOrder.add(orderInfo[i]);
           }
-          print("Final Data: " + myCustomerOrder.length.toString());
+          // print("Final Data: " + myCustomerOrder.length.toString());
         }
       }
       setState(() {
