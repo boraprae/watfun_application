@@ -94,189 +94,206 @@ class _MarketplaceState extends State<Marketplace> {
   }
 
   //** Commission Offer Widget**
-  Widget commissionOffer(index, dataN, size) {
+  Widget commissionOffer(index, dataN, size, isNull) {
     //TODO: filter user data from the USER obj
     userOwnerData = filterCommissionOwner(dataN[index]["user_owner_token"]);
-    return _waitUserInfo == false
-        ? const Center(
-            child: const CircularProgressIndicator(
-            backgroundColor: bgBlack,
-            color: purpleG,
-          ))
-        : FutureBuilder(
-            future: userOwnerData!,
-            builder: (context, snapshot) {
-              late List data = snapshot.data as List;
-              if (snapshot.hasData) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: size.width,
-                        height: size.height * 0.3,
-                        decoration: BoxDecoration(
-                          color: btnDark,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ClipRRect(
+    if (isNull == true) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "No have any offer yet",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      );
+    } else {
+      return _waitUserInfo == false
+          ? const Center(
+              child: const CircularProgressIndicator(
+              backgroundColor: bgBlack,
+              color: purpleG,
+            ))
+          : FutureBuilder(
+              future: userOwnerData!,
+              builder: (context, snapshot) {
+                late List data = snapshot.data as List;
+                if (snapshot.hasData) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: size.width,
+                          height: size.height * 0.3,
+                          decoration: BoxDecoration(
+                            color: btnDark,
                             borderRadius: BorderRadius.circular(10),
-                            child: Image.memory(
-                                base64Decode(
-                                    dataN[index]['offer_image_base64']),
-                                fit: BoxFit.cover),
                           ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        child: BlurryContainer(
-                          blur: 5,
-                          elevation: 0,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                          width: size.width - 50,
-                          color: Colors.black.withOpacity(0.5),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 20,
-                                      backgroundImage: AssetImage(
-                                        data[0]['profile_image_path'],
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    //Todo: Change to user data
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          data[0]['username'],
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 8,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          dataN[index]['offer_title'],
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 10,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Spacer(),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        const Text(
-                                          'Price',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 8,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          dataN[index]['offer_price']
-                                                  .toString() +
-                                              " Baht",
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                //** Order Commission Button **//
-                                GestureDetector(
-                                  onTap: () {
-                                    // print(data[index]);
-                                    Navigator.pushNamed(
-                                        context, '/orderCommission',
-                                        arguments: <String, dynamic>{
-                                          'commission_offer_detail':
-                                              dataN[index],
-                                          'owner_info': data[0]
-                                        });
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: size.width - 100,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(18),
-                                          gradient: const LinearGradient(
-                                            begin: Alignment.topLeft,
-                                            end: Alignment.bottomRight,
-                                            colors: [
-                                              btnTopLeft,
-                                              btnTopRight,
-                                            ],
-                                          ),
-                                        ),
-                                        child: const Padding(
-                                          padding: EdgeInsets.all(12.0),
-                                          child: Text(
-                                            'Order Commission',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 11,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.memory(
+                                  base64Decode(
+                                      dataN[index]['offer_image_base64']),
+                                  fit: BoxFit.cover),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              } else if (snapshot.hasError) {
-                return const Text('Error');
-              }
-              return const Center(
-                  child: const CircularProgressIndicator(
-                backgroundColor: bgBlack,
-                color: purpleG,
-              ));
-            });
+                        Positioned(
+                          bottom: 0,
+                          child: BlurryContainer(
+                            blur: 5,
+                            elevation: 0,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            width: size.width - 50,
+                            color: Colors.black.withOpacity(0.5),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 20,
+                                        backgroundImage: AssetImage(
+                                          data[0]['profile_image_path'],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      //Todo: Change to user data
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            data[0]['username'],
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 8,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            dataN[index]['offer_title'],
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Spacer(),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          const Text(
+                                            'Price',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 8,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            dataN[index]['offer_price']
+                                                    .toString() +
+                                                " Baht",
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  //** Order Commission Button **//
+                                  GestureDetector(
+                                    onTap: () {
+                                      // print(data[index]);
+                                      Navigator.pushNamed(
+                                          context, '/orderCommission',
+                                          arguments: <String, dynamic>{
+                                            'commission_offer_detail':
+                                                dataN[index],
+                                            'owner_info': data[0]
+                                          });
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          width: size.width - 100,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(18),
+                                            gradient: const LinearGradient(
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomRight,
+                                              colors: [
+                                                btnTopLeft,
+                                                btnTopRight,
+                                              ],
+                                            ),
+                                          ),
+                                          child: const Padding(
+                                            padding: EdgeInsets.all(12.0),
+                                            child: Text(
+                                              'Order Commission',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 11,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return const Text('Error');
+                }
+                return const Center(
+                    child: const CircularProgressIndicator(
+                  backgroundColor: bgBlack,
+                  color: purpleG,
+                ));
+              });
+    }
   }
 
   @override
@@ -503,6 +520,7 @@ class _MarketplaceState extends State<Marketplace> {
                             late List data = snapshot.data as List;
                             List filteredData = [];
                             if (snapshot.hasData) {
+                              //Todo: make more filter if currentCategory have any change
                               //Filter data before build
                               for (int i = 0; i < data.length; i++) {
                                 if (data[i]['offer_art_type'] ==
@@ -513,15 +531,23 @@ class _MarketplaceState extends State<Marketplace> {
                                       itemCount: filteredData.length,
                                       itemBuilder: (context, index) {
                                         return commissionOffer(
-                                            index, filteredData, size);
+                                            index, filteredData, size, false);
                                       });
-                                } else {
+                                } else if (currentCategory == "All Category") {
                                   return ListView.builder(
                                       scrollDirection: Axis.vertical,
                                       itemCount: data.length,
                                       itemBuilder: (context, index) {
                                         return commissionOffer(
-                                            index, data, size);
+                                            index, data, size, false);
+                                      });
+                                } else {
+                                  return ListView.builder(
+                                      scrollDirection: Axis.vertical,
+                                      itemCount: 1,
+                                      itemBuilder: (context, index) {
+                                        return commissionOffer(
+                                            index, data, size, true);
                                       });
                                 }
                               }
