@@ -358,65 +358,12 @@ class _CommissionStorageState extends State<CommissionStorage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Your Commission Order',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'Sorting by: ' + sortingTag,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                          ),
-                        ),
-                      ],
-                    ),
-                    //** Sorting Button **//
-                    Container(
-                      height: 45,
-                      width: 45,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0)),
-                          padding: EdgeInsets.all(0.0),
-                        ),
-                        child: Ink(
-                          decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  btnTopLeft,
-                                  btnTopRight,
-                                ],
-                              ),
-                              borderRadius: BorderRadius.circular(10.0)),
-                          child: Container(
-                            constraints:
-                                BoxConstraints(maxWidth: 45.0, minHeight: 45.0),
-                            alignment: Alignment.center,
-                            child: const Icon(
-                              Icons.sort_rounded,
-                              size: 20,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    //** End of Sorting Button **//
-                  ],
+                const Text(
+                  'Your Commission Order',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
                 ),
                 //** List of your commission order **//
                 _waiting
@@ -465,65 +412,12 @@ class _CommissionStorageState extends State<CommissionStorage> {
                         ),
                       ),
                 //! Customer Commission Order is not from other yet
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Your Customer Commission Order',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'Sorting by: ' + sortingTag,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                          ),
-                        ),
-                      ],
-                    ),
-                    //** Sorting Button **//
-                    Container(
-                      height: 45,
-                      width: 45,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0)),
-                          padding: EdgeInsets.all(0.0),
-                        ),
-                        child: Ink(
-                          decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  btnTopLeft,
-                                  btnTopRight,
-                                ],
-                              ),
-                              borderRadius: BorderRadius.circular(10.0)),
-                          child: Container(
-                            constraints:
-                                BoxConstraints(maxWidth: 45.0, minHeight: 45.0),
-                            alignment: Alignment.center,
-                            child: const Icon(
-                              Icons.sort_rounded,
-                              size: 20,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    //** End of Sorting Button **//
-                  ],
+                const Text(
+                  'Your Customer Commission Order',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
                 ),
                 //** List of commission order **//
                 _waiting
