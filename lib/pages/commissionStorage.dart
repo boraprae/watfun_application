@@ -59,7 +59,8 @@ class _CommissionStorageState extends State<CommissionStorage> {
   //Get Commission Order
   Future<List> getMyOrderData() async {
     Response response = await GetConnect().get(_orderURL);
-    // print(response.body); //get email as a token for identify who is current user
+    // print(response.body); 
+    //get email as a token for identify who is current user
     final prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('userToken');
     if (response.status.isOk) {
@@ -83,7 +84,8 @@ class _CommissionStorageState extends State<CommissionStorage> {
 
   Future<List> getMyCustomerOrder() async {
     Response response = await GetConnect().get(_orderURL);
-    // print(response.body); //get email as a token for identify who is current user
+    // print(response.body); 
+    //get email as a token for identify who is current user
     final prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('userToken');
 

@@ -47,15 +47,35 @@ class _CreateNewPostState extends State<CreateNewPost> {
   final String _categoryURL = "http://10.0.2.2:9000/artworkCategory";
   final String _artworkURL = "http://10.0.2.2:9000/artworks";
   final String _commissionOfferURL = "http://10.0.2.2:9000/commission_offer";
+  final String _userURL = "http://10.0.2.2:9000/user";
   late Future<List> _data;
   late Future<List> _artworkCategory;
   var _base64String;
+  bool _waitingUserInfo = true;
+  late Future<List> _userInfo;
 
   @override
   void initState() {
     super.initState();
     //Not check loading data yet
     getCategory();
+    _userInfo = getUserInformation();
+  }
+
+  //Get User Data
+  Future<List> getUserInformation() async {
+    //get email as a token for identify who is current user
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('userToken');
+    Response response = await GetConnect().get(_userURL + "?email=" + token!);
+    if (response.status.isOk) {
+      setState(() {
+        _waitingUserInfo = true;
+      });
+      return response.body;
+    } else {
+      throw Exception('Error');
+    }
   }
 
   //Get category List
@@ -115,6 +135,7 @@ class _CreateNewPostState extends State<CreateNewPost> {
       } else if (artTitleController.text != "" &&
           artDescriptionController.text != "" &&
           artStyleValue != 'Select Style of Arts') {
+        List userData = await _userInfo;
         //upload data to json server
         Response response = await GetConnect().post(
           _artworkURL,
@@ -124,8 +145,8 @@ class _CreateNewPostState extends State<CreateNewPost> {
             "art_type": artStyleValue,
             "art_image_base64": _base64String,
             "art_created_date": currentDate,
-            "user_id_user": token,
-            "username": "Jenny Kim",
+            "user_email": token,
+            "username": userData[0]["username"],
             "profile_image_path": "assets/artworksUploads/05.jpg"
           }),
         );
