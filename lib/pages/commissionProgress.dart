@@ -17,6 +17,7 @@ class CommissionProgress extends StatefulWidget {
 
 class _CommissionProgressState extends State<CommissionProgress> {
   int itemCount = 0;
+  double _currentSliderValue = 0;
   bool showTextAlert = false;
   String itemName = '';
   int currentItemId = 1;
@@ -30,19 +31,20 @@ class _CommissionProgressState extends State<CommissionProgress> {
   Future updateCommissionProgress(percent, orderID) async {
     final prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('userToken');
-    print(orderID.toString() + " " + percent);
+    print(orderID.toString() + " " + percent.toString());
     print(_orderURL + "/" + orderID.toString());
-    if (progressPercentController.text != "") {
+    if (_currentSliderValue >percent) {
       Response response = await GetConnect().patch(
         _orderURL + "/" + orderID.toString(),
         jsonEncode(<String, dynamic>{
-          "progress_percentage": percent,
+          "progress_percentage": _currentSliderValue,
         }),
       );
       // print(response.statusCode);
       //reset all
       setState(() {
-        progressPercentController.clear();
+        //progressPercentController.clear();
+        _currentSliderValue = 0.00;
       });
       //alert
       QuickAlert.show(
@@ -270,13 +272,10 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                                 80,
                                         animation: true,
                                         lineHeight: 20.0,
-                                        animationDuration: 2500,
-                                        percent: double.parse(data['order_info']
-                                                ['progress_percentage']) /
-                                            100,
+                                        animationDuration: 1250,
+                                        percent: data['order_info']['progress_percentage']/100,
                                         center: Text(
-                                          data['order_info']
-                                                  ['progress_percentage'] +
+                                          data['order_info']['progress_percentage'].toString() +
                                               " %",
                                           style: TextStyle(color: Colors.white),
                                         ),
@@ -286,26 +285,21 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                         backgroundColor: Color(0xFF494949),
                                       ),
                                     )
-                                  : TextFormField(
-                                      controller: progressPercentController,
-                                      style: TextStyle(color: Colors.white),
-                                      decoration: InputDecoration(
-                                          hintText:
-                                              "Type the progress of the percent 0-100",
-                                          hintStyle: TextStyle(
-                                            fontSize: 12,
-                                            color:
-                                                Colors.white.withOpacity(0.5),
-                                          ),
-                                          enabledBorder: UnderlineInputBorder(
-                                            borderSide:
-                                                BorderSide(color: Colors.white),
-                                          ),
-                                          focusedBorder: UnderlineInputBorder(
-                                            borderSide:
-                                                BorderSide(color: Colors.white),
-                                          )),
-                                    ),
+                                  : Slider(
+                                      value: _currentSliderValue,
+                                      activeColor: purpleG,
+                                      thumbColor: purpleG,
+                                      inactiveColor: grayText,
+                                      max: 100,
+                                      divisions: 5,
+                                      label: _currentSliderValue
+                                          .round()
+                                          .toString(),
+                                      onChanged: (double value) {
+                                        setState(() {
+                                          _currentSliderValue = value;
+                                        });
+                                      }),
                               const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 16),
                                 child: Text(
@@ -320,7 +314,7 @@ class _CommissionProgressState extends State<CommissionProgress> {
                               _editStatus == true
                                   ? SizedBox(
                                       width: size.width * 0.3,
-                                      height: size.height * 0.04,
+                                      height: size.height * 0.05,
                                       child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
@@ -329,7 +323,8 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                           ),
                                           primary:
                                               Color(0xFF353535), // background
-                                          onPrimary: Colors.white.withOpacity(0.5), // foreground
+                                          onPrimary: Colors.white
+                                              .withOpacity(0.5), // foreground
                                         ),
                                         onPressed: () {},
                                         child: Row(
@@ -459,7 +454,8 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                               _editStatus = false;
                                             });
                                             updateCommissionProgress(
-                                                progressPercentController.text,
+                                                data['order_info']
+                                                    ['progress_percentage'],
                                                 data['order_info']['id']);
                                             // print(
                                             //     progressPercentController.text);
