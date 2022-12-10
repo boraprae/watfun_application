@@ -17,10 +17,6 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
-  double totalArtwork = 270;
-  double totalLikes = 1300;
-  double totalFollower = 4900;
-  double totalFollowing = 512;
   String _token = '';
   var userInfoList;
   List artworkList = [];
@@ -28,6 +24,7 @@ class _UserProfileState extends State<UserProfile> {
   bool _waiting = true;
   bool _haveImg = false;
   bool _waitingUserData = false;
+  bool _btnOnPress = false;
   String username = 'SaraYune';
   String bioText = 'Don’t follow your dream, just follow my arts';
   String profileImg = 'assets/artworksUploads/05.jpg';
@@ -97,24 +94,11 @@ class _UserProfileState extends State<UserProfile> {
                     fit: BoxFit.fitWidth,
                   ),
                 ),
-                //User's stat
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(180, 0, 36, 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      textForm(totalArtwork.toStringAsFixed(0), 'Offers'),
-                      textForm(totalLikes.toStringAsFixed(0), 'Artworks'),
-                      textForm(totalFollowing.toStringAsFixed(0), 'Follower'),
-                      textForm(totalFollower.toStringAsFixed(0), 'Following'),
-                    ],
-                  ),
-                ),
                 //User's bio
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(36, 18, 36, 0),
+                  padding: const EdgeInsets.fromLTRB(36, 72, 36, 0),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         username,
@@ -175,16 +159,70 @@ class _UserProfileState extends State<UserProfile> {
                     ],
                   ),
                 ),
-                Divider(color: grayText),
+
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(36, 8, 36, 8),
-                  child: Text(
-                    'Gallery',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                      color: Colors.white,
-                    ),
+                  padding: const EdgeInsets.fromLTRB(56, 0, 56, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _btnOnPress = false;
+                          });
+                        },
+                        child: Text(
+                          'Commission Offers ' + '15',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: _btnOnPress == false ? Colors.white : grayText,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: size.width * 0.25,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                           setState(() {
+                            _btnOnPress = true;
+                          });
+                        },
+                        child: Text(
+                          'Gallery ' + '3',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: _btnOnPress == true ? Colors.white : grayText,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Row(
+                    //Divider will change if text button on press
+                    children: [
+                      SizedBox(
+                        width: size.width * 0.5,
+                        child: Divider(
+                          color: _btnOnPress == false ? Colors.white : grayText,
+                          thickness: _btnOnPress == false ? 5 : 1,
+                        ),
+                      ),
+                      Expanded(
+                        child: SizedBox(
+                          width: size.width * 0.5,
+                          child: Divider(
+                            color: _btnOnPress == true ? Colors.white : grayText,
+                            thickness: _btnOnPress == true ? 5 : 1,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 //Gallery
@@ -233,7 +271,7 @@ class _UserProfileState extends State<UserProfile> {
             ),
             Positioned(
               top: 0.08 * size.height,
-              left: 0.05 * size.width,
+              left: 0.35 * size.width,
               child: CircleAvatar(
                 backgroundImage: AssetImage(profileImg),
                 radius: 0.12 * size.width,
@@ -244,30 +282,4 @@ class _UserProfileState extends State<UserProfile> {
       ),
     );
   }
-}
-
-Widget textForm(totalNumber, typeText) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          totalNumber,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 12,
-            color: Colors.white,
-          ),
-        ),
-      ),
-      Text(
-        typeText,
-        style: TextStyle(
-          fontSize: 10,
-          color: Colors.white,
-        ),
-      ),
-    ],
-  );
 }
