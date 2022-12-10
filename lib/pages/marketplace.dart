@@ -28,6 +28,7 @@ class _MarketplaceState extends State<Marketplace> {
   bool _waiting = true;
   bool _waitUserInfo = false;
   String currentUser = '';
+  String currentCategory = 'All Category';
   var userOwnerData;
 
   @override
@@ -301,7 +302,8 @@ class _MarketplaceState extends State<Marketplace> {
               }
             }
             //print for test the value
-            // print(data[index]['name']);
+            print(data[index]['name']);
+            currentCategory = data[index]['name'];
           });
         },
         child: Row(
@@ -499,13 +501,37 @@ class _MarketplaceState extends State<Marketplace> {
                           future: _data,
                           builder: (context, snapshot) {
                             late List data = snapshot.data as List;
+                            List filteredData = [];
                             if (snapshot.hasData) {
-                              return ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: data.length,
-                                  itemBuilder: (context, index) {
-                                    return commissionOffer(index, data, size);
-                                  });
+                              //Filter data before build
+                              for (int i = 0; i < data.length; i++) {
+                                if (data[i]['offer_art_type'] ==
+                                    currentCategory) {
+                                  filteredData.add(data[i]);
+                                  return ListView.builder(
+                                      scrollDirection: Axis.vertical,
+                                      itemCount: filteredData.length,
+                                      itemBuilder: (context, index) {
+                                        return commissionOffer(
+                                            index, filteredData, size);
+                                      });
+                                } else {
+                                  return ListView.builder(
+                                      scrollDirection: Axis.vertical,
+                                      itemCount: data.length,
+                                      itemBuilder: (context, index) {
+                                        return commissionOffer(
+                                            index, data, size);
+                                      });
+                                }
+                              }
+
+                              // return ListView.builder(
+                              //     scrollDirection: Axis.vertical,
+                              //     itemCount: data.length,
+                              //     itemBuilder: (context, index) {
+                              //       return commissionOffer(index, data, size);
+                              //     });
                             } else if (snapshot.hasError) {
                               return const Text('Error');
                             }
