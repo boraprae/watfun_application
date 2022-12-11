@@ -19,14 +19,9 @@ class _OrderCommissionState extends State<OrderCommission> {
   int itemCount = 0;
   bool showTextAlert = false;
   bool selectedItem = false;
-  String textAlert = 'Please select the item first';
-  String selectedItemText = 'You don\'t select any gift yet.';
   String itemName = '';
   int currentItemId = 1;
 
-  String totalComment = '0';
-  String totalLikes = '1.2k';
-  String username = 'SaraYune';
   String _token = "";
 
   final String _orderURL = "http://10.0.2.2:9000/commission_order";
@@ -172,12 +167,36 @@ class _OrderCommissionState extends State<OrderCommission> {
                                       //Todo: Update User Profile
                                       child: Row(
                                         children: [
+                                          //convert to base64 format
                                           CircleAvatar(
+                                            backgroundColor: btnDark,
                                             radius: 10.0,
                                             backgroundImage: AssetImage(
                                               data['owner_info']
                                                   ["profile_image_path"],
                                             ),
+                                            child: data['owner_info'][
+                                                            "profile_image_path"] ==
+                                                        null ||
+                                                    data['owner_info'][
+                                                            "profile_image_path"] ==
+                                                        ""
+                                                ? Text(
+                                                    data['owner_info']
+                                                            ["username"][0]
+                                                        .toString()
+                                                        .toUpperCase(),
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 10,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  )
+                                                : Container(
+                                                    height: 0,
+                                                    width: 0,
+                                                  ),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.symmetric(

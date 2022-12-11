@@ -49,8 +49,8 @@
       "password": "123",
       "payment_info": "",
       "bio_text": "",
-      "profile_image_path": "assets/artworksUploads/00.jpg",
-      "cover_profile_image_path": "assets/artworksUploads/02.jpg"
+      "profile_image_path": "",
+      "cover_profile_image_path": ""
     },
     {
       "id": 1,
@@ -59,8 +59,8 @@
       "password": "456",
       "payment_info": "",
       "bio_text": "",
-      "profile_image_path": "assets/artworksUploads/05.jpg",
-      "cover_profile_image_path": "assets/artworksUploads/02.jpg"
+      "profile_image_path": "",
+      "cover_profile_image_path": ""
     },
     {
       "id": 2,
@@ -69,8 +69,8 @@
       "password": "789",
       "payment_info": "Krungthai 555-555-55",
       "bio_text": "",
-      "profile_image_path": "assets/artworksUploads/05.jpg",
-      "cover_profile_image_path": "assets/artworksUploads/02.jpg"
+      "profile_image_path": "",
+      "cover_profile_image_path": ""
     },
     {
       "username": "boraprae",
@@ -78,7 +78,7 @@
       "password": "12345",
       "payment_info": "",
       "bio_text": "",
-      "profile_image_path": "assets/artworksUploads/00.jpg",
+      "profile_image_path": "",
       "cover_profile_image_path": "",
       "id": 3
     },
@@ -88,7 +88,7 @@
       "password": "1234",
       "payment_info": "",
       "bio_text": "",
-      "profile_image_path": "assets/artworksUploads/05.jpg",
+      "profile_image_path": "",
       "cover_profile_image_path": "",
       "id": 4
     },
@@ -98,8 +98,8 @@
       "password": "12345",
       "payment_info": "",
       "bio_text": "",
-      "profile_image_path": "assets/artworksUploads/05.jpg",
-      "cover_profile_image_path": "assets/artworksUploads/02.jpg",
+      "profile_image_path": "",
+      "cover_profile_image_path": "",
       "id": 5
     },
     {
@@ -108,8 +108,8 @@
       "password": "1",
       "payment_info": "",
       "bio_text": "So sad but still so cool",
-      "profile_image_path": "assets/artworksUploads/05.jpg",
-      "cover_profile_image_path": "assets/artworksUploads/02.jpg",
+      "profile_image_path": "",
+      "cover_profile_image_path": "",
       "id": 6
     },
     {
@@ -119,7 +119,7 @@
       "payment_info": "",
       "bio_text": "",
       "profile_image_path": "",
-      "cover_profile_image_path": "assets/artworksUploads/02.jpg",
+      "cover_profile_image_path": "",
       "id": 7
     }
   ],

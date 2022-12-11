@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 // import 'package:paletteartz/artworksetting/setting.dart';
 import 'package:watfun_application/constantColors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,39 +27,32 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController tagController = TextEditingController();
 
   String _token = '';
-  var userInfoList;
+
+  //Get data from JSON server
+  final String _userURL = "http://10.0.2.2:9000/user";
+  late Future<List> _userInfo;
+    bool _waitingUserInfo = true;
 
   @override
   void initState() {
     super.initState();
-    // getToken();
+    _userInfo = getUserInformation();
   }
 
-  void getToken() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    String? userString = await pref.getString('user');
-
-    var userObject = jsonDecode(userString!) as Map<String, dynamic>;
-    _token = userObject['token'];
-    getUserDataAPI(_token);
-  }
-
-  void getUserDataAPI(String token) async {
-    http.Response userInfoResponse = await getUserInfo(token);
-    setState(() {
-      userInfoList = jsonDecode(userInfoResponse.body);
-      _waitingUserData = false;
-    });
-  }
-
-  Future<http.Response> getUserInfo(String token) {
-    return http.get(
-      Uri.parse('http://10.0.2.2:3000/api/profile'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': token,
-      },
-    );
+  //Get User Data
+  Future<List> getUserInformation() async {
+    //get email as a token for identify who is current user
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('userToken');
+    Response response = await GetConnect().get(_userURL + "?email=" + token!);
+    if (response.status.isOk) {
+      setState(() {
+        _waitingUserInfo = false;
+      });
+      return response.body;
+    } else {
+      throw Exception('Error');
+    }
   }
 
   Widget buildTextField(String labelText, String placeholder, var controller) {

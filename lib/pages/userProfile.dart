@@ -66,7 +66,7 @@ class _UserProfileState extends State<UserProfile> {
     final String? token = prefs.getString('userToken');
 
     Response response =
-        await GetConnect().get(_artworkURL + "?user_id_user=" + token!);
+        await GetConnect().get(_artworkURL + "?user_email=" + token!);
     if (response.status.isOk) {
       //build the photo item list
       List artworkList = response.body;
@@ -116,7 +116,7 @@ class _UserProfileState extends State<UserProfile> {
                                       height: 0.15 * size.height,
                                       width: size.width,
                                       child: Image.asset(
-                                        "/assets/img/neonBG.jpg",
+                                        "assets/img/neonBG.jpg",
                                         fit: BoxFit.fitWidth,
                                       ),
                                     )
@@ -140,7 +140,7 @@ class _UserProfileState extends State<UserProfile> {
                                       data[0]["username"],
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 12,
+                                        fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -152,7 +152,7 @@ class _UserProfileState extends State<UserProfile> {
                                       data[0]["bio_text"],
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 10,
+                                        fontSize: 12,
                                       ),
                                     ),
                                     SizedBox(
@@ -359,6 +359,7 @@ class _UserProfileState extends State<UserProfile> {
                       left: 0.35 * size.width,
                       child: CircleAvatar(
                         backgroundColor: btnDark,
+                        //ToDo: Convert to base64
                         backgroundImage:
                             AssetImage(data[0]["profile_image_path"]),
                         radius: 0.12 * size.width,
