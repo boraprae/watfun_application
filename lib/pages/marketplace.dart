@@ -304,13 +304,6 @@ class _MarketplaceState extends State<Marketplace> {
     Widget listViewChannel(index, data) {
       return GestureDetector(
         onTap: () {
-          // Navigator.pushNamed(
-          //   context,
-          //   '/separate',
-          //   arguments: <String, dynamic>{
-          //     'name': data[index],
-          //   },
-          // );
           setState(() {
             data[index]['isOnClicked'] = true;
             for (int i = 0; i < data.length; i++) {

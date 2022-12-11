@@ -168,8 +168,8 @@ class _PostDetailState extends State<PostDetail> {
                       Container(
                         height: 0.4 * size.height,
                         width: size.width,
-                        child: Image.asset(
-                          _items.image,
+                        child: Image.memory(
+                          base64Decode(_items.image),
                           fit: BoxFit.cover,
                         ),
                         // child: Image.network(

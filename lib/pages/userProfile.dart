@@ -20,7 +20,7 @@ class UserProfile extends StatefulWidget {
 class _UserProfileState extends State<UserProfile> {
   String _token = '';
   List artworkList = [];
-  // List<PhotoItem> _items = [];
+  List<PhotoItem> _items = [];
 
   bool _haveImg = false;
   bool _btnOnPress = false;
@@ -64,9 +64,21 @@ class _UserProfileState extends State<UserProfile> {
     //get email as a token for identify who is current user
     final prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('userToken');
+
     Response response =
         await GetConnect().get(_artworkURL + "?user_id_user=" + token!);
     if (response.status.isOk) {
+      //build the photo item list
+      List artworkList = response.body;
+      for (int i = 0; i < artworkList.length; i++) {
+        _items.add(PhotoItem(
+            artworkList[i]["art_image_base64"],
+            artworkList[i]["art_title"],
+            artworkList[i]["username"],
+            artworkList[i]["art_created_date"],
+            artworkList[i]["art_description"],
+            artworkList[i]["art_type"]));
+      }
       setState(() {
         _waitingArtworkInfo = false;
       });
@@ -75,45 +87,6 @@ class _UserProfileState extends State<UserProfile> {
       throw Exception('Error');
     }
   }
-
-  final List<PhotoItem> _items = [
-    PhotoItem(
-      "assets/artworksUploads/01.jpg",
-      "Arai",
-      "Sara Yune",
-      "Sep 15, 2021",
-      "lineless commission for Panalee0819 thanks for commissioning",
-      [
-        'Anime',
-        'Fanart',
-      ],
-      '',
-    ),
-    PhotoItem(
-      "assets/artworksUploads/02.jpg",
-      "Mai roo",
-      "Stephan Seeber",
-      "Sep 4, 2021",
-      "lineless commission for Panalee0819 thanks for commissioning",
-      [
-        'Anime',
-        'Fanart',
-      ],
-      '',
-    ),
-    PhotoItem(
-      "assets/artworksUploads/03.jpg",
-      "55555",
-      "Stephan Seeber",
-      "Sep 4, 2021",
-      "lineless commission for Panalee0819 thanks for commissioning",
-      [
-        'Anime',
-        'Fanart',
-      ],
-      '',
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -137,14 +110,24 @@ class _UserProfileState extends State<UserProfile> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               //cover image
-                              Container(
-                                height: 0.15 * size.height,
-                                width: size.width,
-                                child: Image.asset(
-                                  data[0]["cover_profile_image_path"],
-                                  fit: BoxFit.fitWidth,
-                                ),
-                              ),
+                              data[0]["cover_profile_image_path"] == null ||
+                                      data[0]["cover_profile_image_path"] == ""
+                                  ? Container(
+                                      height: 0.15 * size.height,
+                                      width: size.width,
+                                      child: Image.asset(
+                                        "/assets/img/neonBG.jpg",
+                                        fit: BoxFit.fitWidth,
+                                      ),
+                                    )
+                                  : Container(
+                                      height: 0.15 * size.height,
+                                      width: size.width,
+                                      child: Image.asset(
+                                        data[0]["cover_profile_image_path"],
+                                        fit: BoxFit.fitWidth,
+                                      ),
+                                    ),
                               //User's bio
                               Padding(
                                 padding:
@@ -250,7 +233,7 @@ class _UserProfileState extends State<UserProfile> {
                                         });
                                       },
                                       child: Text(
-                                        'Gallery ' + '3',
+                                        'Gallery ' + _items.length.toString(),
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 12,
@@ -344,9 +327,13 @@ class _UserProfileState extends State<UserProfile> {
                                                             image:
                                                                 DecorationImage(
                                                               fit: BoxFit.cover,
-                                                              image: AssetImage(
+                                                              image:
+                                                                  MemoryImage(
+                                                                base64Decode(
                                                                   _items[index]
-                                                                      .image),
+                                                                      .image,
+                                                                ),
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
@@ -371,8 +358,24 @@ class _UserProfileState extends State<UserProfile> {
                       top: 0.08 * size.height,
                       left: 0.35 * size.width,
                       child: CircleAvatar(
-                        backgroundImage: AssetImage(data[0]["profile_image_path"]),
+                        backgroundColor: btnDark,
+                        backgroundImage:
+                            AssetImage(data[0]["profile_image_path"]),
                         radius: 0.12 * size.width,
+                        child: data[0]["profile_image_path"] == null ||
+                                data[0]["profile_image_path"] == ""
+                            ? Text(
+                                data[0]["username"][0].toString().toUpperCase(),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : Container(
+                                height: 0,
+                                width: 0,
+                              ),
                       ),
                     ),
                   ],
