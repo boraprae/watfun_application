@@ -92,304 +92,327 @@ class _UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
-      child: Container(
-        child: FutureBuilder(
-            future: _userInfo,
-            builder: (context, snapshot) {
-              late List data = snapshot.data as List;
-              if (snapshot.hasData) {
-                return Stack(
-                  children: [
-                    _waitingUserInfo
-                        ? const Center(
-                            child: CircularProgressIndicator(
-                            backgroundColor: bgBlack,
-                            color: purpleG,
-                          ))
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              //cover image
-                              data[0]["cover_profile_image_path"] == null ||
-                                      data[0]["cover_profile_image_path"] == ""
-                                  ? Container(
-                                      height: 0.15 * size.height,
-                                      width: size.width,
-                                      child: Image.asset(
-                                        "assets/img/neonBG.jpg",
-                                        fit: BoxFit.fitWidth,
-                                      ),
-                                    )
-                                  : Container(
-                                      height: 0.15 * size.height,
-                                      width: size.width,
-                                      child: Image.asset(
-                                        data[0]["cover_profile_image_path"],
-                                        fit: BoxFit.fitWidth,
-                                      ),
-                                    ),
-                              //User's bio
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(36, 72, 36, 0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    //** Username */
-                                    Text(
-                                      data[0]["username"],
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    //** User Bio Text*/
-                                    Text(
-                                      data[0]["bio_text"],
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 15,
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8),
-                                      width: size.width,
-                                      child: OutlinedButton.icon(
-                                        onPressed: () {
-                                          //path to setting page
-                                          Navigator.pushNamed(
-                                            context, '/profileSetting',
-                                            // arguments: <String, dynamic>{
-                                            //   'commission_offer_detail': data[index]
-                                            // },
-                                          );
-                                        },
-                                        icon: Icon(
-                                          Icons.settings,
-                                          color: Colors.white,
-                                          size: 0.04 * size.width,
+      child: Column(
+        children: [
+          CustomAppBar(),
+          Container(
+            child: FutureBuilder(
+                future: _userInfo,
+                builder: (context, snapshot) {
+                  late List data = snapshot.data as List;
+                  if (snapshot.hasData) {
+                    return Stack(
+                      children: [
+                        _waitingUserInfo
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                backgroundColor: bgBlack,
+                                color: purpleG,
+                              ))
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  //cover image
+                                  data[0]["cover_profile_image_path"] == null ||
+                                          data[0]["cover_profile_image_path"] ==
+                                              ""
+                                      ? Container(
+                                          height: 0.15 * size.height,
+                                          width: size.width,
+                                          child: Image.asset(
+                                            "assets/img/neonBG.jpg",
+                                            fit: BoxFit.fitWidth,
+                                          ),
+                                        )
+                                      : Container(
+                                          height: 0.15 * size.height,
+                                          width: size.width,
+                                          child: Image.asset(
+                                            data[0]["cover_profile_image_path"],
+                                            fit: BoxFit.fitWidth,
+                                          ),
                                         ),
-                                        label: Text(
-                                          'Settings',
+                                  //User's bio
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        36, 72, 36, 0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        //** Username */
+                                        Text(
+                                          data[0]["username"],
                                           style: TextStyle(
-                                            fontSize: 10,
                                             color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        style: OutlinedButton.styleFrom(
-                                          side: BorderSide(
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        //** User Bio Text*/
+                                        Text(
+                                          data[0]["bio_text"],
+                                          style: TextStyle(
                                             color: Colors.white,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
+                                            fontSize: 12,
                                           ),
                                         ),
-                                      ),
+                                        SizedBox(
+                                          height: 15,
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8),
+                                          width: size.width,
+                                          child: OutlinedButton.icon(
+                                            onPressed: () {
+                                              //path to setting page
+                                              Navigator.pushNamed(
+                                                context, '/profileSetting',
+                                                // arguments: <String, dynamic>{
+                                                //   'commission_offer_detail': data[index]
+                                                // },
+                                              );
+                                            },
+                                            icon: Icon(
+                                              Icons.settings,
+                                              color: Colors.white,
+                                              size: 0.04 * size.width,
+                                            ),
+                                            label: Text(
+                                              'Settings',
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            style: OutlinedButton.styleFrom(
+                                              side: BorderSide(
+                                                color: Colors.white,
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              ),
+                                  ),
 
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(56, 0, 56, 0),
-                                //!The _btnOnPress meaning is Commission Offer = false, Gallery = true
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _btnOnPress = false;
-                                        });
-                                      },
-                                      child: Text(
-                                        'Commission Offers ' + '15',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12,
-                                          color: _btnOnPress == false
-                                              ? Colors.white
-                                              : grayText,
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(56, 0, 56, 0),
+                                    //!The _btnOnPress meaning is Commission Offer = false, Gallery = true
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        TextButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              _btnOnPress = false;
+                                            });
+                                          },
+                                          child: Text(
+                                            'Commission Offers ' + '15',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                              color: _btnOnPress == false
+                                                  ? Colors.white
+                                                  : grayText,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: size.width * 0.25,
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _btnOnPress = true;
-                                        });
-                                      },
-                                      child: Text(
-                                        'Gallery ' + _items.length.toString(),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12,
-                                          color: _btnOnPress == true
-                                              ? Colors.white
-                                              : grayText,
+                                        SizedBox(
+                                          width: size.width * 0.25,
                                         ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                child: Row(
-                                  //Divider will change if text button on press
-                                  children: [
-                                    SizedBox(
-                                      width: size.width * 0.5,
-                                      child: Divider(
-                                        color: _btnOnPress == false
-                                            ? Colors.white
-                                            : grayText,
-                                        thickness: _btnOnPress == false ? 5 : 1,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: SizedBox(
-                                        width: size.width * 0.5,
-                                        child: Divider(
-                                          color: _btnOnPress == true
-                                              ? Colors.white
-                                              : grayText,
-                                          thickness:
-                                              _btnOnPress == true ? 5 : 1,
+                                        TextButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              _btnOnPress = true;
+                                            });
+                                          },
+                                          child: Text(
+                                            'Gallery ' +
+                                                _items.length.toString(),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                              color: _btnOnPress == true
+                                                  ? Colors.white
+                                                  : grayText,
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              ),
-                              //Gallery
-                              _btnOnPress == false
-                                  ? Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: textForNoContent(),
-                                    )
-                                  : Container(
-                                      width: size.width,
-                                      height: size.height * 0.8,
-                                      child: FutureBuilder(
-                                        future: _userInfo,
-                                        builder: (context, snapshot) {
-                                          late List data =
-                                              snapshot.data as List;
-                                          if (snapshot.hasData) {
-                                            return data.length == 0
-                                                ? textForNoContent()
-                                                : GridView.builder(
-                                                    gridDelegate:
-                                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                                      crossAxisSpacing: 1,
-                                                      mainAxisSpacing: 1,
-                                                      crossAxisCount: 3,
-                                                    ),
-                                                    itemCount: _items.length,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      // Item rendering
-                                                      return new GestureDetector(
-                                                        onTap: () {
-                                                          print(index);
-                                                          print(_items[index]);
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  PostDetail(),
-                                                              settings:
-                                                                  RouteSettings(
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: Row(
+                                      //Divider will change if text button on press
+                                      children: [
+                                        SizedBox(
+                                          width: size.width * 0.5,
+                                          child: Divider(
+                                            color: _btnOnPress == false
+                                                ? Colors.white
+                                                : grayText,
+                                            thickness:
+                                                _btnOnPress == false ? 5 : 1,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: SizedBox(
+                                            width: size.width * 0.5,
+                                            child: Divider(
+                                              color: _btnOnPress == true
+                                                  ? Colors.white
+                                                  : grayText,
+                                              thickness:
+                                                  _btnOnPress == true ? 5 : 1,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  //Gallery
+                                  _btnOnPress == false
+                                      ? Padding(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: textForNoContent(),
+                                        )
+                                      : Container(
+                                          width: size.width,
+                                          height: size.height * 0.8,
+                                          child: FutureBuilder(
+                                            future: _userInfo,
+                                            builder: (context, snapshot) {
+                                              late List data =
+                                                  snapshot.data as List;
+                                              if (snapshot.hasData) {
+                                                return data.length == 0
+                                                    ? textForNoContent()
+                                                    : GridView.builder(
+                                                        gridDelegate:
+                                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                                          crossAxisSpacing: 1,
+                                                          mainAxisSpacing: 1,
+                                                          crossAxisCount: 3,
+                                                        ),
+                                                        itemCount:
+                                                            _items.length,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          // Item rendering
+                                                          return new GestureDetector(
+                                                            onTap: () {
+                                                              print(index);
+                                                              print(_items[
+                                                                  index]);
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          PostDetail(),
+                                                                  settings: RouteSettings(
                                                                       arguments:
                                                                           _items[
                                                                               index]),
-                                                            ),
-                                                          );
-                                                        },
-                                                        child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            image:
-                                                                DecorationImage(
-                                                              fit: BoxFit.cover,
-                                                              image:
-                                                                  MemoryImage(
-                                                                base64Decode(
-                                                                  _items[index]
-                                                                      .image,
+                                                                ),
+                                                              );
+                                                            },
+                                                            child: Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                image:
+                                                                    DecorationImage(
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                  image:
+                                                                      MemoryImage(
+                                                                    base64Decode(
+                                                                      _items[index]
+                                                                          .image,
+                                                                    ),
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        ),
+                                                          );
+                                                        },
                                                       );
-                                                    },
-                                                  );
-                                          } else if (snapshot.hasError) {
-                                            return const Text('Error');
-                                          }
-                                          return const Center(
-                                              child:
-                                                  const CircularProgressIndicator(
-                                            backgroundColor: bgBlack,
-                                            color: purpleG,
-                                          ));
-                                        },
-                                      ),
-                                    ),
-                            ],
-                          ),
-                    Positioned(
-                      top: 0.08 * size.height,
-                      left: 0.35 * size.width,
-                      child: CircleAvatar(
-                        backgroundColor: btnDark,
-                        //ToDo: Convert to base64
-                        backgroundImage:
-                            AssetImage(data[0]["profile_image_path"]),
-                        radius: 0.12 * size.width,
-                        child: data[0]["profile_image_path"] == null ||
-                                data[0]["profile_image_path"] == ""
-                            ? Text(
-                                data[0]["username"][0].toString().toUpperCase(),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 36,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            : Container(
-                                height: 0,
-                                width: 0,
+                                              } else if (snapshot.hasError) {
+                                                return const Text('Error');
+                                              }
+                                              return const Center(
+                                                  child:
+                                                      const CircularProgressIndicator(
+                                                backgroundColor: bgBlack,
+                                                color: purpleG,
+                                              ));
+                                            },
+                                          ),
+                                        ),
+                                ],
                               ),
-                      ),
-                    ),
-                  ],
-                );
-              } else if (snapshot.hasError) {
-                return const Text('Error');
-              }
-              return const Center(
-                  child: const CircularProgressIndicator(
-                backgroundColor: bgBlack,
-                color: purpleG,
-              ));
-            }),
+                        Positioned(
+                          top: 0.06 * size.height,
+                          left: 0.35 * size.width,
+                          child: data[0]["profile_image_path"] == null ||
+                                  data[0]["profile_image_path"] == ""
+                              ? CircleAvatar(
+                                  backgroundColor: btnDark,
+                                  //ToDo: Convert to base64
+                                  radius: 0.12 * size.width,
+                                  child: data[0]["profile_image_path"] ==
+                                              null ||
+                                          data[0]["profile_image_path"] == ""
+                                      ? Text(
+                                          data[0]["username"][0]
+                                              .toString()
+                                              .toUpperCase(),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 36,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                      : Container(
+                                          height: 0,
+                                          width: 0,
+                                        ),
+                                )
+                              : CircleAvatar(
+                                  backgroundColor: btnDark,
+                                  //ToDo: Convert to base64
+                                  backgroundImage:
+                                      AssetImage(data[0]["profile_image_path"]),
+                                  radius: 0.12 * size.width,
+                                ),
+                        ),
+                      ],
+                    );
+                  } else if (snapshot.hasError) {
+                    return const Text('Error');
+                  }
+                  return const Center(
+                      child: const CircularProgressIndicator(
+                    backgroundColor: bgBlack,
+                    color: purpleG,
+                  ));
+                }),
+          ),
+        ],
       ),
     );
   }

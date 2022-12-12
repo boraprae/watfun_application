@@ -161,32 +161,42 @@ class _MarketplaceState extends State<Marketplace> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      CircleAvatar(
-                                        radius: 20,
-                                        backgroundColor: btnDark,
-                                        //ToDo: Convert to base64
-                                        backgroundImage: AssetImage(
-                                          data[0]['profile_image_path'],
-                                        ),
-                                        child: data[0]["profile_image_path"] ==
-                                                    null ||
-                                                data[0]["profile_image_path"] ==
-                                                    ""
-                                            ? Text(
-                                                data[0]["username"][0]
-                                                    .toString()
-                                                    .toUpperCase(),
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              )
-                                            : Container(
-                                                height: 0,
-                                                width: 0,
+                                      data[0]["profile_image_path"] == null ||
+                                              data[0]["profile_image_path"] ==
+                                                  ""
+                                          ? CircleAvatar(
+                                              radius: 20,
+                                              backgroundColor: btnDark,
+                                              //ToDo: Convert to base64
+                                              child: data[0]["profile_image_path"] ==
+                                                          null ||
+                                                      data[0]["profile_image_path"] ==
+                                                          ""
+                                                  ? Text(
+                                                      data[0]["username"][0]
+                                                          .toString()
+                                                          .toUpperCase(),
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    )
+                                                  : Container(
+                                                      height: 0,
+                                                      width: 0,
+                                                    ),
+                                            )
+                                          : CircleAvatar(
+                                              radius: 20,
+                                              backgroundColor: btnDark,
+                                              //ToDo: Convert to base64
+                                              backgroundImage: AssetImage(
+                                                data[0]['profile_image_path'],
                                               ),
-                                      ),
+                                            ),
+
                                       const SizedBox(
                                         width: 10,
                                       ),
