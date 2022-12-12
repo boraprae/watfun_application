@@ -1,12 +1,19 @@
+import 'dart:async';
 import 'dart:convert';
-import 'dart:ui';
+import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
+import 'package:quickalert/quickalert.dart';
 // import 'package:paletteartz/artworksetting/setting.dart';
 import 'package:watfun_application/constantColors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -21,22 +28,119 @@ class _EditProfileState extends State<EditProfile> {
 
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController paymentController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController bioController = TextEditingController();
-  TextEditingController tagController = TextEditingController();
 
   String _token = '';
+
+  //Image
+  late BuildContext _context;
+  late Map<dynamic, dynamic> imgData;
 
   //Get data from JSON server
   final String _userURL = "http://10.0.2.2:9000/user";
   late Future<List> _userInfo;
   bool _waitingUserInfo = true;
+  var _base64String;
+  //! Pick image function
+  File? _image;
+  File? _coverImage;
+  String currentProfileImage = "";
+  String currentCoverImage = "";
 
   @override
   void initState() {
     super.initState();
     _userInfo = getUserInformation();
+  }
+
+  Future updateDataToServer(context, userID) async {
+    Response response = await GetConnect().patch(
+        _userURL + "/" + userID.toString(),
+        jsonEncode(<String, dynamic>{
+          "username": usernameController.text,
+          "email": emailController.text,
+          "payment_info": paymentController.text,
+          "bio_text": bioController.text,
+          "profile_image_path": currentProfileImage,
+          "cover_profile_image_path": currentCoverImage,
+        }));
+    print(response.body);
+    // Response response = await GetConnect().patch(
+    //   url,
+    //   jsonEncode(<String, dynamic>{
+    //     "username": usernameController.text,
+    //     "email": emailController.text,
+    //     "payment_info": paymentController.text,
+    //     "bio_text": bioController.text,
+    //     "profile_image_path": currentProfileImage,
+    //     "cover_profile_image_path": currentCoverImage,
+    //   }),
+    // );
+    print(response.statusCode);
+
+    setState(() {
+      // usernameController.clear();
+      // emailController.clear();
+      // paymentController.clear();
+    });
+
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.success,
+      title: "Success",
+      text: "Your artwork already upload!",
+      confirmBtnText: "OK",
+      confirmBtnColor: lightGray,
+    );
+  }
+
+  Future pickProfileImage() async {
+    try {
+      final XFile? image =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      // read picked image byte data.
+      Uint8List imagebytes = await image.readAsBytes();
+      // using base64 encoder convert image into base64 string.
+      _base64String = base64Encode(imagebytes);
+      final imagePermanent = await saveImagePermanently(image.path);
+      setState(() {
+        this._image = imagePermanent;
+        currentProfileImage = _base64String;
+      });
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
+
+  Future pickCoverProfileImage() async {
+    try {
+      final XFile? image =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      // read picked image byte data.
+      Uint8List imagebytes = await image.readAsBytes();
+      // using base64 encoder convert image into base64 string.
+      _base64String = base64Encode(imagebytes);
+      final imagePermanent = await saveImagePermanently(image.path);
+      setState(() {
+        this._image = imagePermanent;
+        currentCoverImage = _base64String;
+      });
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
+
+  //!Save to local storage
+  Future<File> saveImagePermanently(String imagePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = basename(imagePath);
+    final image = File('${directory.path}/$name');
+
+    return File(imagePath).copy(image.path);
   }
 
   //Get User Data
@@ -55,7 +159,9 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
-  Widget buildTextField(String labelText, String placeholder, var controller) {
+  Widget buildTextField(
+      String labelText, String placeholder, TextEditingController controller) {
+    controller.text = placeholder;
     return Padding(
       padding: const EdgeInsets.only(bottom: 24.0),
       child: TextField(
@@ -107,24 +213,34 @@ class _EditProfileState extends State<EditProfile> {
                 builder: (context, snapshot) {
                   late List data = snapshot.data as List;
                   if (snapshot.hasData) {
-                    Stack(
+                    return Stack(
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             //**------ profile cover image ---**
-                            Container(
-                              height: 0.2 * size.height,
-                              width: size.width,
-                              child: Image.asset(
-                                'assets/artworksUploads/02.jpg',
-                                fit: BoxFit.fitWidth,
-                              ),
-                              // child: Image.network(
-                              //   'http://10.0.2.2:3000' + userInfoList['cover_image'],
-                              //   fit: BoxFit.fitWidth,
-                              // ),
-                            ),
+                            data[0]["cover_profile_image_path"] == "" &&
+                                    currentCoverImage == ""
+                                ? Container(
+                                    height: 0.2 * size.height,
+                                    width: size.width,
+                                    child: Image.asset(
+                                      'assets/artworksUploads/02.jpg',
+                                      fit: BoxFit.fitWidth,
+                                    ),
+                                  )
+                                : Container(
+                                    height: 0.2 * size.height,
+                                    width: size.width,
+                                    child: Image.memory(
+                                      currentCoverImage == null ||
+                                              currentCoverImage == ""
+                                          ? base64Decode(
+                                              data[0]["cover_profile_image_path"])
+                                          : base64Decode(currentCoverImage),
+                                      fit: BoxFit.fitWidth,
+                                    ),
+                                  ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(32, 60, 32, 8),
                               child: Column(
@@ -136,7 +252,7 @@ class _EditProfileState extends State<EditProfile> {
                                   buildTextField(
                                       "Payment Information",
                                       data[0]['payment_info'],
-                                      phoneNumberController),
+                                      paymentController),
                                   buildTextField("Bio", data[0]['bio_text'],
                                       bioController),
                                   // buildTextField("Art Style", userInfoList['tags'],
@@ -153,11 +269,8 @@ class _EditProfileState extends State<EditProfile> {
                                       ),
                                       onPressed: () {
                                         //!------ Function for save button here -------!
-                                        // Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //       builder: (context) => Profile()),
-                                        // );
+                                        updateDataToServer(
+                                            context, data[0]["id"]);
                                       },
                                       child: Text(
                                         "Save",
@@ -179,19 +292,42 @@ class _EditProfileState extends State<EditProfile> {
                           left: 0.05 * size.width,
                           child: Stack(
                             children: [
-                              CircleAvatar(
-                                radius: 0.12 * size.width,
-                                backgroundImage:
-                                    AssetImage('assets/artworksUploads/05.jpg'),
-                                // backgroundImage: NetworkImage('http://10.0.2.2:3000' +
-                                //     userInfoList['profile_image']),
-                              ),
+                              //!Current Profile Image
+                              data[0]["profile_image_path"] == "" &&
+                                      currentProfileImage == ""
+                                  ? CircleAvatar(
+                                      backgroundColor: btnDark,
+                                      //ToDo: Convert to base64
+                                      radius: 0.12 * size.width,
+                                      child: Text(
+                                        data[0]["username"][0]
+                                            .toString()
+                                            .toUpperCase(),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 36,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ))
+                                  : CircleAvatar(
+                                      radius: 0.12 * size.width,
+                                      backgroundImage: MemoryImage(
+                                        currentProfileImage == null ||
+                                                currentProfileImage == ""
+                                            ? base64Decode(
+                                                data[0]["profile_image_path"])
+                                            : base64Decode(currentProfileImage),
+                                      ),
+                                      // backgroundImage: NetworkImage('http://10.0.2.2:3000' +
+                                      //     userInfoList['profile_image']),
+                                    ),
                               Positioned(
                                 bottom: 0.01 * size.width,
                                 right: 0.01 * size.width,
                                 child: InkWell(
                                   onTap: () {
                                     //!------ Function for uploade profile image paste here -----!
+                                    pickProfileImage();
                                   },
                                   child: CircleAvatar(
                                     radius: 0.03 * size.width,
@@ -215,6 +351,7 @@ class _EditProfileState extends State<EditProfile> {
                             child: OutlinedButton(
                               onPressed: () {
                                 //!----- Function for change profile cover paste here------
+                                pickCoverProfileImage();
                               },
                               style: OutlinedButton.styleFrom(
                                 side: BorderSide(

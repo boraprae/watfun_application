@@ -127,8 +127,9 @@ class _UserProfileState extends State<UserProfile> {
                                       : Container(
                                           height: 0.15 * size.height,
                                           width: size.width,
-                                          child: Image.asset(
-                                            data[0]["cover_profile_image_path"],
+                                          child: Image.memory(
+                                            base64Decode(data[0]
+                                                ["cover_profile_image_path"]),
                                             fit: BoxFit.fitWidth,
                                           ),
                                         ),
@@ -374,29 +375,21 @@ class _UserProfileState extends State<UserProfile> {
                                   backgroundColor: btnDark,
                                   //ToDo: Convert to base64
                                   radius: 0.12 * size.width,
-                                  child: data[0]["profile_image_path"] ==
-                                              null ||
-                                          data[0]["profile_image_path"] == ""
-                                      ? Text(
-                                          data[0]["username"][0]
-                                              .toString()
-                                              .toUpperCase(),
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 36,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
-                                      : Container(
-                                          height: 0,
-                                          width: 0,
-                                        ),
-                                )
+                                  child: Text(
+                                    data[0]["username"][0]
+                                        .toString()
+                                        .toUpperCase(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 36,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ))
                               : CircleAvatar(
                                   backgroundColor: btnDark,
                                   //ToDo: Convert to base64
-                                  backgroundImage:
-                                      AssetImage(data[0]["profile_image_path"]),
+                                  backgroundImage: MemoryImage(base64Decode(
+                                      data[0]["profile_image_path"])),
                                   radius: 0.12 * size.width,
                                 ),
                         ),

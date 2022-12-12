@@ -115,7 +115,7 @@ class _CreateNewPostState extends State<CreateNewPost> {
       print('Failed to pick image: $e');
     }
   }
-
+ // add new post to the json server
   Future addNewPostToServer(context) async {
     //get current date
     String currentDate = DateFormat("MMM dd, yyyy").format(DateTime.now());
@@ -150,7 +150,7 @@ class _CreateNewPostState extends State<CreateNewPost> {
             "profile_image_path": "assets/artworksUploads/05.jpg"
           }),
         );
-        print(response.statusCode);
+        //print(response.statusCode);
         //reset all
         setState(() {
           artTitleController.clear();
