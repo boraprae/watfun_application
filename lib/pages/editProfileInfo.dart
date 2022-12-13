@@ -55,7 +55,12 @@ class _EditProfileState extends State<EditProfile> {
     _userInfo = getUserInformation();
   }
 
-  Future updateDataToServer(context, userID) async {
+  Future updateDataToServer(context, userID, profileImage, coverImage) async {
+    //TODO: Check if no have new image
+    //TODO: If change the email
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('userToken');
+
     Response response = await GetConnect().patch(
         _userURL + "/" + userID.toString(),
         jsonEncode(<String, dynamic>{
@@ -63,22 +68,11 @@ class _EditProfileState extends State<EditProfile> {
           "email": emailController.text,
           "payment_info": paymentController.text,
           "bio_text": bioController.text,
-          "profile_image_path": currentProfileImage,
-          "cover_profile_image_path": currentCoverImage,
+          "profile_image_path":
+              currentProfileImage == "" ? profileImage : currentProfileImage,
+          "cover_profile_image_path":
+              currentCoverImage == "" ? coverImage : currentCoverImage,
         }));
-    print(response.body);
-    // Response response = await GetConnect().patch(
-    //   url,
-    //   jsonEncode(<String, dynamic>{
-    //     "username": usernameController.text,
-    //     "email": emailController.text,
-    //     "payment_info": paymentController.text,
-    //     "bio_text": bioController.text,
-    //     "profile_image_path": currentProfileImage,
-    //     "cover_profile_image_path": currentCoverImage,
-    //   }),
-    // );
-    print(response.statusCode);
 
     setState(() {
       // usernameController.clear();
@@ -86,14 +80,32 @@ class _EditProfileState extends State<EditProfile> {
       // paymentController.clear();
     });
 
-    QuickAlert.show(
-      context: context,
-      type: QuickAlertType.success,
-      title: "Success",
-      text: "Your artwork already upload!",
-      confirmBtnText: "OK",
-      confirmBtnColor: lightGray,
-    );
+    if (emailController.text != token) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: "Sorry",
+        text: "You can't change the email for now.",
+        confirmBtnText: "OK",
+        confirmBtnColor: lightGray,
+       
+      );
+    } else {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.success,
+        title: "Success",
+        text: "Your artwork already upload!",
+        confirmBtnText: "OK",
+        confirmBtnColor: lightGray,
+        onConfirmBtnTap: () {
+          // if(){
+
+          // }
+          Navigator.pushNamed(context, "/mainMenu");
+        },
+      );
+    }
   }
 
   Future pickProfileImage() async {
@@ -225,7 +237,7 @@ class _EditProfileState extends State<EditProfile> {
                                     height: 0.2 * size.height,
                                     width: size.width,
                                     child: Image.asset(
-                                      'assets/artworksUploads/02.jpg',
+                                      'assets/img/neonBG.jpg',
                                       fit: BoxFit.fitWidth,
                                     ),
                                   )
@@ -235,8 +247,8 @@ class _EditProfileState extends State<EditProfile> {
                                     child: Image.memory(
                                       currentCoverImage == null ||
                                               currentCoverImage == ""
-                                          ? base64Decode(
-                                              data[0]["cover_profile_image_path"])
+                                          ? base64Decode(data[0]
+                                              ["cover_profile_image_path"])
                                           : base64Decode(currentCoverImage),
                                       fit: BoxFit.fitWidth,
                                     ),
@@ -270,7 +282,11 @@ class _EditProfileState extends State<EditProfile> {
                                       onPressed: () {
                                         //!------ Function for save button here -------!
                                         updateDataToServer(
-                                            context, data[0]["id"]);
+                                            context,
+                                            data[0]["id"],
+                                            data[0]['profile_image_path'],
+                                            data[0]
+                                                ['cover_profile_image_path']);
                                       },
                                       child: Text(
                                         "Save",

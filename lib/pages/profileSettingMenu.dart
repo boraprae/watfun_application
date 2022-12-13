@@ -18,6 +18,7 @@ class _ProfileSettingMenuState extends State<ProfileSettingMenu> {
   var userInfoList;
   //Todo: the bool default value is true
   bool _waitingUserData = false;
+  bool disableBackBtn = false;
 
   @override
   void initState() {

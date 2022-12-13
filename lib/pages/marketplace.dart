@@ -18,6 +18,7 @@ class Marketplace extends StatefulWidget {
 class _MarketplaceState extends State<Marketplace> {
   //variable for testing
   String sortingTag = 'Latest';
+  
   //Get User Data
   final String _url = "http://10.0.2.2:9000/commission_offer";
   final String _categoryURL = "http://10.0.2.2:9000/artworkCategory";
@@ -95,13 +96,13 @@ class _MarketplaceState extends State<Marketplace> {
 
   //** Commission Offer Widget**
   Widget commissionOffer(index, dataN, size, isNull) {
-    //TODO: filter user data from the USER obj
+    //TODO: Filter user data from the USER obj
     userOwnerData = filterCommissionOwner(dataN[index]["user_owner_token"]);
     if (isNull == true) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
+          const Text(
             "No have any offer yet",
             style: TextStyle(
               color: Colors.white,
@@ -168,35 +169,25 @@ class _MarketplaceState extends State<Marketplace> {
                                               radius: 20,
                                               backgroundColor: btnDark,
                                               //ToDo: Convert to base64
-                                              child: data[0]["profile_image_path"] ==
-                                                          null ||
-                                                      data[0]["profile_image_path"] ==
-                                                          ""
-                                                  ? Text(
-                                                      data[0]["username"][0]
-                                                          .toString()
-                                                          .toUpperCase(),
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    )
-                                                  : Container(
-                                                      height: 0,
-                                                      width: 0,
-                                                    ),
-                                            )
+                                              child: Text(
+                                                data[0]["username"][0]
+                                                    .toString()
+                                                    .toUpperCase(),
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ))
                                           : CircleAvatar(
                                               radius: 20,
                                               backgroundColor: btnDark,
                                               //ToDo: Convert to base64
-                                              backgroundImage: AssetImage(
-                                                data[0]['profile_image_path'],
+                                              backgroundImage: MemoryImage(
+                                                base64Decode(data[0]
+                                                    ['profile_image_path']),
                                               ),
                                             ),
-
                                       const SizedBox(
                                         width: 10,
                                       ),
