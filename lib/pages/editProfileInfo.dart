@@ -65,7 +65,6 @@ class _EditProfileState extends State<EditProfile> {
         _userURL + "/" + userID.toString(),
         jsonEncode(<String, dynamic>{
           "username": usernameController.text,
-          "email": emailController.text,
           "payment_info": paymentController.text,
           "bio_text": bioController.text,
           "profile_image_path":
