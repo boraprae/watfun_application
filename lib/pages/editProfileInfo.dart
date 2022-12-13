@@ -42,8 +42,9 @@ class _EditProfileState extends State<EditProfile> {
   final String _userURL = "http://10.0.2.2:9000/user";
   late Future<List> _userInfo;
   bool _waitingUserInfo = true;
-  var _base64String;
+
   //! Pick image function
+  var _base64String;
   File? _image;
   File? _coverImage;
   String currentProfileImage = "";
@@ -87,7 +88,6 @@ class _EditProfileState extends State<EditProfile> {
         text: "You can't change the email for now.",
         confirmBtnText: "OK",
         confirmBtnColor: lightGray,
-       
       );
     } else {
       QuickAlert.show(
@@ -98,9 +98,6 @@ class _EditProfileState extends State<EditProfile> {
         confirmBtnText: "OK",
         confirmBtnColor: lightGray,
         onConfirmBtnTap: () {
-          // if(){
-
-          // }
           Navigator.pushNamed(context, "/mainMenu");
         },
       );

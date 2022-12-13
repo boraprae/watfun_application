@@ -2,17 +2,20 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
 
-import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:watfun_application/constantColors.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:blurrycontainer/blurrycontainer.dart';
 
 class CommissionProgress extends StatefulWidget {
   const CommissionProgress({Key? key}) : super(key: key);
@@ -31,20 +34,15 @@ class _CommissionProgressState extends State<CommissionProgress> {
   String _token = "";
   bool _editStatus = false;
 
+  //! Pick image function
+  File? _image;
+  var _base64String;
+  String artworkImage = "";
+
   final progressPercentController = TextEditingController();
   final String _orderURL = "http://10.0.2.2:9000/commission_order";
 
-  // void requestPersmission() async {
-  //  // await PermissionHandler().requestPermissions([PermissionGroup.storage]);
-  // }
-
-  // @override
-  // void initState() {
-  //   requestPersmission();
-  //   super.initState();
-  // }
-
-  Future<String> _createFileFromString(base64img) async {
+  Future<String> createFileFromString(base64img, context) async {
     final encodedStr = "...";
     Directory? directory;
     directory = Directory('/storage/emulated/0/Download');
@@ -61,22 +59,29 @@ class _CommissionProgressState extends State<CommissionProgress> {
     final result = await ImageGallerySaver.saveImage(bytes);
     print(result);
 
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.success,
+      title: "Download Successful",
+      text: "Please check your artwork in the gallery!",
+      confirmBtnText: "OK",
+      confirmBtnColor: lightGray,
+    );
+
     return file.path;
   }
 
-  Future updateCommissionProgress(percent, orderID) async {
+  Future updateCommissionProgress(percent, orderID, context) async {
     final prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('userToken');
-    // print(orderID.toString() + " " + percent.toString());
-    // print(_orderURL + "/" + orderID.toString());
     if (_currentSliderValue > percent) {
       Response response = await GetConnect().patch(
         _orderURL + "/" + orderID.toString(),
         jsonEncode(<String, dynamic>{
           "progress_percentage": _currentSliderValue,
+          "artwork_progress_image": artworkImage,
         }),
       );
-      // print(response.statusCode);
       //reset all
       setState(() {
         //progressPercentController.clear();
@@ -103,14 +108,39 @@ class _CommissionProgressState extends State<CommissionProgress> {
     }
   }
 
+  Future pickCommissionArtImage() async {
+    try {
+      final XFile? image =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      // read picked image byte data.
+      Uint8List imagebytes = await image.readAsBytes();
+      // using base64 encoder convert image into base64 string.
+      _base64String = base64Encode(imagebytes);
+      final imagePermanent = await saveImagePermanently(image.path);
+      setState(() {
+        this._image = imagePermanent;
+        artworkImage = _base64String;
+      });
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
+
+  //!Save to local storage
+  Future<File> saveImagePermanently(String imagePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = basename(imagePath);
+    final image = File('${directory.path}/$name');
+
+    return File(imagePath).copy(image.path);
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     Map<String, dynamic> data =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    // print(data['order_detail']);
-    // // print(data['order_info']);
-    // print(double.parse(data['order_info']['progress_percentage']) / 100);
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -197,31 +227,12 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                       //Todo: Update User Profile
                                       child: Row(
                                         children: [
-                                          // CircleAvatar(
-                                          //   radius: 10.0,
-                                          //   backgroundImage: AssetImage(
-                                          //     data["order_info"]
-                                          //         ["commission_owner_profile"],
-                                          //   ),
-                                          // ),
-                                          // Padding(
-                                          //   padding: const EdgeInsets.symmetric(
-                                          //       horizontal: 8.0),
-                                          //   child: Text(
-                                          //     data["order_info"]
-                                          //         ['commission_owner_name'],
-                                          //     style: TextStyle(
-                                          //       fontSize: 12,
-                                          //       color: Colors.white,
-                                          //     ),
-                                          //   ),
-                                          // ),
                                           Text(
                                             "Ordered from: " +
                                                 data["order_info"]
                                                         ["order_user_email"]
                                                     .toString(),
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontSize: 12,
                                               color: Colors.white,
                                             ),
@@ -245,7 +256,7 @@ class _CommissionProgressState extends State<CommissionProgress> {
                               ),
                               Text(
                                 data["order_detail"]["offer_title"],
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -256,7 +267,7 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                     const EdgeInsets.symmetric(vertical: 16),
                                 child: Text(
                                   data["order_detail"]["offer_description"],
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 12,
                                   ),
@@ -267,20 +278,19 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                     data["order_detail"]["offer_price"]
                                         .toString() +
                                     ' Baht',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 8),
                                 child: Divider(
                                   color: Colors.white,
                                 ),
                               ),
-                              Text(
+                              const Text(
                                 "Customer Request",
                                 style: TextStyle(
                                   color: Colors.white,
@@ -364,59 +374,58 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                 ),
                               ),
                               _editStatus == true
-                                  ? SizedBox(
-                                      width: size.width * 0.3,
-                                      height: size.height * 0.05,
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                          ),
-                                          primary:
-                                              Color(0xFF353535), // background
-                                          onPrimary: Colors.white
-                                              .withOpacity(0.5), // foreground
-                                        ),
-                                        onPressed: () {},
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Icon(
-                                              Icons.upload_file_outlined,
-                                              color: Colors.white,
+                                  ? Row(
+                                      children: [
+                                        SizedBox(
+                                          width: size.width * 0.3,
+                                          height: size.height * 0.05,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                              ),
+                                              primary: Color(
+                                                  0xFF353535), // background
+                                              onPrimary: Colors.white
+                                                  .withOpacity(
+                                                      0.5), // foreground
                                             ),
-                                            Text("Upload"),
-                                          ],
+                                            onPressed: () {
+                                              pickCommissionArtImage();
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Icon(
+                                                  Icons.upload_file_outlined,
+                                                  color: Colors.white,
+                                                ),
+                                                Text("Upload"),
+                                              ],
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        artworkImage == "" ||
+                                                artworkImage == null
+                                            ? Text("")
+                                            : const Text(
+                                                "Upload success!",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                      ],
                                     )
                                   : GestureDetector(
                                       onTap: () {
-                                        _createFileFromString(
-                                            data["order_detail"]
-                                                ["offer_image_base64"]);
-                                        // setState(() {
-                                        //   _editStatus = true;
-                                        // });
-                                        // Uint8List bytes = base64Decode(
-                                        //     data["order_detail"]
-                                        //         ["offer_image_base64"]);
-
-                                        // final decodedBytes = base64Decode(
-                                        //     data["order_detail"]
-                                        //         ["offer_image_base64"]);
-
-                                        // var file =
-                                        //     Io.File("decodedBezkoder.png");
-                                        // file.writeAsBytesSync(decodedBytes);
-                                        // //save to gallery
-                                        // await ImageGallerySaver.saveImage(Uint8List.fromList(file.),
-                                        //     name: "WATFUN", quality: 60);
-                                        // // await GallerySaver.saveImage(file.toString(),
-                                        // //     albumName: "WATFUN");
-                                        // Navigator.pop(context);
+                                        //!Image which upload from artist
+                                        createFileFromString(
+                                            data["order_info"]
+                                                ["artwork_progress_image"],
+                                            context);
                                       },
                                       child: Container(
                                         width: size.width * 0.3,
@@ -527,7 +536,8 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                             updateCommissionProgress(
                                                 data['order_info']
                                                     ['progress_percentage'],
-                                                data['order_info']['id']);
+                                                data['order_info']['id'],
+                                                context);
                                             // print(
                                             //     progressPercentController.text);
                                             Navigator.pushNamed(
