@@ -211,8 +211,6 @@
       "progress_percentage": 50,
       "order_user_email": "t",
       "offer_id_commission": 1,
-      "commission_owner_name": "boraprae",
-      "commission_owner_profile": "assets/artworksUploads/00.jpg",
       "id": 1
     },
     {
@@ -223,8 +221,6 @@
       "progress_percentage": 0,
       "order_user_email": "t",
       "offer_id_commission": 4,
-      "commission_owner_name": "nani",
-      "commission_owner_profile": "assets/artworksUploads/05.jpg",
       "id": 2
     },
     {
@@ -235,8 +231,6 @@
       "progress_percentage": 0,
       "order_user_email": "bo@gmail.com",
       "offer_id_commission": 5,
-      "commission_owner_name": "yainezu",
-      "commission_owner_profile": "assets/artworksUploads/05.jpg",
       "id": 3
     },
     {
@@ -247,8 +241,6 @@
       "progress_percentage": 80,
       "order_user_email": "bo@gmail.com",
       "offer_id_commission": 6,
-      "commission_owner_name": "tokla",
-      "commission_owner_profile": "assets/artworksUploads/05.jpg",
       "id": 4
     },
     {
@@ -259,8 +251,6 @@
       "progress_percentage": 18,
       "order_user_email": "yo@gmail.com",
       "offer_id_commission": 4,
-      "commission_owner_name": "nani",
-      "commission_owner_profile": "assets/artworksUploads/05.jpg",
       "id": 5
     }
   ],

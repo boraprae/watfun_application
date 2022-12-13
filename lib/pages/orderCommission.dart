@@ -27,8 +27,7 @@ class _OrderCommissionState extends State<OrderCommission> {
   final String _orderURL = "http://10.0.2.2:9000/commission_order";
   TextEditingController customerReqController = TextEditingController();
 
-  Future placeCommissionOrder(
-      context, commissionID, ownerName, ownerProfile) async {
+  Future placeCommissionOrder(context, commissionID) async {
     //get current date
     String currentDate = DateFormat("MMM dd, yyyy").format(DateTime.now());
     //get email as a token for identify who is current user
@@ -45,8 +44,6 @@ class _OrderCommissionState extends State<OrderCommission> {
           "progress_percentage": 0,
           "order_user_email": token,
           "offer_id_commission": commissionID,
-          "commission_owner_name": ownerName,
-          "commission_owner_profile": ownerProfile,
         }),
       );
       print(response.statusCode);
@@ -168,36 +165,35 @@ class _OrderCommissionState extends State<OrderCommission> {
                                       child: Row(
                                         children: [
                                           //convert to base64 format
-                                          CircleAvatar(
-                                            backgroundColor: btnDark,
-                                            radius: 10.0,
-                                            backgroundImage: AssetImage(
-                                              data['owner_info']
-                                                  ["profile_image_path"],
-                                            ),
-                                            child: data['owner_info'][
-                                                            "profile_image_path"] ==
-                                                        null ||
-                                                    data['owner_info'][
-                                                            "profile_image_path"] ==
-                                                        ""
-                                                ? Text(
+                                          data['owner_info'][
+                                                          "profile_image_path"] ==
+                                                      null ||
+                                                  data['owner_info'][
+                                                          "profile_image_path"] ==
+                                                      ""
+                                              ? CircleAvatar(
+                                                  radius: 20,
+                                                  backgroundColor: btnDark,
+                                                  //ToDo: Convert to base64
+                                                  child: Text(
                                                     data['owner_info']
                                                             ["username"][0]
                                                         .toString()
                                                         .toUpperCase(),
                                                     style: TextStyle(
                                                       color: Colors.white,
-                                                      fontSize: 10,
+                                                      fontSize: 16,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                     ),
-                                                  )
-                                                : Container(
-                                                    height: 0,
-                                                    width: 0,
-                                                  ),
-                                          ),
+                                                  ))
+                                              : CircleAvatar(
+                                                  backgroundColor: btnDark,
+                                                  radius: 10.0,
+                                                  backgroundImage: MemoryImage(
+                                                      base64Decode(data[
+                                                              'owner_info'][
+                                                          "profile_image_path"]))),
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8.0),
@@ -319,11 +315,9 @@ class _OrderCommissionState extends State<OrderCommission> {
                                 child: GestureDetector(
                                   onTap: () {
                                     placeCommissionOrder(
-                                        context,
-                                        data["commission_offer_detail"]["id"],
-                                        data['owner_info']["username"],
-                                        data['owner_info']
-                                            ["profile_image_path"]);
+                                      context,
+                                      data["commission_offer_detail"]["id"],
+                                    );
                                     // Navigator.pushNamed(
                                     //   context,
                                     //   '/separate',

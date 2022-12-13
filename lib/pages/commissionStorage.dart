@@ -18,6 +18,8 @@ class _CommissionStorageState extends State<CommissionStorage> {
   String sortingTag = 'Latest';
   final String _offerURL = "http://10.0.2.2:9000/commission_offer";
   final String _orderURL = "http://10.0.2.2:9000/commission_order";
+  final String _userURL = "http://10.0.2.2:9000/user";
+
   // late Future<List> _orderData;
   late Future<List> _myOrderData;
   late Future<List> _customerOrderData;
@@ -38,28 +40,10 @@ class _CommissionStorageState extends State<CommissionStorage> {
     _customerOrderData = getMyCustomerOrder();
   }
 
-  //Get All Commission Order
-  // Future<List> getData() async {
-  //   Response response = await GetConnect().get(_orderURL);
-  //   // print(response.body); //get email as a token for identify who is current user
-  //   final prefs = await SharedPreferences.getInstance();
-  //   final String? token = prefs.getString('userToken');
-  //   if (response.status.isOk) {
-  //     print("token in storage page " + token!);
-  //     setState(() {
-  //       _waiting = false;
-  //       currentUser = token;
-  //     });
-  //     return response.body;
-  //   } else {
-  //     throw Exception('Error');
-  //   }
-  // }
-
   //Get Commission Order
   Future<List> getMyOrderData() async {
     Response response = await GetConnect().get(_orderURL);
-    // print(response.body); 
+    // print(response.body);
     //get email as a token for identify who is current user
     final prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('userToken');
@@ -84,7 +68,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
 
   Future<List> getMyCustomerOrder() async {
     Response response = await GetConnect().get(_orderURL);
-    // print(response.body); 
+    // print(response.body);
     //get email as a token for identify who is current user
     final prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('userToken');
@@ -190,6 +174,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                         ),
                       ),
                       //Todo: Map with data from server
+
                       Positioned(
                         bottom: 0,
                         child: BlurryContainer(
@@ -206,14 +191,6 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    //user image profile
-                                    CircleAvatar(
-                                      radius: 15,
-                                      backgroundImage: AssetImage(
-                                        dataN[index]
-                                            ["commission_owner_profile"],
-                                      ),
-                                    ),
                                     SizedBox(
                                       width: 10,
                                     ),
@@ -223,11 +200,12 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          dataN[index]['commission_owner_name'],
+                                        const Text(
+                                          "Title",
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 6,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 8,
                                           ),
                                         ),
                                         SizedBox(
@@ -253,7 +231,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                           'Price',
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 6,
+                                            fontSize: 8,
                                           ),
                                         ),
                                         SizedBox(

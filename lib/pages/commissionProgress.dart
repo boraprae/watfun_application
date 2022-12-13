@@ -51,7 +51,7 @@ class _CommissionProgressState extends State<CommissionProgress> {
     Uint8List bytes = base64.decode(base64img);
     // String dir = (await getExternalStorageDirectory())!.path;
     String dir = directory.path;
-    
+
     String fullPath = '$dir/watfun.png';
     print("local file full path ${fullPath}");
     File file = File(fullPath);
@@ -197,32 +197,44 @@ class _CommissionProgressState extends State<CommissionProgress> {
                                       //Todo: Update User Profile
                                       child: Row(
                                         children: [
-                                          CircleAvatar(
-                                            radius: 10.0,
-                                            backgroundImage: AssetImage(
-                                              data["order_info"]
-                                                  ["commission_owner_profile"],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            child: Text(
-                                              data["order_info"]
-                                                  ['commission_owner_name'],
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.white,
-                                              ),
+                                          // CircleAvatar(
+                                          //   radius: 10.0,
+                                          //   backgroundImage: AssetImage(
+                                          //     data["order_info"]
+                                          //         ["commission_owner_profile"],
+                                          //   ),
+                                          // ),
+                                          // Padding(
+                                          //   padding: const EdgeInsets.symmetric(
+                                          //       horizontal: 8.0),
+                                          //   child: Text(
+                                          //     data["order_info"]
+                                          //         ['commission_owner_name'],
+                                          //     style: TextStyle(
+                                          //       fontSize: 12,
+                                          //       color: Colors.white,
+                                          //     ),
+                                          //   ),
+                                          // ),
+                                          Text(
+                                            "Ordered from: " +
+                                                data["order_info"]
+                                                        ["order_user_email"]
+                                                    .toString(),
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.white,
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
                                     //Todo: Add date
+                                    SizedBox(
+                                      width: 10,
+                                    ),
                                     Text(
-                                      "Ordered on: " +
-                                          data["order_info"]["order_date"],
+                                      data["order_info"]["order_date"],
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: grayText,
