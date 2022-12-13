@@ -552,7 +552,7 @@ class _UserProfileState extends State<UserProfile> {
                                                   color: purpleG,
                                                 ))
                                               : SizedBox(
-                                                  height: size.height * 0.58,
+                                                  height: size.height * 0.35,
                                                   child: FutureBuilder(
                                                     future: _data,
                                                     builder:
