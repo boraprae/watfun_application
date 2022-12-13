@@ -33,25 +33,102 @@ class _UserProfileState extends State<UserProfile> {
   //Get data from JSON server
   final String _userURL = "http://10.0.2.2:9000/user";
   final String _artworkURL = "http://10.0.2.2:9000/artworks";
+  final String _url = "http://10.0.2.2:9000/commission_offer";
   late Future<List> _userInfo;
   late Future<List> _myArtwork;
+  late Future<List> _data;
   bool _waitingUserInfo = true;
   bool _waitingArtworkInfo = true;
+  bool _waiting = true;
+  String currentUser = '';
+  String myTotalOffer = "";
 
   @override
   void initState() {
     super.initState();
     _userInfo = getUserInformation();
     _myArtwork = getArtwork();
+    _data = getData();
+  }
+
+  //Get Commission Offer
+  Future<List> getData() async {
+    //get email as a token for identify who is current user
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('userToken');
+    Response response =
+        await GetConnect().get(_url + "?user_owner_token=" + token!);
+
+    // print(token);
+    if (response.status.isOk) {
+      List test = response.body;
+      print(test.length);
+      ;
+      setState(() {
+        _waiting = false;
+        currentUser = token;
+      });
+      return response.body;
+    } else {
+      throw Exception('Error');
+    }
+  }
+
+  //Get User Data
+  Future<List> getUserInformation() async {
+    //get email as a token for identify who is current user
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('userToken');
+    Response response = await GetConnect().get(_userURL + "?email=" + token!);
+    if (response.status.isOk) {
+      setState(() {
+        _waitingUserInfo = false;
+      });
+      return response.body;
+    } else {
+      throw Exception('Error');
+    }
+  }
+
+  Future<List> getArtwork() async {
+    //get email as a token for identify who is current user
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('userToken');
+
+    Response response =
+        await GetConnect().get(_artworkURL + "?user_email=" + token!);
+    if (response.status.isOk) {
+      //build the photo item list
+      List artworkList = response.body;
+      for (int i = 0; i < artworkList.length; i++) {
+        _items.add(PhotoItem(
+            artworkList[i]["art_image_base64"],
+            artworkList[i]["art_title"],
+            artworkList[i]["username"],
+            artworkList[i]["art_created_date"],
+            artworkList[i]["art_description"],
+            artworkList[i]["art_type"]));
+      }
+      setState(() {
+        _waitingArtworkInfo = false;
+      });
+      return response.body;
+    } else {
+      throw Exception('Error');
+    }
   }
 
   //** Commission Offer Widget**
-  Widget commissionOffer(index, dataN, size, isNull) {
-    //TODO: Filter user data from the USER obj
+  Widget commissionOffer(
+    index,
+    dataN,
+    size,
+  ) {
     //userOwnerData = filterCommissionOwner(dataN[index]["user_owner_token"]);
-    if (isNull == true) {
+    if (dataN == null || dataN == "" || dataN == []) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        // ignore: prefer_const_literals_to_create_immutables
         children: [
           const Text(
             "No have any offer yet",
@@ -64,7 +141,7 @@ class _UserProfileState extends State<UserProfile> {
         ],
       );
     } else {
-      return _waitingUserInfo == false
+      return _waiting == true
           ? const Center(
               child: const CircularProgressIndicator(
               backgroundColor: bgBlack,
@@ -205,7 +282,6 @@ class _UserProfileState extends State<UserProfile> {
                                   //** Order Commission Button **//
                                   GestureDetector(
                                     onTap: () {
-                                      // print(data[index]);
                                       Navigator.pushNamed(
                                           context, '/orderCommission',
                                           arguments: <String, dynamic>{
@@ -235,7 +311,7 @@ class _UserProfileState extends State<UserProfile> {
                                           child: const Padding(
                                             padding: EdgeInsets.all(12.0),
                                             child: Text(
-                                              'Order Commission',
+                                              'Edit Commission Offer',
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 color: Colors.white,
@@ -265,51 +341,6 @@ class _UserProfileState extends State<UserProfile> {
                   color: purpleG,
                 ));
               });
-    }
-  }
-
-
-  //Get User Data
-  Future<List> getUserInformation() async {
-    //get email as a token for identify who is current user
-    final prefs = await SharedPreferences.getInstance();
-    final String? token = prefs.getString('userToken');
-    Response response = await GetConnect().get(_userURL + "?email=" + token!);
-    if (response.status.isOk) {
-      setState(() {
-        _waitingUserInfo = false;
-      });
-      return response.body;
-    } else {
-      throw Exception('Error');
-    }
-  }
-
-  Future<List> getArtwork() async {
-    //get email as a token for identify who is current user
-    final prefs = await SharedPreferences.getInstance();
-    final String? token = prefs.getString('userToken');
-
-    Response response =
-        await GetConnect().get(_artworkURL + "?user_email=" + token!);
-    if (response.status.isOk) {
-      //build the photo item list
-      List artworkList = response.body;
-      for (int i = 0; i < artworkList.length; i++) {
-        _items.add(PhotoItem(
-            artworkList[i]["art_image_base64"],
-            artworkList[i]["art_title"],
-            artworkList[i]["username"],
-            artworkList[i]["art_created_date"],
-            artworkList[i]["art_description"],
-            artworkList[i]["art_type"]));
-      }
-      setState(() {
-        _waitingArtworkInfo = false;
-      });
-      return response.body;
-    } else {
-      throw Exception('Error');
     }
   }
 
@@ -408,7 +439,7 @@ class _UserProfileState extends State<UserProfile> {
                                               color: Colors.white,
                                               size: 0.04 * size.width,
                                             ),
-                                            label: Text(
+                                            label: const Text(
                                               'Settings',
                                               style: TextStyle(
                                                 fontSize: 10,
@@ -429,7 +460,6 @@ class _UserProfileState extends State<UserProfile> {
                                       ],
                                     ),
                                   ),
-
                                   Padding(
                                     padding:
                                         const EdgeInsets.fromLTRB(56, 0, 56, 0),
@@ -445,7 +475,7 @@ class _UserProfileState extends State<UserProfile> {
                                             });
                                           },
                                           child: Text(
-                                            'Commission Offers ' + '15',
+                                            'My Commission Offers ',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 12,
@@ -456,7 +486,7 @@ class _UserProfileState extends State<UserProfile> {
                                           ),
                                         ),
                                         SizedBox(
-                                          width: size.width * 0.25,
+                                          width: size.width * 0.2,
                                         ),
                                         TextButton(
                                           onPressed: () {
@@ -514,7 +544,51 @@ class _UserProfileState extends State<UserProfile> {
                                   _btnOnPress == false
                                       ? Padding(
                                           padding: const EdgeInsets.all(16.0),
-                                          child: textForNoContent(),
+                                          child: _waiting
+                                              ? Center(
+                                                  child:
+                                                      const CircularProgressIndicator(
+                                                  backgroundColor: bgBlack,
+                                                  color: purpleG,
+                                                ))
+                                              : SizedBox(
+                                                  height: size.height * 0.58,
+                                                  child: FutureBuilder(
+                                                    future: _data,
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      late List data =
+                                                          snapshot.data as List;
+                                                      if (snapshot.hasData) {
+                                                        return ListView.builder(
+                                                            scrollDirection:
+                                                                Axis.vertical,
+                                                            itemCount:
+                                                                data.length,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              return commissionOffer(
+                                                                index,
+                                                                data,
+                                                                size,
+                                                              );
+                                                            });
+                                                      } else if (snapshot
+                                                          .hasError) {
+                                                        return const Text(
+                                                            'Error');
+                                                      }
+                                                      return const Center(
+                                                          child:
+                                                              const CircularProgressIndicator(
+                                                        backgroundColor:
+                                                            bgBlack,
+                                                        color: purpleG,
+                                                      ));
+                                                    },
+                                                  ),
+                                                ),
                                         )
                                       : Container(
                                           width: size.width,
@@ -539,11 +613,8 @@ class _UserProfileState extends State<UserProfile> {
                                                         itemBuilder:
                                                             (context, index) {
                                                           // Item rendering
-                                                          return new GestureDetector(
+                                                          return GestureDetector(
                                                             onTap: () {
-                                                              print(index);
-                                                              print(_items[
-                                                                  index]);
                                                               Navigator.push(
                                                                 context,
                                                                 MaterialPageRoute(

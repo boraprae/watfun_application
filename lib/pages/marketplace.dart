@@ -530,6 +530,7 @@ class _MarketplaceState extends State<Marketplace> {
                           },
                         ),
                       ),
+             
               ],
             ),
           )
