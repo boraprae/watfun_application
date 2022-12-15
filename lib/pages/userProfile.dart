@@ -429,9 +429,9 @@ class _UserProfileState extends State<UserProfile> {
                                               //path to setting page
                                               Navigator.pushNamed(
                                                 context, '/profileSetting',
-                                                // arguments: <String, dynamic>{
-                                                //   'commission_offer_detail': data[index]
-                                                // },
+                                                arguments: <String, dynamic>{
+                                                  'user_info': data[0]
+                                                },
                                               );
                                             },
                                             icon: Icon(

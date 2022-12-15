@@ -26,35 +26,11 @@ class _ProfileSettingMenuState extends State<ProfileSettingMenu> {
     //getToken();
   }
 
-  // void getToken() async {
-  //   SharedPreferences pref = await SharedPreferences.getInstance();
-  //   String? userString = await pref.getString('user');
-
-  //   var userObject = jsonDecode(userString!) as Map<String, dynamic>;
-  //   _token = userObject['token'];
-  //   getUserDataAPI(_token);
-  // }
-
-  // void getUserDataAPI(String token) async {
-  //   http.Response userInfoResponse = await getUserInfo(token);
-  //   setState(() {
-  //     userInfoList = jsonDecode(userInfoResponse.body);
-  //     _waitingUserData = false;
-  //   });
-  // }
-
-  // Future<http.Response> getUserInfo(String token) {
-  //   return http.get(
-  //     Uri.parse('http://10.0.2.2:3000/api/profile'),
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //       'Authorization': token,
-  //     },
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
+    Map<String, dynamic> data =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    print(data['user_info']);
     return Scaffold(
       backgroundColor: bgBlack,
       appBar: AppBar(
@@ -84,13 +60,31 @@ class _ProfileSettingMenuState extends State<ProfileSettingMenu> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        CircleAvatar(
-                          backgroundImage:
-                              AssetImage('assets/artworksUploads/05.jpg'),
-                          // backgroundImage:
-                          //     NetworkImage('http://10.0.2.2:3000' + userInfoList['profile_image']),
-                          radius: 40,
-                        ),
+                        data['user_info']["profile_image_path"] == null ||
+                                data['user_info']["profile_image_path"] == ""
+                            ? CircleAvatar(
+                                radius: 20,
+                                backgroundColor: btnDark,
+                                //ToDo: Convert to base64
+                                child: Text(
+                                  data['user_info']["username"][0]
+                                      .toString()
+                                      .toUpperCase(),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ))
+                            : CircleAvatar(
+                                radius: 40,
+                                backgroundColor: btnDark,
+                                //ToDo: Convert to base64
+                                backgroundImage: MemoryImage(
+                                  base64Decode(
+                                      data['user_info']['profile_image_path']),
+                                ),
+                              ),
                         Padding(
                           padding: const EdgeInsets.only(left: 16.0),
                           child: Column(
@@ -105,7 +99,7 @@ class _ProfileSettingMenuState extends State<ProfileSettingMenu> {
                               ),
                               //TODO: connect to API
                               Text(
-                                'userInfoList',
+                                data['user_info']['username'],
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
