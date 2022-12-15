@@ -77,7 +77,7 @@ class _OrderCommissionState extends State<OrderCommission> {
     Size size = MediaQuery.of(context).size;
     Map<String, dynamic> data =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    print(data['owner_info']);
+    // print(data['owner_info']);
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -233,7 +233,7 @@ class _OrderCommissionState extends State<OrderCommission> {
                                 child: Text(
                                   data["commission_offer_detail"]
                                       ["offer_description"],
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 12,
                                   ),

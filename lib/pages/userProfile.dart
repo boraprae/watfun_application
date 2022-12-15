@@ -283,11 +283,11 @@ class _UserProfileState extends State<UserProfile> {
                                   GestureDetector(
                                     onTap: () {
                                       Navigator.pushNamed(
-                                          context, '/orderCommission',
+                                          context, '/editCommissionDetail',
                                           arguments: <String, dynamic>{
                                             'commission_offer_detail':
                                                 dataN[index],
-                                            'owner_info': data[0]
+                                            'owner_info': data[0],
                                           });
                                     },
                                     child: Row(
@@ -495,8 +495,7 @@ class _UserProfileState extends State<UserProfile> {
                                             });
                                           },
                                           child: Text(
-                                            'Gallery ' +
-                                                _items.length.toString(),
+                                            'Gallery ',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 12,
@@ -675,7 +674,7 @@ class _UserProfileState extends State<UserProfile> {
                                     data[0]["username"][0]
                                         .toString()
                                         .toUpperCase(),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 36,
                                       fontWeight: FontWeight.bold,

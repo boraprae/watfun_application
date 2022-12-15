@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:watfun_application/pages/artworkDeatil.dart';
 import 'package:watfun_application/pages/changePassword.dart';
 import 'package:watfun_application/pages/commissionProgress.dart';
+import 'package:watfun_application/pages/editCommissionDetial.dart';
 import 'package:watfun_application/pages/editProfileInfo.dart';
 import 'package:watfun_application/pages/orderCommission.dart';
 import 'package:watfun_application/pages/profileSettingMenu.dart';
@@ -29,6 +30,7 @@ void main() {
         '/profileSetting': (context) => ProfileSettingMenu(),
         '/changePassword': (context)=> ChangePassword(),
         '/editProfileInfo': (context) => EditProfile(),
+        '/editCommissionDetail': (context)=> EditCommissionDetail(),
       },
     ),
   );
