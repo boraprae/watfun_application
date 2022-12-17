@@ -227,7 +227,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                           CrossAxisAlignment.end,
                                       children: [
                                         Text(
-                                          'Price',
+                                          'Progress',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 8,
@@ -237,7 +237,7 @@ class _CommissionStorageState extends State<CommissionStorage> {
                                           height: 5,
                                         ),
                                         Text(
-                                          data[0]['offer_price'] + " Baht",
+                                          dataN[0]['progress_percentage'].toString() + " %",
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 10,

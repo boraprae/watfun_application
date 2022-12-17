@@ -139,13 +139,6 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                       //** View Button **//
                       GestureDetector(
                         onTap: () {
-                          // Navigator.pushNamed(
-                          //   context,
-                          //   '/separate',
-                          //   arguments: <String, dynamic>{
-                          //     'name': artworkCategory[index],
-                          //   },
-                          // );
                           Navigator.pushNamed(context, '/artworkDetail',
                               arguments: <String, dynamic>{
                                 'artwork_detail': data[index]
@@ -197,13 +190,6 @@ class _DiscoverArtsState extends State<DiscoverArts> {
     Widget listViewChannel(index, data) {
       return GestureDetector(
         onTap: () {
-          // Navigator.pushNamed(
-          //   context,
-          //   '/separate',
-          //   arguments: <String, dynamic>{
-          //     'name': artworkCategory[index],
-          //   },
-          // );
           setState(() {
             data[index]['isOnClicked'] = true;
             for (int i = 0; i < data.length; i++) {
@@ -211,8 +197,6 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                 data[i]['isOnClicked'] = false;
               }
             }
-            //print for test the value
-            // print(data[index]['name']);
           });
         },
         child: Row(
@@ -283,7 +267,7 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                       fontSize: 16,
                       fontWeight: FontWeight.bold),
                 ),
-               
+
                 //** Searching Button **//
                 Padding(
                   padding: const EdgeInsets.only(top: 16),
@@ -297,8 +281,8 @@ class _DiscoverArtsState extends State<DiscoverArts> {
                         ),
                       ),
                       onPressed: () {
-                        // Jump to Searching Page
-                        Navigator.pushNamed(context, '/searchOffer');
+                        //!!Search function is not complete
+                        //  Navigator.pushNamed(context, '/searchOffer');
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),

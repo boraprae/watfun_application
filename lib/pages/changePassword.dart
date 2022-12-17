@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-// import 'package:paletteartz/artworksetting/setting.dart';
 import 'package:watfun_application/constantColors.dart';
 
 class ChangePassword extends StatefulWidget {

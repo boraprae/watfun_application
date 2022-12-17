@@ -97,15 +97,6 @@ class _PostDetailState extends State<PostDetail> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: bgBlack,
-      // appBar: AppBar(
-      //   backgroundColor: bgBlack,
-      //   title: Text('Artworks'),
-      //   automaticallyImplyLeading: true,
-      //   leading: IconButton(
-      //     icon: Icon(Icons.arrow_back_ios),
-      //     onPressed: () => Navigator.pop(context),
-      //   ),
-      // ),
       //?tab bar wil paste here
       body: SafeArea(
         child: Stack(

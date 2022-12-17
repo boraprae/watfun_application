@@ -47,17 +47,16 @@ class _CommissionProgressState extends State<CommissionProgress> {
     Directory? directory;
     directory = Directory('/storage/emulated/0/Download');
     Uint8List bytes = base64.decode(base64img);
-    // String dir = (await getExternalStorageDirectory())!.path;
     String dir = directory.path;
 
     String fullPath = '$dir/watfun.png';
-    print("local file full path ${fullPath}");
+    //  print("local file full path ${fullPath}");
     File file = File(fullPath);
     await file.writeAsBytes(bytes);
-    print(file.path);
+    //  print(file.path);
 
     final result = await ImageGallerySaver.saveImage(bytes);
-    print(result);
+    // print(result);
 
     QuickAlert.show(
       context: context,

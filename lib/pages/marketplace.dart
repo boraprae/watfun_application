@@ -346,7 +346,7 @@ class _MarketplaceState extends State<Marketplace> {
                   ? Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(18),
-                        gradient: LinearGradient(
+                        gradient: const LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                           colors: [
@@ -418,7 +418,8 @@ class _MarketplaceState extends State<Marketplace> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.pushNamed(context, '/searchOffer');
+                        //!!Search function is not complete
+                        // Navigator.pushNamed(context, '/searchOffer');
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
