@@ -143,7 +143,7 @@ class _UserProfileState extends State<UserProfile> {
     } else {
       return _waiting == true
           ? const Center(
-              child: const CircularProgressIndicator(
+              child:  CircularProgressIndicator(
               backgroundColor: bgBlack,
               color: purpleG,
             ))

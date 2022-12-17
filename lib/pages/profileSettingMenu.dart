@@ -23,25 +23,23 @@ class _ProfileSettingMenuState extends State<ProfileSettingMenu> {
   @override
   void initState() {
     super.initState();
-    //getToken();
   }
 
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> data =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    print(data['user_info']);
     return Scaffold(
       backgroundColor: bgBlack,
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Settings',
         ),
         backgroundColor: bgBlack,
       ),
       body: _waitingUserData
-          ? Center(
-              child: const CircularProgressIndicator(
+          ? const Center(
+              child: CircularProgressIndicator(
               backgroundColor: bgBlack,
               color: purpleG,
             ))
@@ -70,7 +68,7 @@ class _ProfileSettingMenuState extends State<ProfileSettingMenu> {
                                   data['user_info']["username"][0]
                                       .toString()
                                       .toUpperCase(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -90,7 +88,7 @@ class _ProfileSettingMenuState extends State<ProfileSettingMenu> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 "Username",
                                 style: TextStyle(
                                   color: Colors.white,
@@ -100,7 +98,7 @@ class _ProfileSettingMenuState extends State<ProfileSettingMenu> {
                               //TODO: connect to API
                               Text(
                                 data['user_info']['username'],
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -109,7 +107,7 @@ class _ProfileSettingMenuState extends State<ProfileSettingMenu> {
                             ],
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Icon(
                           Icons.create,
                           color: Colors.white,
@@ -117,11 +115,11 @@ class _ProfileSettingMenuState extends State<ProfileSettingMenu> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
+                  const Padding(
+                    padding: EdgeInsets.symmetric(
                       vertical: 16,
                     ),
-                    child: const Text(
+                    child: Text(
                       'Application Settings',
                       style: TextStyle(
                         color: Colors.grey,
@@ -132,7 +130,7 @@ class _ProfileSettingMenuState extends State<ProfileSettingMenu> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      print("object");
+                      //print("object");
                       Navigator.pushNamed(context, '/changePassword');
                     },
                     child: Row(
@@ -151,8 +149,8 @@ class _ProfileSettingMenuState extends State<ProfileSettingMenu> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
+                  const Padding(
+                    padding: EdgeInsets.symmetric(
                       vertical: 16,
                     ),
                     child: Text(
